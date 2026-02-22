@@ -48,5 +48,19 @@
             <p id="eventos">Cargando eventos...</p> 
         </div>
     </div>
+<script>
+        // Esta función busca el archivo que creó el robot y lo lee
+        fetch('datos.json')
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                // Reemplaza los textos de la página con los datos reales
+                document.getElementById('afijos').innerText = datos.afijos;
+                document.getElementById('eventos').innerText = datos.evento;
+            })
+            .catch(error => {
+                console.error('Hubo un problema leyendo los datos:', error);
+                document.getElementById('afijos').innerText = "No se pudieron cargar los datos esta semana.";
+            });
+    </script>
 </body>
 </html>
