@@ -5,7 +5,6 @@ import json
 import base64
 
 def obtener_token_blizzard(client_id, client_secret):
-    # El robot va a la puerta de Blizzard y pide un pase temporal
     url = "https://oauth.battle.net/token"
     datos = urllib.parse.urlencode({'grant_type': 'client_credentials'}).encode('utf-8')
     credenciales = f"{client_id}:{client_secret}"
@@ -42,21 +41,23 @@ def obtener_datos_wow():
         pase_blizzard = obtener_token_blizzard(client_id, client_secret)
         if pase_blizzard:
             try:
-                # Preguntamos por el Token en los servidores de América (US)
-                url_ficha = f"https://us.api.blizzard.com/data/wow/token/index?namespace=dynamic-us&locale=es_MX&access_token={pase_blizzard}"
-                req = urllib.request.Request(url_ficha)
+                # CORRECCIÓN: La URL ya no lleva el pase pegado al final
+                url_ficha = "https://us.api.blizzard.com/data/wow/token/index?namespace=dynamic-us&locale=es_MX"
+                
+                # CORRECCIÓN: Ahora el pase viaja escondido de forma segura en las cabeceras
+                req = urllib.request.Request(url_ficha, headers={'Authorization': f'Bearer {pase_blizzard}'})
+                
                 with urllib.request.urlopen(req) as response:
                     datos_ficha = json.loads(response.read().decode())
-                    # Blizzard da el precio en cobre. 1 oro = 10,000 monedas de cobre.
                     precio_cobre = datos_ficha['price']
                     oro = int(precio_cobre / 10000)
-                    precio_ficha_oro = f"{oro:,}".replace(",", ".") # Formato: 300.000
+                    precio_ficha_oro = f"{oro:,}".replace(",", ".")
             except Exception as e:
                 print(f"Error con la ficha: {e}")
     else:
         print("Faltan las llaves secretas en GitHub.")
 
-    # 3. Empaquetar todo para tu página web
+    # 3. Empaquetar todo
     datos_para_web = {
         "afijos": texto_afijos,
         "evento": "Buscando en el calendario... (Próximamente)",
