@@ -22,6 +22,9 @@ jobs:
           python-version: '3.x'
 
       - name: Ejecutar el Robot Recolector
+        env:
+          BLIZZARD_CLIENT_ID: ${{ secrets.BLIZZARD_CLIENT_ID }}
+          BLIZZARD_CLIENT_SECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
         run: python actualizar_datos.py
 
       - name: Guardar los nuevos datos en GitHub
