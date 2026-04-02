@@ -1,122 +1,288 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WoW Explorador - Panel de la Hermandad</title>
-    <style>
-        body {
-            background-color: #0b0b0b;
-            background-image: radial-gradient(circle at top, #1a1a24, #0b0b0b);
-            color: #e4e4e4;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-        .header {
-            text-align: center;
-            padding: 30px 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-bottom: 2px solid #F8B700;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-        h1 {
-            color: #F8B700;
-            margin: 0;
-            font-size: 2.5em;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 4px #000;
-            letter-spacing: 2px;
-        }
-        .subtitulo {
-            color: #a3a3a3;
-            font-size: 1.1em;
-            margin-top: 10px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .card {
-            background: #1c1c1c;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-            border-top: 4px solid #F8B700;
-            transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            border-top-color: #ff3333; /* Color horda/daño, puedes cambiarlo */
-        }
-        .card h2 {
-            margin-top: 0;
-            color: #ffffff;
-            font-size: 1.3em;
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .dato-destacado {
-            font-size: 1.2em;
-            color: #00ffcc; /* Color para los afijos/eventos */
-            font-weight: bold;
-            margin-top: 15px;
-        }
-        .oro { color: #FFD700; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WoW Explorador - Panel de la Hermandad</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0b0b0b;
+      background-image: radial-gradient(circle at top, #1a1a24, #0b0b0b);
+      color: #e4e4e4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+    .header {
+      text-align: center;
+      padding: 30px 20px 22px;
+      background-color: rgba(0,0,0,0.8);
+      border-bottom: 2px solid #F8B700;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    h1 {
+      color: #F8B700;
+      margin: 0;
+      font-size: 2.5em;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 4px #000;
+      letter-spacing: 2px;
+    }
+    .subtitulo { color: #a3a3a3; font-size: 1em; margin-top: 8px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #1c1c1c;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+      border-top: 4px solid #F8B700;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); border-top-color: #ff3333; }
+    .card h2 {
+      margin-top: 0;
+      color: #ffffff;
+      font-size: 1.2em;
+      border-bottom: 1px solid #444;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .valor-principal {
+      font-size: 1.2em;
+      color: #00ffcc;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .oro { color: #FFD700; }
+    .zona-detalle {
+      font-size: 0.82em;
+      color: #888;
+      margin-top: 5px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.4;
+    }
+    .zona-detalle::before {
+      content: '▸';
+      color: #555;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .afijo-lista { display: flex; flex-direction: column; gap: 8px; }
+    .afijo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92em;
+      color: #00ffcc;
+    }
+    .afijo-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #F8B700;
+      flex-shrink: 0;
+    }
+    .evento-badge {
+      display: inline-block;
+      background: rgba(0,200,120,0.15);
+      color: #00ffcc;
+      font-size: 0.75em;
+      padding: 3px 9px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,255,180,0.25);
+      margin-bottom: 10px;
+    }
+    .token-precio {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .token-numero { font-size: 1.8em; font-weight: bold; color: #FFD700; }
+    .token-unidad { font-size: 0.9em; color: #aaa; }
+    .tag {
+      display: inline-block;
+      font-size: 0.72em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-top: 8px;
+      margin-right: 4px;
+    }
+    .tag-drop { background: rgba(248,183,0,0.12); color: #F8B700; border: 1px solid rgba(248,183,0,0.3); }
+    .tag-ilvl { background: rgba(0,200,255,0.1); color: #00c8ff; border: 1px solid rgba(0,200,255,0.25); }
+    .boss-desc {
+      font-size: 0.83em;
+      color: #aaa;
+      margin-top: 10px;
+      line-height: 1.5;
+      border-left: 2px solid #333;
+      padding-left: 10px;
+    }
+    .reset-info {
+      font-size: 0.78em;
+      color: #555;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid #2a2a2a;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>WoW Explorador</h1>
-        <div class="subtitulo">Centro de Inteligencia Semanal</div>
+<div class="header">
+  <h1>⚔ WoW Explorador</h1>
+  <div class="subtitulo">Centro de Inteligencia Semanal · Midnight Season 1</div>
+</div>
+
+<div class="grid">
+
+  <!-- Afijos de Mythic+ -->
+  <div class="card">
+    <h2>⚔️ Afijos de Mythic+</h2>
+    <div class="afijo-lista" id="afijos-lista">
+      <div class="afijo-item">
+        <span class="afijo-dot"></span>
+        <span id="afijos">Cargando afijos...</span>
+      </div>
     </div>
+    <div class="reset-info">↻ Se actualizan cada martes al reset semanal</div>
+  </div>
 
-    <div class="grid">
-        <div class="card">
-            <h2>⚔️ Afijos de Mythic+</h2>
-            <div id="afijos" class="dato-destacado">Cargando afijos...</div>
-        </div>
+  <!-- Evento de la Semana -->
+  <div class="card">
+    <h2>📅 Evento de la Semana</h2>
+    <div class="evento-badge" id="evento-tipo">Evento Semanal</div>
+    <div class="valor-principal" id="eventos">Cargando evento...</div>
+    <div class="zona-detalle" id="evento-desc">Revisando el calendario de Azeroth...</div>
+    <div class="reset-info">↻ Cambia cada martes al reset semanal</div>
+  </div>
 
-        <div class="card">
-            <h2>📅 Evento de la Semana</h2>
-            <div id="eventos" class="dato-destacado">Cargando evento...</div>
-        </div>
-
-        <div class="card">
-            <h2>🪙 Precio de la Ficha (Token)</h2>
-            <div id="ficha" class="dato-destacado oro">Buscando precio en oro...</div>
-        </div>
-
-        <div class="card">
-            <h2>🐉 Jefe de Mundo</h2>
-            <div id="jefe" class="dato-destacado">Buscando jefe activo...</div>
-        </div>
+  <!-- Token -->
+  <div class="card">
+    <h2>🪙 Precio de la Ficha</h2>
+    <div class="token-precio">
+      <span class="token-numero oro" id="ficha">—</span>
+      <span class="token-unidad">Oro</span>
     </div>
+    <div class="zona-detalle">Región: América del Norte</div>
+    <span class="tag tag-drop">WoW Token → 30 días de juego</span>
+    <div class="reset-info">↻ Se actualiza en cada ejecución del workflow</div>
+  </div>
 
-    <script>
-        fetch('datos.json')
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-                // Actualizamos los datos si existen en el JSON
-                if(datos.afijos) document.getElementById('afijos').innerText = datos.afijos;
-                if(datos.evento) document.getElementById('eventos').innerText = datos.evento;
-                if(datos.ficha) document.getElementById('ficha').innerText = datos.ficha + " Oro";
-                if(datos.jefe) document.getElementById('jefe').innerText = datos.jefe;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('afijos').innerText = "Error al cargar los datos.";
-            });
-    </script>
+  <!-- Jefe de Mundo -->
+  <div class="card">
+    <h2>🐉 Jefe de Mundo</h2>
+    <div class="valor-principal" id="jefe">Buscando jefe activo...</div>
+    <div class="zona-detalle" id="jefe-zona">Cargando zona...</div>
+    <div class="boss-desc" id="jefe-desc"></div>
+    <div id="jefe-tags"></div>
+    <div class="reset-info">↻ Rota cada martes al reset semanal</div>
+  </div>
+
+</div>
+
+<script>
+  const JEFES_INFO = {
+    "Lu'ashal": {
+      zona: "Eversong Woods",
+      desc: "Absorbió la energía del Lightbloom y creció a tamaño descomunal. Lanza Radiant Sunder y Dawnfire Breath en cono.",
+    },
+    "Cragpine": {
+      zona: "Zul'Aman",
+      desc: "Durmió siglos bajo un pinar hasta ser despertado por intrusos mortales. Invoca treants iracundos y Ancient Seeds.",
+    },
+    "Thorm'belan": {
+      zona: "Harandar",
+      desc: "Bestia dócil corrompida por el Lightbloom. Usa Shredding Tendrils y Scintillating Shard que aturde a toda la incursión si no se intercepta.",
+    },
+    "Predaxas": {
+      zona: "Voidstorm",
+      desc: "No descansa, no razona, solo devora. Carga con Devour contra los jugadores y llama a adds Ingested Consumptor.",
+    },
+  };
+
+  const EVENTOS_DESC = {
+    "Timewalking: The Burning Crusade": "Revisita mazmorras clásicas de Terrallende. Recompensa: Insignias de Timewalker + gear escalado.",
+    "Timewalking: Wrath of the Lich King": "Vuelve a Rasganorte con tu nivel actual. Recompensa: Insignias de Timewalker + mounts exclusivos.",
+    "Timewalking: Cataclysm": "Mazmorras de la época de Cataclysmn reescaladas. Recompensa: Insignias de Timewalker.",
+    "Timewalking: Mists of Pandaria": "Revisita Pandaria en tiempos de La Niebla. Recompensa: Insignias de Timewalker.",
+    "Bonus: Misión Heróica": "Semana de bonificación en misiones heroicas. +Bonus de reputación y recompensas.",
+    "Bonus: Calabozo": "Semana de bonificación en mazmorras. Colas más rápidas y mayor drop de oro.",
+    "Bonus: Batalla de Azeroth": "Bonificación en contenido de BfA. Buena semana para reputación y transmogs.",
+  };
+
+  fetch('datos.json')
+    .then(r => r.json())
+    .then(datos => {
+
+      // ── Afijos ──
+      if (datos.afijos) {
+        const lista = document.getElementById('afijos-lista');
+        const nombres = datos.afijos.split(' - ');
+        lista.innerHTML = nombres.map((n, i) => {
+          const colores = ['#F8B700', '#cc44ff', '#4488ff', '#ff6644'];
+          return `<div class="afijo-item">
+            <span class="afijo-dot" style="background:${colores[i] || '#888'}"></span>
+            <span>${n.trim()}</span>
+          </div>`;
+        }).join('');
+      }
+
+      // ── Evento ──
+      if (datos.evento) {
+        document.getElementById('eventos').textContent = datos.evento;
+        const tipo = datos.evento.startsWith('Timewalking') ? 'Timewalking' :
+                     datos.evento.startsWith('Bonus') ? 'Bonus Semanal' : 'Evento Especial';
+        document.getElementById('evento-tipo').textContent = tipo;
+        const desc = EVENTOS_DESC[datos.evento] || 'Consulta el calendario en el juego para más detalles.';
+        document.getElementById('evento-desc').textContent = desc;
+      }
+
+      // ── Ficha ──
+      if (datos.ficha) {
+        document.getElementById('ficha').textContent = datos.ficha;
+      }
+
+      // ── Jefe de Mundo ──
+      if (datos.jefe) {
+        const nombreCompleto = datos.jefe;
+        const nombreCorto = Object.keys(JEFES_INFO).find(k => nombreCompleto.includes(k)) || null;
+        const info = JEFES_INFO[nombreCorto] || {};
+
+        document.getElementById('jefe').textContent = nombreCorto || nombreCompleto;
+        document.getElementById('jefe-zona').textContent = info.zona
+          ? `${info.zona} · Semana actual`
+          : nombreCompleto;
+
+        if (info.desc) {
+          document.getElementById('jefe-desc').textContent = info.desc;
+        }
+
+        document.getElementById('jefe-tags').innerHTML = `
+          <span class="tag tag-ilvl">iLvl 256 · Champion 4/6</span>
+          <span class="tag tag-drop">Warbound-until-equipped</span>
+        `;
+      }
+
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      document.getElementById('afijos-lista').innerHTML =
+        '<div class="afijo-item"><span class="afijo-dot" style="background:#ff4444"></span><span>Error al cargar datos.</span></div>';
+    });
+</script>
+
 </body>
 </html>
