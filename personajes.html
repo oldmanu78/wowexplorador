@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WoW Explorador - Personajes</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0b0b0b;
+      background-image: radial-gradient(circle at top, #1a1a24, #0b0b0b);
+      color: #e4e4e4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+    .header {
+      text-align: center;
+      padding: 30px 20px 22px;
+      background-color: rgba(0,0,0,0.8);
+      border-bottom: 2px solid #F8B700;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .header h1 { color: #F8B700; font-size: 2.2em; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 4px #000; }
+    .header .sub { color: #a3a3a3; font-size: 0.95em; margin-top: 8px; }
+    .nav { text-align: center; padding: 14px; }
+    .nav a {
+      color: #F8B700;
+      text-decoration: none;
+      font-size: 0.9em;
+      border: 1px solid #F8B700;
+      padding: 6px 16px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .nav a:hover { background: rgba(248,183,0,0.15); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .char-card {
+      background: #1c1c1c;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      border-top: 4px solid var(--class-color, #F8B700);
+      transition: transform 0.2s;
+    }
+    .char-card:hover { transform: translateY(-4px); }
+
+    .char-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .char-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--class-color, #F8B700);
+      background: #111;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .char-avatar-placeholder {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--class-color, #555);
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4em;
+      flex-shrink: 0;
+      color: var(--class-color, #555);
+    }
+    .char-identity { flex: 1; min-width: 0; }
+    .char-name {
+      font-size: 1.15em;
+      font-weight: bold;
+      color: var(--class-color, #fff);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .char-realm { font-size: 0.78em; color: #666; margin-top: 2px; }
+    .char-class-spec {
+      font-size: 0.82em;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    .char-body { padding: 14px 18px; }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid #222;
+      font-size: 0.88em;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { color: #888; }
+    .stat-value { font-weight: bold; color: #e4e4e4; }
+    .stat-value.score { color: #00ffcc; font-size: 1.05em; }
+    .stat-value.ilvl { color: #F8B700; }
+
+    .raid-bar-wrap { margin-top: 10px; }
+    .raid-title { font-size: 0.78em; color: #888; margin-bottom: 5px; }
+    .raid-bar-bg {
+      background: #2a2a2a;
+      border-radius: 3px;
+      height: 8px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .raid-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #F8B700, #ff9900);
+      transition: width 0.5s ease;
+    }
+    .raid-text {
+      font-size: 0.78em;
+      color: #aaa;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .char-footer {
+      padding: 10px 18px;
+      border-top: 1px solid #2a2a2a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .rio-link {
+      font-size: 0.78em;
+      color: #F8B700;
+      text-decoration: none;
+    }
+    .rio-link:hover { text-decoration: underline; }
+    .role-badge {
+      font-size: 0.72em;
+      padding: 2px 8px;
+      border-radius: 3px;
+      border: 1px solid #444;
+      color: #aaa;
+    }
+    .role-tank   { border-color: #4488ff; color: #4488ff; }
+    .role-healer { border-color: #44cc88; color: #44cc88; }
+    .role-dps    { border-color: #ff4444; color: #ff4444; }
+
+    .loading-text { color: #555; font-size: 0.85em; text-align: center; padding: 20px 0; }
+    .error-text   { color: #ff5555; font-size: 0.82em; text-align: center; padding: 12px 0; }
+
+    .skeleton { background: #2a2a2a; border-radius: 4px; height: 14px; margin: 6px 0; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    .last-updated {
+      text-align: center;
+      color: #444;
+      font-size: 0.75em;
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚔ Mis Personajes</h1>
+  <div class="sub">Quel'Thalas · Datos en vivo desde Raider.io</div>
+</div>
+
+<div class="nav">
+  <a href="index.html">← Volver al Panel Semanal</a>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="last-updated" id="last-updated"></div>
+
+<script>
+// ── Colores por clase WoW ──────────────────────────────
+const CLASS_COLORS = {
+  'Death Knight': '#C41E3A',
+  'Demon Hunter': '#A330C9',
+  'Druid':        '#FF7C0A',
+  'Evoker':       '#33937F',
+  'Hunter':       '#AAD372',
+  'Mage':         '#3FC7EB',
+  'Monk':         '#00FF98',
+  'Paladin':      '#F48CBA',
+  'Priest':       '#FFFFFF',
+  'Rogue':        '#FFF468',
+  'Shaman':       '#0070DD',
+  'Warlock':      '#8788EE',
+  'Warrior':      '#C69B3A',
+};
+
+// ── Rol por spec ───────────────────────────────────────
+const SPEC_ROLE = {
+  'Blood': 'TANK', 'Brewmaster': 'TANK', 'Guardian': 'TANK',
+  'Protection': 'TANK', 'Vengeance': 'TANK',
+  'Discipline': 'HEALER', 'Holy': 'HEALER', 'Mistweaver': 'HEALER',
+  'Preservation': 'HEALER', 'Restoration': 'HEALER',
+};
+function getRole(spec) {
+  if (!spec) return 'DPS';
+  if (SPEC_ROLE[spec]) return SPEC_ROLE[spec];
+  return 'DPS';
+}
+function roleBadge(role) {
+  const map = { TANK:'role-tank', HEALER:'role-healer', DPS:'role-dps' };
+  const label = { TANK:'Tanque', HEALER:'Sanador', DPS:'DPS' };
+  return `<span class="role-badge ${map[role]||'role-dps'}">${label[role]||'DPS'}</span>`;
+}
+
+// ── Personajes ─────────────────────────────────────────
+const PERSONAJES = [
+  { nombre: 'Kreathor',    urlNombre: 'Kreathor' },
+  { nombre: 'Muchufaza',   urlNombre: 'Muchufaza' },
+  { nombre: 'Czernobög',   urlNombre: 'Czernob%C3%B6g' },
+  { nombre: 'Oldkreeper',  urlNombre: 'Oldkreeper' },
+  { nombre: 'Redguardïan', urlNombre: 'Redguard%C3%AFan' },
+  { nombre: 'Krëeper',     urlNombre: 'Kr%C3%ABeper' },
+  { nombre: 'Nösferätü',   urlNombre: 'N%C3%B6sfer%C3%A4t%C3%BC' },
+];
+
+const REALM  = 'quelthalas';
+const REGION = 'us';
+const FIELDS = 'mythic_plus_scores_by_season:current,gear,raid_progression,spec,class';
+
+// ── Raids conocidos de Midnight S1 ─────────────────────
+const RAIDS_S1 = [
+  { key: 'voidspire',          nombre: 'Voidspire',          total: 6 },
+  { key: 'dreamrift',          nombre: 'Dreamrift',           total: 1 },
+  { key: 'march-on-queldanas', nombre: "March on Quel'Danas", total: 2 },
+];
+
+// ── Renderizar esqueleto de carga ──────────────────────
+function crearEsqueleto(nombre) {
+  return `
+    <div class="char-card" id="card-${nombre}">
+      <div class="char-header">
+        <div class="char-avatar-placeholder">?</div>
+        <div class="char-identity">
+          <div class="char-name">${nombre}</div>
+          <div class="char-realm">Quel'Thalas · US</div>
+          <div class="skeleton" style="width:60%;height:12px;margin-top:6px"></div>
+        </div>
+      </div>
+      <div class="char-body">
+        <div class="skeleton"></div>
+        <div class="skeleton" style="width:75%"></div>
+        <div class="skeleton" style="width:85%"></div>
+      </div>
+    </div>`;
+}
+
+// ── Renderizar card con datos ──────────────────────────
+function renderCard(p, datos) {
+  const classColor = CLASS_COLORS[datos.class] || '#F8B700';
+  const score = datos.mythic_plus_scores_by_season?.[0]?.scores?.all ?? 0;
+  const ilvl  = datos.gear?.item_level_equipped ?? '—';
+  const spec  = datos.spec?.name ?? '—';
+  const cls   = datos.class ?? '—';
+  const role  = getRole(spec);
+  const thumb = datos.thumbnail_url ?? null;
+  const rioUrl = `https://raider.io/characters/${REGION}/${REALM}/${encodeURIComponent(p.nombre)}`;
+
+  // Score color
+  let scoreColor = '#00ffcc';
+  if (score >= 3000) scoreColor = '#ff8000';
+  else if (score >= 2000) scoreColor = '#a335ee';
+  else if (score >= 1500) scoreColor = '#0070dd';
+  else if (score >= 1000) scoreColor = '#1eff00';
+  else if (score > 0)     scoreColor = '#ffffff';
+
+  // Raids
+  let raidHTML = '';
+  const raidProg = datos.raid_progression ?? {};
+  RAIDS_S1.forEach(raid => {
+    const prog = raidProg[raid.key];
+    if (!prog) return;
+    const kills = prog.mythic_bosses_killed ?? prog.heroic_bosses_killed ?? 0;
+    const diff  = prog.mythic_bosses_killed > 0 ? 'Mítico'
+                : prog.heroic_bosses_killed > 0 ? 'Heroico'
+                : prog.normal_bosses_killed > 0 ? 'Normal' : '';
+    const pct = Math.round((kills / raid.total) * 100);
+    raidHTML += `
+      <div class="raid-bar-wrap">
+        <div class="raid-title">${raid.nombre}</div>
+        <div class="raid-bar-bg">
+          <div class="raid-bar-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="raid-text">${kills}/${raid.total} ${diff}</div>
+      </div>`;
+  });
+
+  const avatarHTML = thumb
+    ? `<img class="char-avatar" src="${thumb}" alt="${p.nombre}" style="border-color:${classColor}">`
+    : `<div class="char-avatar-placeholder" style="border-color:${classColor};color:${classColor}">⚔</div>`;
+
+  return `
+    <div class="char-card" style="--class-color:${classColor}">
+      <div class="char-header">
+        ${avatarHTML}
+        <div class="char-identity">
+          <div class="char-name" style="color:${classColor}">${p.nombre}</div>
+          <div class="char-realm">Quel'Thalas · US</div>
+          <div class="char-class-spec">${spec} ${cls}</div>
+        </div>
+      </div>
+      <div class="char-body">
+        <div class="stat-row">
+          <span class="stat-label">Mythic+ Score</span>
+          <span class="stat-value score" style="color:${scoreColor}">${Math.round(score).toLocaleString()}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Item Level</span>
+          <span class="stat-value ilvl">${ilvl}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Temporada</span>
+          <span class="stat-value">Midnight S1</span>
+        </div>
+        ${raidHTML || '<div class="loading-text" style="padding:8px 0">Sin progreso de raid registrado</div>'}
+      </div>
+      <div class="char-footer">
+        <a class="rio-link" href="${rioUrl}" target="_blank">Ver en Raider.io ↗</a>
+        ${roleBadge(role)}
+      </div>
+    </div>`;
+}
+
+function renderError(p, msg) {
+  return `
+    <div class="char-card">
+      <div class="char-header">
+        <div class="char-avatar-placeholder">?</div>
+        <div class="char-identity">
+          <div class="char-name">${p.nombre}</div>
+          <div class="char-realm">Quel'Thalas · US</div>
+        </div>
+      </div>
+      <div class="char-body">
+        <div class="error-text">${msg}</div>
+      </div>
+      <div class="char-footer">
+        <a class="rio-link" href="https://raider.io/characters/${REGION}/${REALM}/${encodeURIComponent(p.nombre)}" target="_blank">Ver en Raider.io ↗</a>
+      </div>
+    </div>`;
+}
+
+// ── Main ───────────────────────────────────────────────
+async function cargarPersonajes() {
+  const grid = document.getElementById('grid');
+
+  // Poner esqueletos primero
+  grid.innerHTML = PERSONAJES.map(p => crearEsqueleto(p.nombre)).join('');
+
+  const resultados = await Promise.allSettled(
+    PERSONAJES.map(p => {
+      const url = `https://raider.io/api/v1/characters/profile?region=${REGION}&realm=${REALM}&name=${p.urlNombre}&fields=${FIELDS}`;
+      return fetch(url).then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      });
+    })
+  );
+
+  // Reemplazar cada esqueleto con el resultado real
+  grid.innerHTML = '';
+  resultados.forEach((res, i) => {
+    const p = PERSONAJES[i];
+    if (res.status === 'fulfilled') {
+      const datos = res.value;
+      if (datos.statusCode === 400 || datos.error) {
+        grid.innerHTML += renderError(p, 'Personaje no encontrado en Raider.io');
+      } else {
+        grid.innerHTML += renderCard(p, datos);
+      }
+    } else {
+      grid.innerHTML += renderError(p, 'No se pudo conectar con Raider.io');
+    }
+  });
+
+  document.getElementById('last-updated').textContent =
+    'Datos cargados: ' + new Date().toLocaleString('es-CL');
+}
+
+cargarPersonajes();
+</script>
+
+</body>
+</html>
