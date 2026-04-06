@@ -32,8 +32,9 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 .hl{font-size:.76em;font-weight:500;padding:5px 12px;border-radius:4px;border:1px solid;transition:all .2s}
 .hl-rio{border-color:rgba(248,183,0,.5);color:var(--gold)}.hl-rio:hover{background:rgba(248,183,0,.1);text-decoration:none}
 .hl-ext{border-color:var(--b2);color:var(--muted)}.hl-ext:hover{color:var(--text);border-color:#444;text-decoration:none}
-.tabs{display:flex;border-bottom:1px solid var(--b2);background:var(--bg2);padding:0 20px;overflow-x:auto}
-.tab-btn{background:none;border:none;border-bottom:3px solid transparent;color:var(--muted);font-family:'Cinzel',serif;font-size:.75em;font-weight:600;padding:13px 15px;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.5px}
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--b2);background:var(--bg2);padding:0 20px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--b2) transparent}
+.tab-btn{background:none;border:none;border-bottom:3px solid transparent;color:var(--muted);font-family:'Cinzel',serif;font-size:.72em;font-weight:600;padding:12px 13px;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.4px}
 .tab-btn:hover{color:var(--text)}.tab-btn.active{color:var(--dk);border-bottom-color:var(--dk)}
 .main{max-width:1100px;margin:0 auto;padding:22px}
 .tab-panel{display:none}.tab-panel.active{display:block}
@@ -42,7 +43,8 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 .card{background:var(--bg2);border:1px solid var(--b1);border-radius:8px;padding:16px}
 .card h3{font-family:'Cinzel',serif;font-size:.78em;color:var(--muted);letter-spacing:1px;margin-bottom:12px;text-transform:uppercase}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:650px){.two-col{grid-template-columns:1fr}}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.two-col,.three-col{grid-template-columns:1fr}}
 /* CHECKLIST */
 .check-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--b1);cursor:pointer;user-select:none;transition:opacity .15s}
 .check-item:last-child{border-bottom:none}.check-item.done{opacity:.42}
@@ -55,13 +57,11 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 .tw{background:rgba(248,183,0,.12);color:var(--gold);border:1px solid rgba(248,183,0,.25)}
 .td{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.25)}
 .tv{background:rgba(155,77,202,.15);color:var(--purp);border:1px solid rgba(155,77,202,.3)}
-/* PROGRESS */
 .prow{display:flex;align-items:center;gap:10px;margin-bottom:9px}.prow:last-child{margin-bottom:0}
 .plbl{font-size:.78em;width:115px;flex-shrink:0}
 .pbg{flex:1;height:7px;background:var(--b2);border-radius:3px;overflow:hidden}
 .pf{height:100%;border-radius:3px;transition:width .3s}
 .ppct{font-size:.7em;color:var(--muted);width:36px;text-align:right}
-/* RESET BAR */
 .rbar{background:var(--bg2);border:1px solid var(--b2);border-radius:8px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .rlabel{font-size:.68em;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 .rcd{font-family:'Cinzel',serif;font-size:1.3em;color:var(--gold);margin-top:2px}
@@ -140,12 +140,90 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 .ur:last-child{border-bottom:none}.ur .lbl{color:var(--muted)}
 .cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
 .cc{background:var(--bg2);border:1px solid var(--b1);border-radius:6px;padding:12px}
+/* COMPARADOR BUILDS */
+.build-tabs{display:flex;gap:0;margin-bottom:18px;border:1px solid var(--b2);border-radius:6px;overflow:hidden;width:fit-content}
+.btab{background:var(--bg3);border:none;color:var(--muted);font-family:'Cinzel',serif;font-size:.75em;font-weight:600;padding:8px 18px;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.btab:first-child{border-right:1px solid var(--b2)}
+.btab.active.db{background:rgba(196,30,58,.15);color:#ff8096;border-bottom:2px solid var(--dk)}
+.btab.active.sl{background:rgba(155,77,202,.15);color:var(--purp);border-bottom:2px solid var(--purp)}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--b2);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.cmp-header{padding:12px 16px;font-family:'Cinzel',serif;font-size:.82em;font-weight:700;text-align:center;letter-spacing:1px}
+.cmp-header.db{background:rgba(196,30,58,.2);color:#ff8096;border-right:1px solid var(--b2)}
+.cmp-header.sl{background:rgba(155,77,202,.2);color:var(--purp)}
+.cmp-row{display:contents}
+.cmp-cell{padding:9px 14px;font-size:.8em;border-top:1px solid var(--b1)}
+.cmp-cell.db{border-right:1px solid var(--b2)}
+.cmp-cat{padding:6px 14px;font-size:.68em;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-top:1px solid var(--b2);background:rgba(255,255,255,.02)}
+.cmp-cat.db{border-right:1px solid var(--b2)}
+.win{color:var(--green);font-weight:600}.lose{color:var(--muted)}.tie{color:var(--text)}
+.verdict{border:1px solid var(--b1);border-radius:8px;padding:14px 16px;margin-top:4px;font-size:.82em;line-height:1.7}
+/* SIMULADOR ROTACION */
+.rot-steps{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.rot-step{display:flex;align-items:flex-start;gap:10px;background:var(--bg3);border:1px solid var(--b1);border-radius:6px;padding:10px 13px;cursor:pointer;user-select:none;transition:all .2s}
+.rot-step.active-step{border-color:var(--dk);background:rgba(196,30,58,.08)}
+.rot-step.done-step{opacity:.45;border-color:var(--b1)}
+.step-num{font-family:'Cinzel',serif;font-size:1.1em;font-weight:700;color:var(--dk);width:24px;flex-shrink:0;text-align:center}
+.step-info{flex:1}
+.step-spell{font-size:.88em;font-weight:600;color:var(--text)}
+.step-cond{font-size:.72em;color:var(--muted);margin-top:2px}
+.step-prio{font-size:.68em;padding:2px 6px;border-radius:3px;margin-top:3px;display:inline-block}
+.prio-high{background:rgba(196,30,58,.15);color:#ff8096;border:1px solid rgba(196,30,58,.3)}
+.prio-med{background:rgba(248,183,0,.1);color:var(--gold);border:1px solid rgba(248,183,0,.2)}
+.prio-low{background:rgba(90,180,255,.1);color:var(--blue);border:1px solid rgba(90,180,255,.2)}
+.rot-nav{display:flex;gap:8px;margin-bottom:16px}
+.rot-btn{background:var(--bg3);border:1px solid var(--b2);color:var(--text);font-size:.78em;padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Exo 2',sans-serif;transition:all .2s}
+.rot-btn:hover{border-color:var(--dk);color:var(--dk)}
+.rot-btn.primary{background:rgba(196,30,58,.15);border-color:rgba(196,30,58,.5);color:#ff8096}
+.cd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.cd-card{background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:10px 12px}
+.cd-name{font-size:.82em;font-weight:600;color:var(--text);margin-bottom:3px}
+.cd-info{font-size:.72em;color:var(--muted);line-height:1.5}
+.cd-timer{font-family:'Cinzel',serif;font-size:1em;color:var(--gold);margin-top:4px}
+/* NOTAS MAZMORRAS */
+.dng-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:18px}
+.dng-btn{background:var(--bg3);border:1px solid var(--b2);color:var(--muted);font-size:.78em;padding:8px 10px;border-radius:5px;cursor:pointer;text-align:left;transition:all .2s;font-family:'Exo 2',sans-serif}
+.dng-btn:hover{border-color:var(--dk);color:var(--text)}
+.dng-btn.selected{border-color:var(--dk);color:var(--gold);background:rgba(196,30,58,.08)}
+.note-area{width:100%;background:var(--bg3);border:1px solid var(--b2);color:var(--text);font-family:'Exo 2',sans-serif;font-size:.83em;padding:12px;border-radius:6px;resize:vertical;min-height:160px;line-height:1.6}
+.note-area:focus{outline:none;border-color:var(--dk)}
+.note-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ntag{font-size:.7em;padding:3px 9px;border-radius:12px;cursor:pointer;border:1px solid;transition:all .2s;user-select:none}
+.ntag:hover{opacity:.8}
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;position:relative}
+.timeline::before{content:'';position:absolute;left:90px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--dk),rgba(196,30,58,.1));pointer-events:none}
+.tl-day{display:flex;gap:0;position:relative;margin-bottom:0}
+.tl-day-label{width:90px;font-family:'Cinzel',serif;font-size:.72em;color:var(--muted);text-align:right;padding:12px 14px 12px 0;flex-shrink:0;line-height:1.3}
+.tl-day-label.reset{color:var(--gold)}
+.tl-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--dk);background:var(--bg);flex-shrink:0;margin-top:14px;position:relative;z-index:1}
+.tl-dot.reset-dot{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(248,183,0,.5)}
+.tl-dot.today-dot{background:var(--dk);border-color:var(--dk);box-shadow:0 0 8px rgba(196,30,58,.5)}
+.tl-content{flex:1;padding:8px 0 8px 16px}
+.tl-tasks{display:flex;flex-direction:column;gap:4px}
+.tl-task{display:flex;align-items:center;gap:7px;font-size:.8em;padding:4px 8px;border-radius:4px;background:var(--bg2);border:1px solid var(--b1)}
+.tl-task.done{opacity:.45}.tl-task.done .tl-task-name{text-decoration:line-through}
+.tl-task-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tl-task-name{flex:1}
+/* TRACKER CRESTS */
+.crest-input-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--b1)}
+.crest-input-row:last-child{border-bottom:none}
+.crest-color{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.crest-name{font-size:.85em;font-weight:500;width:140px;flex-shrink:0}
+.crest-num{width:70px;background:var(--bg3);border:1px solid var(--b2);color:var(--text);font-family:'Cinzel',serif;font-size:1em;text-align:center;padding:5px 8px;border-radius:4px}
+.crest-limit{font-size:.72em;color:var(--muted);width:80px}
+.crest-pbar{flex:1;height:8px;background:var(--b2);border-radius:4px;overflow:hidden}
+.crest-pfill{height:100%;border-radius:4px;transition:width .3s}
+.crest-pct{font-size:.7em;color:var(--muted);width:38px;text-align:right}
+.upgrade-plan{background:var(--bg3);border:1px solid var(--b1);border-radius:6px;padding:12px;margin-top:4px}
+.up-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--b1);font-size:.8em}
+.up-row:last-child{border-bottom:none}
 /* LOADING */
 .lp{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:.83em;padding:18px 0}
 .pd{width:7px;height:7px;border-radius:50%;background:var(--dk);animation:pulse 1.4s ease-in-out infinite}
 .pd:nth-child(2){animation-delay:.2s}.pd:nth-child(3){animation-delay:.4s}
 @keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
 .err{color:#e74c3c;font-size:.83em;padding:12px 0}
+.info-chip{display:inline-block;font-size:.7em;padding:2px 8px;border-radius:3px;margin-left:6px}
 </style>
 </head>
 <body>
@@ -157,7 +235,7 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 </div>
 
 <div class="hero">
-  <div class="hero-inner" id="heroInner">
+  <div class="hero-inner">
     <div class="char-ph" id="portrait">&#128128;</div>
     <div class="hero-info">
       <div class="char-name">Kreathor</div>
@@ -176,9 +254,14 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 
 <div class="tabs">
   <button class="tab-btn active" onclick="ST('checklist')">&#10003; Checklist</button>
+  <button class="tab-btn" onclick="ST('timeline')">&#128197; Semana</button>
+  <button class="tab-btn" onclick="ST('crests')">&#128142; Crests</button>
   <button class="tab-btn" onclick="ST('bis')">&#9876; Gear &amp; BiS</button>
   <button class="tab-btn" onclick="ST('dungeons')">&#128505; Mazmorras</button>
-  <button class="tab-btn" onclick="ST('enchants')">&#128142; Encantamientos</button>
+  <button class="tab-btn" onclick="ST('notas')">&#128221; Notas</button>
+  <button class="tab-btn" onclick="ST('rotation')">&#9881; Rotaci&oacute;n</button>
+  <button class="tab-btn" onclick="ST('builds')">&#9878; Builds</button>
+  <button class="tab-btn" onclick="ST('enchants')">&#10024; Encantamientos</button>
   <button class="tab-btn" onclick="ST('talents')">&#11088; Talentos</button>
   <button class="tab-btn" onclick="ST('mplus')">&#128202; M+ Runs</button>
   <button class="tab-btn" onclick="ST('raid')">&#127984; Raid</button>
@@ -187,7 +270,7 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 
 <div class="main">
 
-<!-- ===== CHECKLIST ===== -->
+<!-- ========== CHECKLIST ========== -->
 <div class="tab-panel active" id="tab-checklist">
   <div class="rbar">
     <div>
@@ -212,7 +295,42 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
   </div>
 </div>
 
-<!-- ===== GEAR & BIS ===== -->
+<!-- ========== TIMELINE SEMANAL ========== -->
+<div class="tab-panel" id="tab-timeline">
+  <div class="stitle"><span class="acc">&#128197;</span> Semana ideal de Kreathor &mdash; Midnight S1</div>
+  <p style="font-size:.78em;color:var(--muted);margin-bottom:18px;max-width:600px">Distribuci&oacute;n &oacute;ptima de actividades durante la semana. El reset ocurre cada martes a las 15:00 UTC (11:00 AM EST / 08:00 AM PST).</p>
+  <div class="timeline" id="tlContainer"></div>
+</div>
+
+<!-- ========== TRACKER CRESTS ========== -->
+<div class="tab-panel" id="tab-crests">
+  <div class="stitle"><span class="acc">&#128142;</span> Tracker de Crests &mdash; Semana actual</div>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <h3>&#128203; Crests acumulados esta semana</h3>
+        <div id="crestInputs"></div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--b1)">
+          <button onclick="saveCrests()" style="background:rgba(196,30,58,.15);border:1px solid rgba(196,30,58,.4);color:#ff8096;padding:7px 16px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:.75em;letter-spacing:.5px">GUARDAR</button>
+          <button onclick="resetCrests()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);padding:7px 14px;border-radius:4px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:.75em;margin-left:6px">Resetear</button>
+          <span style="font-size:.7em;color:var(--muted);margin-left:10px" id="crestSaveLabel"></span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" id="crestPlanCard">
+        <h3>&#128200; Plan de upgrades con crests actuales</h3>
+        <p style="color:var(--muted);font-size:.83em">Ingresa tus crests y guarda para ver qu&eacute; piezas puedes subir.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stitle" style="margin-top:20px"><span class="acc">&#128336;</span> Historial semanal</div>
+  <div class="card" id="crestHistory">
+    <p style="color:var(--muted);font-size:.83em">Sin historial guardado a&uacute;n.</p>
+  </div>
+</div>
+
+<!-- ========== GEAR & BIS ========== -->
 <div class="tab-panel" id="tab-bis">
   <div class="tbox">
     <h4>Set Tier 35 &mdash; Relentless Rider's Lament</h4>
@@ -225,7 +343,6 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
     <button class="gtab myth" onclick="SG('mythic')">&#128994; Mythic BiS (285-289)</button>
   </div>
   <p style="font-size:.71em;color:var(--muted);margin-bottom:12px">Fuentes: <a href="https://www.icy-veins.com/wow/blood-death-knight-pve-tank-gear-best-in-slot" target="_blank">Icy-Veins</a> &middot; <a href="https://www.method.gg/guides/blood-death-knight/gearing" target="_blank">Method.gg</a> &middot; <a href="https://www.archon.gg/wow/builds/blood/death-knight/mythic-plus/gear-and-tier-set/10/all-dungeons/this-week" target="_blank">Archon.gg</a> &middot; Midnight S1 12.0.1</p>
-
   <div class="gpanel active" id="gear-heroic">
   <table class="gt"><thead><tr><th>Slot</th><th>&Iacute;tem BiS Heroic</th><th>iLvl</th><th>Fuente</th></tr></thead><tbody>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129686;</div><div><div>Casco</div><div class="sn">Head</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232419" target="_blank">Helm of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Umbral Nullifier</span></td></tr>
@@ -233,91 +350,168 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129398;</div><div><div>Hombros</div><div class="sn">Shoulder</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232420" target="_blank">Pauldrons of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Crown of the Cosmos</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129d9;</div><div><div>Capa</div><div class="sn">Back</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232350" target="_blank">Cloak of the Void Sovereign</a></span></td><td><span class="ih">272</span></td><td><span class="sr">Dreamrift &mdash; Alnathe</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128737;</div><div><div>Pecho</div><div class="sn">Chest</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232421" target="_blank">Chestguard of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Xal'atath</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128170;</div><div><div>Mu&ntilde;ecas</div><div class="sn">Wrist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232340" target="_blank">Spellbreaker's Bracers</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero (Devouring Banding)</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128170;</div><div><div>Mu&ntilde;ecas</div><div class="sn">Wrist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232340" target="_blank">Spellbreaker's Bracers</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129408;</div><div><div>Guantes</div><div class="sn">Hands</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232358" target="_blank">Voidclaw Gauntlets</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Seat of the Triumvirate &mdash; L'ura</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128279;</div><div><div>Cintur&oacute;n</div><div class="sn">Waist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232345" target="_blank">Spellbreaker's Girdle</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero (Devouring Banding)</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128279;</div><div><div>Cintur&oacute;n</div><div class="sn">Waist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232345" target="_blank">Spellbreaker's Girdle</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128518;</div><div><div>Piernas</div><div class="sn">Legs</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232422" target="_blank">Legguards of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Shatterweave</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128082;</div><div><div>Botas</div><div class="sn">Feet</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232362" target="_blank">Oathsworn Stompers</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Magisters' Terrace &mdash; Kael'thas</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128141;</div><div><div>Anillo 1</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232375" target="_blank">Occulsion of Void</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Nexus-Point Xenas &mdash; Zhar'koveth</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128141;</div><div><div>Anillo 2</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232376" target="_blank">Omission of Light</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Nexus-Point Xenas &mdash; Zhar'koveth</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#127994;</div><div><div>Trinket 1</div><div class="sn">On-Use</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232291" target="_blank">Seed of the Devouring Wild</a></span></td><td><span class="ih">272</span></td><td><span class="sr">Dreamrift &mdash; Alnathe</span></td></tr>
   <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#127994;</div><div><div>Trinket 2</div><div class="sn">Passive</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232290" target="_blank">Sapling of the Dawnroot</a></span></td><td><span class="ih">272</span></td><td><span class="sr">Dreamrift &mdash; Alnathe</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#9876;</div><div><div>Arma</div><div class="sn">2H Weapon</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=237846" target="_blank">Blood Knight's Warblade</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero (Darkmoon Sigil: Hunt)</span></td></tr>
-  </tbody></table>
-  </div>
-
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#9876;</div><div><div>Arma</div><div class="sn">2H Weapon</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=237846" target="_blank">Blood Knight's Warblade</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero</span></td></tr>
+  </tbody></table></div>
   <div class="gpanel" id="gear-mythic">
   <table class="gt"><thead><tr><th>Slot</th><th>&Iacute;tem BiS Mythic</th><th>iLvl</th><th>Fuente</th></tr></thead><tbody>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129686;</div><div><div>Casco</div><div class="sn">Head</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232419" target="_blank">Helm of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic &mdash; Umbral Nullifier</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128447;</div><div><div>Cuello</div><div class="sn">Neck</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232380" target="_blank">Loa Worshiper's Band</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth &mdash; Joyer&iacute;a</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129398;</div><div><div>Hombros</div><div class="sn">Shoulder</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232420" target="_blank">Pauldrons of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic &mdash; Crown of the Cosmos</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129d9;</div><div><div>Capa</div><div class="sn">Back</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232350" target="_blank">Cloak of the Void Sovereign</a></span></td><td><span class="im">285</span></td><td><span class="sr">Dreamrift Mythic &mdash; Alnathe</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128737;</div><div><div>Pecho</div><div class="sn">Chest</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232421" target="_blank">Chestguard of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic &mdash; Xal'atath</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128170;</div><div><div>Mu&ntilde;ecas</div><div class="sn">Wrist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232340" target="_blank">Spellbreaker's Bracers</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth (Devouring Banding)</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129408;</div><div><div>Guantes</div><div class="sn">Hands</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232358" target="_blank">Voidclaw Gauntlets</a></span></td><td><span class="im">289</span></td><td><span class="sd">Seat of the Triumvirate +10 &mdash; L'ura</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128279;</div><div><div>Cintur&oacute;n</div><div class="sn">Waist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232348" target="_blank">Girdle of the Ancient Pit</a></span></td><td><span class="im">289</span></td><td><span class="sd">Pit of Saron +10 &mdash; Tyrannus</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128518;</div><div><div>Piernas</div><div class="sn">Legs</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232422" target="_blank">Legguards of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic &mdash; Shatterweave</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128082;</div><div><div>Botas</div><div class="sn">Feet</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232362" target="_blank">Oathsworn Stompers</a></span></td><td><span class="im">289</span></td><td><span class="sd">Magisters' Terrace +10 &mdash; Kael'thas</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128141;</div><div><div>Anillo 1</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232375" target="_blank">Occulsion of Void</a></span></td><td><span class="im">289</span></td><td><span class="sd">Nexus-Point Xenas +10 &mdash; Zhar'koveth</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128141;</div><div><div>Anillo 2</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232376" target="_blank">Omission of Light</a></span></td><td><span class="im">289</span></td><td><span class="sd">Nexus-Point Xenas +10 &mdash; Zhar'koveth</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#127994;</div><div><div>Trinket 1</div><div class="sn">On-Use</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232291" target="_blank">Seed of the Devouring Wild</a></span></td><td><span class="im">285</span></td><td><span class="sr">Dreamrift Mythic &mdash; Alnathe</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#127994;</div><div><div>Trinket 2</div><div class="sn">Passive</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232292" target="_blank">Rotting Globule</a></span></td><td><span class="im">289</span></td><td><span class="sd">Pit of Saron +10 &mdash; Tyrannus</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#9876;</div><div><div>Arma</div><div class="sn">2H Weapon</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=237846" target="_blank">Blood Knight's Warblade</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth (Darkmoon Sigil: Hunt)</span></td></tr>
-  </tbody></table>
-  </div>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129686;</div><div><div>Casco</div><div class="sn">Head</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232419" target="_blank">Helm of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128447;</div><div><div>Cuello</div><div class="sn">Neck</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232380" target="_blank">Loa Worshiper's Band</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129398;</div><div><div>Hombros</div><div class="sn">Shoulder</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232420" target="_blank">Pauldrons of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129d9;</div><div><div>Capa</div><div class="sn">Back</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232350" target="_blank">Cloak of the Void Sovereign</a></span></td><td><span class="im">285</span></td><td><span class="sr">Dreamrift Mythic</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128737;</div><div><div>Pecho</div><div class="sn">Chest</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232421" target="_blank">Chestguard of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128170;</div><div><div>Mu&ntilde;ecas</div><div class="sn">Wrist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232340" target="_blank">Spellbreaker's Bracers</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#129408;</div><div><div>Guantes</div><div class="sn">Hands</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232358" target="_blank">Voidclaw Gauntlets</a></span></td><td><span class="im">289</span></td><td><span class="sd">Seat of the Triumvirate +10</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128279;</div><div><div>Cintur&oacute;n</div><div class="sn">Waist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232348" target="_blank">Girdle of the Ancient Pit</a></span></td><td><span class="im">289</span></td><td><span class="sd">Pit of Saron +10</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128518;</div><div><div>Piernas</div><div class="sn">Legs</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232422" target="_blank">Legguards of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128082;</div><div><div>Botas</div><div class="sn">Feet</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232362" target="_blank">Oathsworn Stompers</a></span></td><td><span class="im">289</span></td><td><span class="sd">Magisters' Terrace +10</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128141;</div><div><div>Anillo 1</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232375" target="_blank">Occulsion of Void</a></span></td><td><span class="im">289</span></td><td><span class="sd">Nexus-Point Xenas +10</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#128141;</div><div><div>Anillo 2</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232376" target="_blank">Omission of Light</a></span></td><td><span class="im">289</span></td><td><span class="sd">Nexus-Point Xenas +10</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#127994;</div><div><div>Trinket 1</div><div class="sn">On-Use</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232291" target="_blank">Seed of the Devouring Wild</a></span></td><td><span class="im">285</span></td><td><span class="sr">Dreamrift Mythic</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#127994;</div><div><div>Trinket 2</div><div class="sn">Passive</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232292" target="_blank">Rotting Globule</a></span></td><td><span class="im">289</span></td><td><span class="sd">Pit of Saron +10</span></td></tr>
+  <tr><td><div style="display:flex;align-items:center;gap:7px"><div class="sicon">&#9876;</div><div><div>Arma</div><div class="sn">2H Weapon</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=237846" target="_blank">Blood Knight's Warblade</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth</span></td></tr>
+  </tbody></table></div>
 </div>
 
-<!-- ===== MAZMORRAS ===== -->
+<!-- ========== MAZMORRAS ========== -->
 <div class="tab-panel" id="tab-dungeons">
   <div class="stitle"><span class="acc">&#10022;</span> Score por Mazmorra <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
   <div id="dgContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
 </div>
 
-<!-- ===== ENCHANTS ===== -->
-<div class="tab-panel" id="tab-enchants">
-  <div class="two-col">
-    <div>
-      <div class="stitle"><span class="acc">&#10022;</span> Encantamientos &mdash; Blood DK Deathbringer</div>
-      <div class="card">
-        <h3>Por slot</h3>
-        <div class="erow"><span class="eslot">Arma</span><span class="ename"><a href="https://www.wowhead.com/item=235480" target="_blank">Enchant Weapon &ndash; Stonebound Artistry</a></span><span class="eprice">~800g</span></div>
-        <div class="erow"><span class="eslot">Casco</span><span class="ename"><a href="https://www.wowhead.com/item=235500" target="_blank">Enchant Helm &ndash; Thalassian Mandate</a></span><span class="eprice">~1,200g</span></div>
-        <div class="erow"><span class="eslot">Hombros</span><span class="ename"><a href="https://www.wowhead.com/item=235510" target="_blank">Enchant Shoulder &ndash; Whisper of Crit</a></span><span class="eprice">~600g</span></div>
-        <div class="erow"><span class="eslot">Pecho</span><span class="ename"><a href="https://www.wowhead.com/item=235520" target="_blank">Enchant Chest &ndash; Crystalline Radiance</a></span><span class="eprice">~900g</span></div>
-        <div class="erow"><span class="eslot">Mu&ntilde;ecas</span><span class="ename"><a href="https://www.wowhead.com/item=235530" target="_blank">Enchant Bracer &ndash; Chant of Leeching Fangs</a><br><span style="font-size:.74em;color:var(--muted)">Leech para supervivencia</span></span><span class="eprice">~700g</span></div>
-        <div class="erow"><span class="eslot">Guantes</span><span class="ename"><a href="https://www.wowhead.com/item=235540" target="_blank">Enchant Gloves &ndash; Chant of Armored Avoidance</a></span><span class="eprice">~550g</span></div>
-        <div class="erow"><span class="eslot">Piernas</span><span class="ename"><a href="https://www.wowhead.com/item=235550" target="_blank">Shadowarmor Kit</a> <span style="font-size:.74em;color:var(--muted)">(Leather Working)</span></span><span class="eprice">~1,500g</span></div>
-        <div class="erow"><span class="eslot">Botas</span><span class="ename"><a href="https://www.wowhead.com/item=235560" target="_blank">Enchant Boots &ndash; Scout's March</a></span><span class="eprice">~400g</span></div>
-        <div class="erow"><span class="eslot">Anillos x2</span><span class="ename"><a href="https://www.wowhead.com/item=235570" target="_blank">Enchant Ring &ndash; Devotion of Critical Strike</a></span><span class="eprice">~800g c/u</span></div>
-        <p style="font-size:.71em;color:var(--muted);margin-top:10px;padding-top:8px;border-top:1px solid var(--b1)">Precios estimados &middot; Verifica en <a href="https://theunderminejournal.com" target="_blank">Undermine Journal</a></p>
+<!-- ========== NOTAS POR MAZMORRA ========== -->
+<div class="tab-panel" id="tab-notas">
+  <div class="stitle"><span class="acc">&#128221;</span> Notas por Mazmorra &mdash; Estrategias y pulls</div>
+  <p style="font-size:.78em;color:var(--muted);margin-bottom:14px">Selecciona una mazmorra y escribe tus notas personales. Se guardan en el navegador.</p>
+  <div class="dng-selector" id="dngSelector"></div>
+  <div id="noteEditor" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+      <div style="font-family:'Cinzel',serif;font-size:.9em;color:var(--gold)" id="noteTitle"></div>
+      <div style="display:flex;gap:6px">
+        <button onclick="clearNote()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);font-size:.72em;padding:4px 10px;border-radius:3px;cursor:pointer">&#128465; Borrar</button>
+        <button onclick="saveNote()" style="background:rgba(196,30,58,.15);border:1px solid rgba(196,30,58,.4);color:#ff8096;font-size:.72em;padding:4px 12px;border-radius:3px;cursor:pointer;font-family:'Cinzel',serif">GUARDAR</button>
+        <span id="noteSaved" style="font-size:.7em;color:var(--green);align-self:center;opacity:0;transition:opacity .3s"></span>
       </div>
     </div>
+    <div class="note-tags" id="noteTags"></div>
+    <textarea class="note-area" id="noteTextarea" placeholder="Escribe tus notas aquí: pulls, interrupciones clave, patios que saltar, estrategia de tu grupo..."></textarea>
+    <p style="font-size:.7em;color:var(--muted);margin-top:6px">&#128276; Ctrl+S para guardar r&aacute;pido</p>
+  </div>
+  <div id="noteEmpty" style="color:var(--muted);font-size:.83em;padding:20px 0;text-align:center">
+    &#8593; Selecciona una mazmorra para ver o editar tus notas
+  </div>
+</div>
+
+<!-- ========== SIMULADOR ROTACION ========== -->
+<div class="tab-panel" id="tab-rotation">
+  <div class="stitle"><span class="acc">&#9881;</span> Simulador de Rotaci&oacute;n &mdash; Blood DK Deathbringer</div>
+  <div class="two-col" style="margin-bottom:20px">
     <div>
-      <div class="stitle"><span class="acc">&#10022;</span> Gemas</div>
-      <div class="card">
-        <h3>Deathbringer &mdash; Crit prioritario</h3>
-        <div class="grow"><div class="gdot" style="background:#ff4466"></div><div><div class="gname"><a href="https://www.wowhead.com/item=234783" target="_blank">Indecipherable Eversong Diamond</a></div><div class="gstat">Única meta Thalassian Diamond</div></div><span class="gprice">~8,000g</span></div>
-        <div class="grow"><div class="gdot" style="background:#ff2244"></div><div><div class="gname"><a href="https://www.wowhead.com/item=234780" target="_blank">Flawless Masterful Garnet</a></div><div class="gstat">+Cr&iacute;tico &middot; Default Deathbringer</div></div><span class="gprice">~1,200g</span></div>
-        <div class="grow"><div class="gdot" style="background:#ff8844"></div><div><div class="gname"><a href="https://www.wowhead.com/item=234781" target="_blank">Crafty Alexstraszite</a></div><div class="gstat">+Crit/Versa &middot; Alternativa defensiva</div></div><span class="gprice">~900g</span></div>
-        <div class="grow"><div class="gdot" style="background:#44aaff"></div><div><div class="gname"><a href="https://www.wowhead.com/item=234782" target="_blank">Keen Neltharite</a></div><div class="gstat">+Versa/Mastery &middot; Para San'layn</div></div><span class="gprice">~800g</span></div>
-        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--b1)">
-          <p style="font-size:.73em;color:#ff9900;margin-bottom:5px">&#9888; Sockets adicionales</p>
-          <p style="font-size:.71em;color:var(--muted);line-height:1.6"><strong>Radiant Jewelbinder</strong>: 6 tokens sin usar del Great Vault = 1 socket. A&ntilde;ade en Casco, Cintur&oacute;n o Mu&ntilde;ecas. Prioriza Casco &gt; Cintur&oacute;n &gt; Mu&ntilde;ecas.</p>
-        </div>
+      <div style="font-size:.7em;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Haz clic en cada habilidad para marcarla como ejecutada</div>
+      <div class="rot-nav">
+        <button class="rot-btn primary" onclick="resetRot()">&#8635; Reiniciar</button>
+        <button class="rot-btn" onclick="nextStep()">Siguiente &rarr;</button>
+        <span id="rotPhaseLabel" style="font-size:.75em;color:var(--muted);align-self:center;margin-left:4px"></span>
       </div>
-      <div class="stitle" style="margin-top:18px"><span class="acc">&#10022;</span> Consumibles</div>
-      <div class="card">
-        <h3>Flask &middot; Poci&oacute;n &middot; Comida</h3>
-        <div class="erow"><span class="eslot">Flask</span><span class="ename"><a href="https://www.wowhead.com/item=235600" target="_blank">Flask of the Shattered Sun</a> <span style="font-size:.74em;color:var(--muted)">o Flask of the Blood Knights (sim)</span></span><span class="eprice">~2,000g</span></div>
-        <div class="erow"><span class="eslot">Poci&oacute;n</span><span class="ename"><a href="https://www.wowhead.com/item=235610" target="_blank">Potion of Recklessness</a></span><span class="eprice">~1,500g</span></div>
-        <div class="erow"><span class="eslot">Comida</span><span class="ename"><a href="https://www.wowhead.com/item=235620" target="_blank">Grand Banquet of the Kaluak</a></span><span class="eprice">~500g</span></div>
-        <div class="erow"><span class="eslot">Augment</span><span class="ename"><a href="https://www.wowhead.com/item=235630" target="_blank">Ethereal Augment Rune</a> <span style="font-size:.74em;color:var(--muted)">(Kar'esh)</span></span><span class="eprice">~3,000g</span></div>
+      <div class="rot-steps" id="rotSteps"></div>
+    </div>
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:.74em;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--b1)">Cooldowns activos</div>
+      <div class="cd-grid" id="cdGrid"></div>
+      <div style="margin-top:16px;padding:12px;background:var(--bg3);border:1px solid var(--b1);border-radius:6px;font-size:.78em;line-height:1.7">
+        <p style="color:var(--gold);font-family:'Cinzel',serif;font-size:.82em;margin-bottom:6px">REGLAS CLAVE</p>
+        <p>&#8227; Mant&eacute;n Bone Shield &ge;7 cargas siempre</p>
+        <p>&#8227; Death Strike cuando HP &lt; 80% <em>o</em> &gt;80 RP</p>
+        <p>&#8227; No desperdicies Blood Boil en 2 cargas</p>
+        <p>&#8227; Usa DRW siempre que est&eacute; disponible</p>
+        <p>&#8227; Vampiric Blood antes de da&ntilde;o predecible</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== TALENTOS ===== -->
+<!-- ========== COMPARADOR BUILDS ========== -->
+<div class="tab-panel" id="tab-builds">
+  <div class="stitle"><span class="acc">&#9878;</span> Comparador de Builds &mdash; Midnight S1</div>
+  <p style="font-size:.78em;color:var(--muted);margin-bottom:16px;max-width:640px">Deathbringer vs San'layn para Blood DK. Ambas son viables; la elecci&oacute;n depende del contenido y preferencia de playstyle.</p>
+  <div class="compare-grid">
+    <div class="cmp-header db">&#128308; Deathbringer <span style="font-size:.75em;font-weight:400">(recomendado S1)</span></div>
+    <div class="cmp-header sl">&#128994; San'layn</div>
+    <div class="cmp-cat db">THROUGHPUT</div><div class="cmp-cat sl">THROUGHPUT</div>
+    <div class="cmp-cell db"><span class="win">Mayor burst con DRW</span><br><span style="font-size:.75em;color:var(--muted)">Reaper's Mark genera stacks passivos de da&ntilde;o shadowfrost</span></div>
+    <div class="cmp-cell sl"><span class="tie">Sostenido m&aacute;s parejo</span><br><span style="font-size:.75em;color:var(--muted)">Vampiric Strikes &amp; Gift of the San'layn para healing/DPS</span></div>
+    <div class="cmp-cat db">DEFENSIVO</div><div class="cmp-cat sl">DEFENSIVO</div>
+    <div class="cmp-cell db"><span class="win">Mejor burst mitigation</span><br><span style="font-size:.75em;color:var(--muted)">Dance of Midnight spawnea DRW adicionales = m&aacute;s absorci&oacute;n</span></div>
+    <div class="cmp-cell sl"><span class="tie">Mejor healing sostenido</span><br><span style="font-size:.75em;color:var(--muted)">Vampiric Strikes aumenta el healing de Death Strike</span></div>
+    <div class="cmp-cat db">MYTHIC+</div><div class="cmp-cat sl">MYTHIC+</div>
+    <div class="cmp-cell db"><span class="win">Superior en Midnight S1</span><br><span style="font-size:.75em;color:var(--muted)">Mejor en keys altas (&gt;+8) donde el burst damage importa m&aacute;s</span></div>
+    <div class="cmp-cell sl"><span class="tie">Bueno en keys bajas/medias</span><br><span style="font-size:.75em;color:var(--muted)">M&aacute;s f&aacute;cil de jugar en contenido donde el autoheal es suficiente</span></div>
+    <div class="cmp-cat db">RAID</div><div class="cmp-cat sl">RAID</div>
+    <div class="cmp-cell db"><span class="win">Mejor en fight cortos</span><br><span style="font-size:.75em;color:var(--muted)">Reaper's Mark s-tier en fights con burst window</span></div>
+    <div class="cmp-cell sl"><span class="tie">Mejor en fights largos</span><br><span style="font-size:.75em;color:var(--muted)">Healing sostenido reduce presion sobre healers en prog largo</span></div>
+    <div class="cmp-cat db">HERO TALENT</div><div class="cmp-cat sl">HERO TALENT</div>
+    <div class="cmp-cell db"><span class="win">Dance of Midnight (Apex)</span><br><span style="font-size:.75em;color:var(--muted)">Spawn DRW extra al consumir Reaper's Mark. Fuerte con 4pc tier</span></div>
+    <div class="cmp-cell sl"><span class="tie">Gift of the San'layn</span><br><span style="font-size:.75em;color:var(--muted)">Buff temporal que mejora Death Strike y Heart Strike. M&aacute;s forgiving</span></div>
+    <div class="cmp-cat db">STAT PRIORITY</div><div class="cmp-cat sl">STAT PRIORITY</div>
+    <div class="cmp-cell db"><span style="color:var(--text)">STR &gt; <span class="win">Crit</span> &gt; Vers &gt; Mastery &gt; Haste</span><br><span style="font-size:.75em;color:var(--muted)">Crit sinergia perfecta con Reaper's Mark stacks</span></div>
+    <div class="cmp-cell sl"><span style="color:var(--text)">STR &gt; <span class="win">Haste</span> &gt; Vers &gt; Mastery &gt; Crit</span><br><span style="font-size:.75em;color:var(--muted)">Haste = m&aacute;s Vampiric Strikes = m&aacute;s healing</span></div>
+    <div class="cmp-cat db">COMPLEJIDAD</div><div class="cmp-cat sl">COMPLEJIDAD</div>
+    <div class="cmp-cell db"><span style="color:var(--ora)">Alta</span><br><span style="font-size:.75em;color:var(--muted)">Requiere gestionar bien el timing de DRW y Reaper's Mark</span></div>
+    <div class="cmp-cell sl"><span class="win">Media</span><br><span style="font-size:.75em;color:var(--muted)">Rotaci&oacute;n m&aacute;s simple, autoheal m&aacute;s perdona errores</span></div>
+  </div>
+  <div class="verdict" style="border-color:rgba(196,30,58,.3);background:rgba(196,30,58,.05)">
+    <strong style="color:#ff8096;font-family:'Cinzel',serif">Veredicto para Kreathor (Midnight S1):</strong><br>
+    <strong style="color:var(--dk)">Deathbringer</strong> es la elecci&oacute;n &oacute;ptima para Mythic+ alto y raid prog. El synergy con el set tier 35 (4pc Blood Boil + DRW) es muy fuerte. San'layn sigue siendo viable si prefieres un playstyle m&aacute;s c&oacute;modo o ests en contenido casual (Normal/Heroic + keys bajas).
+    <br><span style="font-size:.75em;color:var(--muted)">Fuente: Archon.gg &middot; Method.gg &middot; Icy-Veins Midnight S1 tier lists</span>
+  </div>
+</div>
+
+<!-- ========== ENCHANTS ========== -->
+<div class="tab-panel" id="tab-enchants">
+  <div class="two-col">
+    <div>
+      <div class="stitle"><span class="acc">&#10022;</span> Encantamientos &mdash; Deathbringer</div>
+      <div class="card">
+        <h3>Por slot</h3>
+        <div class="erow"><span class="eslot">Arma</span><span class="ename"><a href="https://www.wowhead.com/item=235480" target="_blank">Stonebound Artistry</a></span><span class="eprice">~800g</span></div>
+        <div class="erow"><span class="eslot">Casco</span><span class="ename"><a href="https://www.wowhead.com/item=235500" target="_blank">Thalassian Mandate</a></span><span class="eprice">~1,200g</span></div>
+        <div class="erow"><span class="eslot">Hombros</span><span class="ename"><a href="https://www.wowhead.com/item=235510" target="_blank">Whisper of Crit</a></span><span class="eprice">~600g</span></div>
+        <div class="erow"><span class="eslot">Pecho</span><span class="ename"><a href="https://www.wowhead.com/item=235520" target="_blank">Crystalline Radiance</a></span><span class="eprice">~900g</span></div>
+        <div class="erow"><span class="eslot">Mu&ntilde;ecas</span><span class="ename"><a href="https://www.wowhead.com/item=235530" target="_blank">Chant of Leeching Fangs</a> <span style="font-size:.74em;color:var(--muted)">(Leech)</span></span><span class="eprice">~700g</span></div>
+        <div class="erow"><span class="eslot">Guantes</span><span class="ename"><a href="https://www.wowhead.com/item=235540" target="_blank">Chant of Armored Avoidance</a></span><span class="eprice">~550g</span></div>
+        <div class="erow"><span class="eslot">Piernas</span><span class="ename"><a href="https://www.wowhead.com/item=235550" target="_blank">Shadowarmor Kit</a> <span style="font-size:.74em;color:var(--muted)">(LW)</span></span><span class="eprice">~1,500g</span></div>
+        <div class="erow"><span class="eslot">Botas</span><span class="ename"><a href="https://www.wowhead.com/item=235560" target="_blank">Scout's March</a></span><span class="eprice">~400g</span></div>
+        <div class="erow"><span class="eslot">Anillos x2</span><span class="ename"><a href="https://www.wowhead.com/item=235570" target="_blank">Devotion of Critical Strike</a></span><span class="eprice">~800g c/u</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="stitle"><span class="acc">&#10022;</span> Gemas y Consumibles</div>
+      <div class="card">
+        <h3>Gemas &mdash; Deathbringer Crit</h3>
+        <div class="grow"><div class="gdot" style="background:#ff4466"></div><div><div class="gname"><a href="https://www.wowhead.com/item=234783" target="_blank">Indecipherable Eversong Diamond</a></div><div class="gstat">Meta &uacute;nica</div></div><span class="gprice">~8,000g</span></div>
+        <div class="grow"><div class="gdot" style="background:#ff2244"></div><div><div class="gname"><a href="https://www.wowhead.com/item=234780" target="_blank">Flawless Masterful Garnet</a></div><div class="gstat">+Cr&iacute;tico &middot; Default</div></div><span class="gprice">~1,200g</span></div>
+        <div class="grow"><div class="gdot" style="background:#44aaff"></div><div><div class="gname"><a href="https://www.wowhead.com/item=234782" target="_blank">Keen Neltharite</a></div><div class="gstat">+Versa &middot; Defensivo</div></div><span class="gprice">~800g</span></div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h3>Consumibles</h3>
+        <div class="erow"><span class="eslot">Flask</span><span class="ename">Flask of the Shattered Sun</span><span class="eprice">~2,000g</span></div>
+        <div class="erow"><span class="eslot">Poci&oacute;n</span><span class="ename">Potion of Recklessness</span><span class="eprice">~1,500g</span></div>
+        <div class="erow"><span class="eslot">Comida</span><span class="ename">Grand Banquet of the Kaluak</span><span class="eprice">~500g</span></div>
+        <div class="erow"><span class="eslot">Augment</span><span class="ename">Ethereal Augment Rune</span><span class="eprice">~3,000g</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TALENTOS ========== -->
 <div class="tab-panel" id="tab-talents">
   <div class="two-col" style="margin-bottom:20px">
     <div>
@@ -328,22 +522,19 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
         <div class="sprow"><span class="splbl">Versatilidad</span><div class="spbg"><div class="spf" style="width:80%;background:#44aaff"></div></div><span style="font-size:.7em;color:var(--muted);width:28px;text-align:right">A</span></div>
         <div class="sprow"><span class="splbl">Maestr&iacute;a</span><div class="spbg"><div class="spf" style="width:74%;background:var(--purp)"></div></div><span style="font-size:.7em;color:var(--muted);width:28px;text-align:right">A</span></div>
         <div class="sprow"><span class="splbl">Prisa</span><div class="spbg"><div class="spf" style="width:42%;background:var(--green)"></div></div><span style="font-size:.7em;color:var(--muted);width:28px;text-align:right">B</span></div>
-        <p style="font-size:.7em;color:var(--muted);margin-top:10px">San'layn invierte Prisa y Cr&iacute;tico. Simula en <a href="https://www.raidbots.com" target="_blank">Raidbots</a>.</p>
       </div>
     </div>
     <div>
-      <div class="stitle"><span class="acc">&#10022;</span> Rotaci&oacute;n R&aacute;pida &mdash; Cheat Sheet</div>
+      <div class="stitle"><span class="acc">&#10022;</span> Cheat Sheet &mdash; Rotaci&oacute;n</div>
       <div class="card">
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div><p style="font-size:.7em;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Apertura</p><p style="font-size:.8em;line-height:1.6">Marrowrend x2 &rarr; Blood Boil &rarr; Dancing Rune Weapon &rarr; Heart Strike spam &rarr; Death Strike si HP baja</p></div>
-          <div style="border-top:1px solid var(--b1);padding-top:10px"><p style="font-size:.7em;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Loop de Prioridad</p><p style="font-size:.8em;line-height:1.6">1. Death Strike (HP &lt; 80% o exceso RP)<br>2. Marrowrend (Bone Shield &lt; 7)<br>3. Blood Boil (2 cargas)<br>4. Heart Strike (generador)</p></div>
-          <div style="border-top:1px solid var(--b1);padding-top:10px"><p style="font-size:.7em;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Cooldowns</p><p style="font-size:.8em;line-height:1.6">Dancing Rune Weapon 2min &middot; Vampiric Blood (da&ntilde;o fuerte) &middot; Tombstone (emergencia) &middot; AMS (m&aacute;gico)</p></div>
-        </div>
+        <p style="font-size:.7em;color:var(--gold);margin-bottom:4px">APERTURA</p>
+        <p style="font-size:.8em;line-height:1.6;margin-bottom:10px">Marrowrend x2 &rarr; Blood Boil &rarr; Dancing Rune Weapon &rarr; Heart Strike spam</p>
+        <p style="font-size:.7em;color:var(--gold);margin-bottom:4px">LOOP</p>
+        <p style="font-size:.8em;line-height:1.6">1. Death Strike (HP&lt;80% o RP&gt;80)<br>2. Marrowrend (Bone Shield&lt;7)<br>3. Blood Boil (2 cargas)<br>4. Heart Strike</p>
       </div>
     </div>
   </div>
-  <div class="stitle"><span class="acc">&#10022;</span> Build &mdash; Deathbringer Mythic+ &amp; Raid</div>
-  <p style="font-size:.78em;color:var(--muted);max-width:680px;line-height:1.6;margin-bottom:12px">Hero Talent: <span style="background:rgba(155,77,202,.2);border:1px solid rgba(155,77,202,.4);color:var(--purp);padding:2px 8px;border-radius:4px">Deathbringer</span> &mdash; mayor throughput que San'layn en Midnight S1. Core: <strong style="color:var(--text)">Reaper's Mark</strong> acumula stacks shadowfrost. Apex: <strong style="color:var(--text)">Dance of Midnight</strong> spawnea DRW adicionales.</p>
+  <div class="stitle"><span class="acc">&#10022;</span> Talentos clave &mdash; Deathbringer</div>
   <div class="tgrid" style="margin-bottom:14px">
     <div class="tnode key"><div class="tn">Reaper's Mark</div><div class="td2">Core Deathbringer</div></div>
     <div class="tnode key"><div class="tn">Dancing Rune Weapon</div><div class="td2">CD principal 2min</div></div>
@@ -353,58 +544,50 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
     <div class="tnode sel"><div class="tn">Blood Boil</div><div class="td2">AoE + set bonus</div></div>
     <div class="tnode sel"><div class="tn">Ossuary</div><div class="td2">Reduce coste DS</div></div>
     <div class="tnode sel"><div class="tn">Purgatory</div><div class="td2">Cheat death</div></div>
-    <div class="tnode sel"><div class="tn">Anti-Magic Shell</div><div class="td2">CD m&aacute;gico ic&oacute;nico</div></div>
+    <div class="tnode sel"><div class="tn">Anti-Magic Shell</div><div class="td2">CD m&aacute;gico</div></div>
     <div class="tnode sel"><div class="tn">Vampiric Blood</div><div class="td2">CD defensivo mayor</div></div>
     <div class="tnode sel"><div class="tn">Tombstone</div><div class="td2">CD + absorci&oacute;n</div></div>
     <div class="tnode key"><div class="tn">Dance of Midnight</div><div class="td2">Apex Talent Rank 3</div></div>
   </div>
-  <p style="font-size:.74em;color:var(--muted)">Gu&iacute;as: <a href="https://www.icy-veins.com/wow/blood-death-knight-pve-tank-spec-builds-talents" target="_blank">Icy-Veins</a> &middot; <a href="https://www.method.gg/guides/blood-death-knight/talents" target="_blank">Method.gg</a> &middot; <a href="https://maxroll.gg/wow/class-guides/blood-death-knight-mythic-plus-guide" target="_blank">Maxroll</a> &middot; <a href="https://www.archon.gg/wow/builds/blood/death-knight/mythic-plus/talents/10/all-dungeons/this-week" target="_blank">Archon.gg</a></p>
 </div>
 
-<!-- ===== M+ RUNS ===== -->
+<!-- ========== M+ RUNS ========== -->
 <div class="tab-panel" id="tab-mplus">
   <div class="stitle"><span class="acc">&#10022;</span> Actividad Mythic+ <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
   <div id="mpContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando runs...</span></div></div>
 </div>
 
-<!-- ===== RAID ===== -->
+<!-- ========== RAID ========== -->
 <div class="tab-panel" id="tab-raid">
   <div class="stitle"><span class="acc">&#10022;</span> Progreso de Raid <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
   <div id="raidContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
 </div>
 
-<!-- ===== UPGRADES ===== -->
+<!-- ========== UPGRADES ========== -->
 <div class="tab-panel" id="tab-upgrades">
   <div class="stitle"><span class="acc">&#10022;</span> Simulador de Upgrades &mdash; Crests necesarios</div>
   <p style="font-size:.78em;color:var(--muted);margin-bottom:16px;max-width:580px">Calcula cu&aacute;ntos crests necesitas para subir una pieza al ilvl objetivo en Midnight S1.</p>
   <div class="two-col" style="margin-bottom:22px">
     <div class="ucal card">
       <h3>Calculadora</h3>
-      <label>ilvl actual de la pieza</label>
+      <label>ilvl actual</label>
       <select id="uFrom">
-        <option value="233">233 &mdash; Adventurer</option>
-        <option value="242">242 &mdash; Veteran</option>
-        <option value="249">249 &mdash; Champion</option>
-        <option value="256">256 &mdash; Hero</option>
-        <option value="263">263 &mdash; Hero max</option>
-        <option value="272" selected>272 &mdash; Heroic Raid</option>
-        <option value="279">279 &mdash; Hero upgrade</option>
-        <option value="285">285 &mdash; Mythic Raid</option>
+        <option value="233">233 &mdash; Adventurer</option><option value="242">242 &mdash; Veteran</option>
+        <option value="249">249 &mdash; Champion</option><option value="256">256 &mdash; Hero</option>
+        <option value="263">263 &mdash; Hero max</option><option value="272" selected>272 &mdash; Heroic Raid</option>
+        <option value="279">279 &mdash; Hero upgrade</option><option value="285">285 &mdash; Mythic Raid</option>
       </select>
       <label>ilvl objetivo</label>
       <select id="uTo">
-        <option value="249">249 &mdash; Champion</option>
-        <option value="256">256 &mdash; Hero</option>
-        <option value="263">263 &mdash; Hero max</option>
-        <option value="272">272 &mdash; Heroic Raid</option>
-        <option value="279" selected>279 &mdash; Hero upgrade</option>
-        <option value="285">285 &mdash; Mythic Raid</option>
+        <option value="249">249 &mdash; Champion</option><option value="256">256 &mdash; Hero</option>
+        <option value="263">263 &mdash; Hero max</option><option value="272">272 &mdash; Heroic Raid</option>
+        <option value="279" selected>279 &mdash; Hero upgrade</option><option value="285">285 &mdash; Mythic Raid</option>
         <option value="289">289 &mdash; M+ max (+10)</option>
       </select>
       <label>Tipo de pieza</label>
       <select id="uType">
         <option value="armor">Armadura / Joyería / Trinket</option>
-        <option value="weapon">Arma 2H (cuesta 2x crests)</option>
+        <option value="weapon">Arma 2H (2x crests)</option>
       </select>
       <button class="ucal-btn" onclick="calcU()">CALCULAR</button>
     </div>
@@ -413,17 +596,15 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
       <p style="color:var(--muted);font-size:.83em;margin-top:8px">Selecciona los ilvl y calcula.</p>
     </div>
   </div>
-  <div class="stitle"><span class="acc">&#10022;</span> Tipos de Crests &mdash; Midnight S1</div>
   <div class="cg">
-    <div class="cc" style="border-top:3px solid #6b7280"><div style="font-weight:600;color:#9ca3af;margin-bottom:7px">Whelpling's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Adventurer track<br>M+ 2-5 &middot; LFR<br>L&iacute;mite: 90/semana<br>Upgrade hasta 249</div></div>
-    <div class="cc" style="border-top:3px solid #16a34a"><div style="font-weight:600;color:#4ade80;margin-bottom:7px">Drake's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Veteran track<br>M+ 6-7 &middot; Normal Raid<br>L&iacute;mite: 90/semana<br>Upgrade hasta 256</div></div>
-    <div class="cc" style="border-top:3px solid #1d4ed8"><div style="font-weight:600;color:#60a5fa;margin-bottom:7px">Wyrm's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Champion / Hero track<br>M+ 8-10 &middot; Heroic Raid<br>L&iacute;mite: 90/semana<br>Upgrade hasta 272</div></div>
-    <div class="cc" style="border-top:3px solid #7e22ce"><div style="font-weight:600;color:#c084f5;margin-bottom:7px">Aspect's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Hero max / Myth track<br>M+ 10+ &middot; Mythic Raid<br>L&iacute;mite: 15/semana<br>Upgrade hasta 289</div></div>
+    <div class="cc" style="border-top:3px solid #6b7280"><div style="font-weight:600;color:#9ca3af;margin-bottom:7px">Whelpling's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Adventurer &middot; M+ 2-5 &middot; LFR<br>90/semana &middot; hasta 249</div></div>
+    <div class="cc" style="border-top:3px solid #16a34a"><div style="font-weight:600;color:#4ade80;margin-bottom:7px">Drake's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Veteran &middot; M+ 6-7 &middot; Normal<br>90/semana &middot; hasta 256</div></div>
+    <div class="cc" style="border-top:3px solid #1d4ed8"><div style="font-weight:600;color:#60a5fa;margin-bottom:7px">Wyrm's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Champion/Hero &middot; M+ 8-10 &middot; Heroic<br>90/semana &middot; hasta 272</div></div>
+    <div class="cc" style="border-top:3px solid #7e22ce"><div style="font-weight:600;color:#c084f5;margin-bottom:7px">Aspect's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Hero max/Myth &middot; M+ 10+ &middot; Mythic<br>15/semana &middot; hasta 289</div></div>
   </div>
 </div>
 
 </div><!-- /main -->
-
 <script>
 const R='us',RL='quelthalas',N='Kreathor';
 const F='mythic_plus_scores_by_season:current,gear,raid_progression,spec,class,mythic_plus_recent_runs,mythic_plus_best_runs:current,thumbnail_url';
@@ -437,17 +618,13 @@ function ST(id){
 function SG(id){
   document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('active','hero','myth'));
   document.querySelectorAll('.gpanel').forEach(p=>p.classList.remove('active'));
-  const btn=document.querySelector(`[onclick="SG('${id}')"]`);
-  btn.classList.add('active',id==='heroic'?'hero':'myth');
+  document.querySelector(`[onclick="SG('${id}')"]`).classList.add('active',id==='heroic'?'hero':'myth');
   document.getElementById('gear-'+id).classList.add('active');
 }
 function SC(s){
-  if(s>=3000)return'#ff8000';
-  if(s>=2000)return'#a335ee';
-  if(s>=1500)return'#0070dd';
-  if(s>=1000)return'#1eff00';
-  if(s>0)return'#ffffff';
-  return'#aaa';
+  if(s>=3000)return'#ff8000';if(s>=2000)return'#a335ee';
+  if(s>=1500)return'#0070dd';if(s>=1000)return'#1eff00';
+  if(s>0)return'#ffffff';return'#aaa';
 }
 
 // ── RESET COUNTDOWN ──────────────────────────
@@ -455,12 +632,10 @@ function nextReset(){
   const n=new Date(),d=new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),15,0,0));
   let diff=(2-d.getUTCDay()+7)%7;
   if(diff===0&&n>=d)diff=7;
-  d.setUTCDate(d.getUTCDate()+diff);
-  return d;
+  d.setUTCDate(d.getUTCDate()+diff);return d;
 }
 function tick(){
-  const ms=nextReset()-Date.now();
-  if(ms<=0){tick();return;}
+  const ms=nextReset()-Date.now();if(ms<=0){tick();return;}
   const dy=Math.floor(ms/86400000),hr=Math.floor(ms%86400000/3600000),mn=Math.floor(ms%3600000/60000),sc=Math.floor(ms%60000/1000);
   const p=[];if(dy)p.push(dy+'d');
   p.push(String(hr).padStart(2,'0')+'h '+String(mn).padStart(2,'0')+'m '+String(sc).padStart(2,'0')+'s');
@@ -472,8 +647,8 @@ setInterval(tick,1000);tick();
 function wKey(){const r=nextReset();r.setUTCDate(r.getUTCDate()-7);return'kr_w_'+r.toISOString().slice(0,10)}
 function dKey(){const n=new Date(),c=new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),15,0,0)),b=n<c?new Date(c-86400000):c;return'kr_d_'+b.toISOString().slice(0,10)}
 function lC(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch{return{}}}
-function toggle(sk,id){const d=lC(sk);d[id]=!d[id];localStorage.setItem(sk,JSON.stringify(d));renderCL()}
-function clearAll(){if(!confirm('Limpiar todas las tareas?'))return;localStorage.removeItem(wKey());localStorage.removeItem(dKey());renderCL()}
+function toggle(sk,id){const d=lC(sk);d[id]=!d[id];localStorage.setItem(sk,JSON.stringify(d));renderCL();renderTL();}
+function clearAll(){if(!confirm('Limpiar todas las tareas?'))return;localStorage.removeItem(wKey());localStorage.removeItem(dKey());renderCL();renderTL();}
 
 const WT=[
   {id:'wb',t:'World Boss',s:'Matar el jefe activo esta semana',g:'w'},
@@ -481,38 +656,33 @@ const WT=[
   {id:'voids',t:'Raid &mdash; Voidspire',s:'Normal / Heroic / Mythic (6 jefes)',g:'w'},
   {id:'dream',t:'Raid &mdash; Dreamrift',s:'1 jefe &mdash; r&aacute;pido y con tier',g:'w'},
   {id:'march',t:"Raid &mdash; March on Quel'Danas",s:'2 jefes finales de la temporada',g:'w'},
-  {id:'pr1',t:'Nightmare Prey 1/3',s:'3 Prey totales para quest de Lady Liadrin',g:'w'},
-  {id:'pr2',t:'Nightmare Prey 2/3',s:'',g:'w'},
-  {id:'pr3',t:'Nightmare Prey 3/3',s:'Entregar quest &rarr; obtener Spark',g:'w'},
-  {id:'liad',t:'World Event (Lady Liadrin)',s:'Quest semanal de evento por Spark adicional',g:'w'},
-  {id:'hous',t:'Housing Weekly (Vaeli)',s:'Quest semanal &mdash; fuera del banco de Silvermoon',g:'w'},
-  {id:'m1',t:'M+ Vault 1/8',s:'8 mazmorras &rarr; 3 opciones en Great Vault',g:'v'},
+  {id:'pr1',t:'Nightmare Prey 1/3',s:'3 Prey totales para quest Lady Liadrin',g:'w'},
+  {id:'pr2',t:'Nightmare Prey 2/3',s:'',g:'w'},{id:'pr3',t:'Nightmare Prey 3/3',s:'Entregar &rarr; obtener Spark',g:'w'},
+  {id:'liad',t:'World Event (Lady Liadrin)',s:'Quest semanal de evento por Spark',g:'w'},
+  {id:'hous',t:'Housing Weekly (Vaeli)',s:'Quest semanal banco de Silvermoon',g:'w'},
+  {id:'m1',t:'M+ Vault 1/8',s:'8 mazmorras = 3 opciones en Great Vault',g:'v'},
   {id:'m2',t:'M+ Vault 2/8',s:'',g:'v'},{id:'m3',t:'M+ Vault 3/8',s:'',g:'v'},
   {id:'m4',t:'M+ Vault 4/8',s:'',g:'v'},{id:'m5',t:'M+ Vault 5/8',s:'',g:'v'},
   {id:'m6',t:'M+ Vault 6/8',s:'',g:'v'},{id:'m7',t:'M+ Vault 7/8',s:'',g:'v'},
   {id:'m8',t:'M+ Vault 8/8',s:'Vault 100% desbloqueado!',g:'v'},
 ];
 const DT=[
-  {id:'t11',t:'Delve T11',s:'Al menos 1 Delve nivel 11 para crests de alto tier',g:'d'},
-  {id:'boun',t:'Bountiful Delve',s:'Cofre adicional del delve bountiful diario',g:'d'},
-  {id:'crest',t:'Crests farming (M+)',s:'Farmear crests en mazmorras para subir gear',g:'d'},
+  {id:'t11',t:'Delve T11',s:'Al menos 1 Delve nivel 11 para crests',g:'d'},
+  {id:'boun',t:'Bountiful Delve',s:'Cofre adicional diario',g:'d'},
+  {id:'crest',t:'Crests farming (M+)',s:'Farmear crests para upgrades',g:'d'},
 ];
-const TL={'w':'Semanal','d':'Diaria','v':'Vault'};
-const TC={'w':'tw','d':'td','v':'tv'};
-
+const TL2={'w':'tw','d':'td','v':'tv'};const TLlbl={'w':'Semanal','d':'Diaria','v':'Vault'};
 function mkItem(sk,t){
   const done=lC(sk)[t.id]||false;
   return`<div class="check-item${done?' done':''}" onclick="toggle('${sk}','${t.id}')">
     <div class="check-box">${done?'&#10003;':''}</div>
     <div class="check-lbl"><div class="check-lbl-t">${t.t}</div>${t.s?`<div class="check-lbl-s">${t.s}</div>`:''}</div>
-    <span class="ctag ${TC[t.g]}">${TL[t.g]}</span>
+    <span class="ctag ${TL2[t.g]}">${TLlbl[t.g]}</span>
   </div>`;
 }
-
 function renderCL(){
   const wk=wKey(),dk=dKey(),wd=lC(wk),dd=lC(dk);
-  const today=new Date();
-  document.getElementById('dlbl').textContent='&mdash; '+today.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'short'});
+  document.getElementById('dlbl').textContent='— '+new Date().toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'short'});
   document.getElementById('wList').innerHTML=WT.map(t=>mkItem(wk,t)).join('');
   document.getElementById('dList').innerHTML=DT.map(t=>mkItem(dk,t)).join('');
   const wD=WT.filter(t=>wd[t.id]).length,dD=DT.filter(t=>dd[t.id]).length;
@@ -521,34 +691,299 @@ function renderCL(){
   const pD=[wd.pr1,wd.pr2,wd.pr3].filter(Boolean).length;
   function bar(l,v,t,c){return`<div class="prow"><span class="plbl">${l}</span><div class="pbg"><div class="pf" style="width:${Math.round(v/t*100)}%;background:${c}"></div></div><span class="ppct">${v}/${t}</span></div>`}
   document.getElementById('pCard').innerHTML=
-    bar('Semanal',wD,WT.length,'var(--gold)')+
-    bar('Diario',dD,DT.length,'#2ecc71')+
-    bar('M+ Vault',mD,8,'#5ab4ff')+
-    bar('Raids',rD,3,'#c084f5')+
-    bar('Nightmare Prey',pD,3,'#e67e22')+
-    '<p style="font-size:.7em;color:var(--muted);margin-top:10px">Semanal se limpia cada martes 15:00 UTC. Diario cada d&iacute;a a las 15:00 UTC.</p>';
+    bar('Semanal',wD,WT.length,'var(--gold)')+bar('Diario',dD,DT.length,'#2ecc71')+
+    bar('M+ Vault',mD,8,'#5ab4ff')+bar('Raids',rD,3,'#c084f5')+bar('Nightmare Prey',pD,3,'#e67e22')+
+    '<p style="font-size:.7em;color:var(--muted);margin-top:10px">Reset semanal: martes 15:00 UTC &middot; Diario: cada d&iacute;a 15:00 UTC</p>';
 }
 renderCL();
 
-// ── DUNGEON SCORES ───────────────────────────
-const DNGS=["Algeth'ar Academy","Maisara Caverns","Nexus-Point Xenas","Windrunner Spire","Magisters' Terrace","Pit of Saron","Seat of the Triumvirate","Skyreach"];
+// ── TIMELINE SEMANAL ─────────────────────────
+const WEEK_PLAN=[
+  {day:'Martes',label:'RESET',isReset:true,tasks:[
+    {name:'Abrir Great Vault',color:'#c084f5',key:'vault'},
+    {name:'World Boss semanal',color:'#e67e22',key:'wb'},
+    {name:'2-3 M+ para el vault',color:'#5ab4ff',key:'m1'},
+  ]},
+  {day:'Martes\ntarde',label:'',tasks:[
+    {name:'Nightmare Prey 1/3',color:'#e67e22',key:'pr1'},
+    {name:'Raid — Voidspire',color:'#ff6b80',key:'voids'},
+    {name:'Delve T11 + Bountiful',color:'var(--green)',key:'t11'},
+  ]},
+  {day:'Miércoles',label:'',tasks:[
+    {name:'Raid — Dreamrift',color:'#ff6b80',key:'dream'},
+    {name:'Nightmare Prey 2/3',color:'#e67e22',key:'pr2'},
+    {name:'2-3 M+ vault',color:'#5ab4ff',key:'m4'},
+    {name:'Crests farming',color:'#60a5fa',key:'crest'},
+  ]},
+  {day:'Jueves',label:'',tasks:[
+    {name:"Raid — March on Quel'Danas",color:'#ff6b80',key:'march'},
+    {name:'Nightmare Prey 3/3 → Spark',color:'#e67e22',key:'pr3'},
+    {name:'Lady Liadrin Event',color:'var(--gold)',key:'liad'},
+  ]},
+  {day:'Viernes',label:'',tasks:[
+    {name:'2-3 M+ vault',color:'#5ab4ff',key:'m6'},
+    {name:'Housing Weekly (Vaeli)',color:'var(--gold)',key:'hous'},
+    {name:'Crests farming',color:'#60a5fa',key:'crest'},
+  ]},
+  {day:'Sábado',label:'',tasks:[
+    {name:'M+ Push (score)',color:'#5ab4ff',key:'m7'},
+    {name:'Crests farming',color:'#60a5fa',key:'crest'},
+  ]},
+  {day:'Domingo',label:'',tasks:[
+    {name:'M+ extra / prog',color:'#5ab4ff',key:'m8'},
+    {name:'Preparar para reset',color:'var(--muted)',key:''},
+  ]},
+  {day:'Lunes',label:'',tasks:[
+    {name:'Último día antes del reset',color:'var(--muted)',key:''},
+    {name:'Revisar vault del martes',color:'#c084f5',key:'vault'},
+  ]},
+];
+const TODAY_DAYS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 
+function renderTL(){
+  const wd=lC(wKey()),dd=lC(dKey());
+  const todayName=TODAY_DAYS[new Date().getDay()];
+  let h='';
+  WEEK_PLAN.forEach(entry=>{
+    const isToday=entry.day.startsWith(todayName)||todayName===entry.day;
+    const dotClass=entry.isReset?'reset-dot':isToday?'today-dot':'';
+    h+=`<div class="tl-day">
+      <div class="tl-day-label${entry.isReset?' reset':''}">${entry.day.replace('\n','<br>')}</div>
+      <div class="tl-dot ${dotClass}"></div>
+      <div class="tl-content"><div class="tl-tasks">`;
+    entry.tasks.forEach(task=>{
+      const done=task.key?(wd[task.key]||dd[task.key]):false;
+      h+=`<div class="tl-task${done?' done':''}">
+        <div class="tl-task-dot" style="background:${task.color}"></div>
+        <span class="tl-task-name">${task.name}</span>
+        ${done?'<span style="font-size:.68em;color:var(--green)">&#10003; hecho</span>':''}
+      </div>`;
+    });
+    h+='</div></div></div>';
+  });
+  document.getElementById('tlContainer').innerHTML=h;
+}
+renderTL();
+
+// ── TRACKER CRESTS ───────────────────────────
+const CREST_TYPES=[
+  {id:'whelp',name:"Whelpling's Crest",color:'#6b7280',limit:90,col:'#9ca3af'},
+  {id:'drake',name:"Drake's Crest",color:'#16a34a',limit:90,col:'#4ade80'},
+  {id:'wyrm',name:"Wyrm's Crest",color:'#1d4ed8',limit:90,col:'#60a5fa'},
+  {id:'aspect',name:"Aspect's Crest",color:'#7e22ce',limit:15,col:'#c084f5'},
+];
+function crestKey(){const r=nextReset();r.setUTCDate(r.getUTCDate()-7);return'kr_crests_'+r.toISOString().slice(0,10)}
+function lCrests(){try{return JSON.parse(localStorage.getItem(crestKey())||'{}')}catch{return{}}}
+
+function renderCrestInputs(){
+  const saved=lCrests();
+  let h='';
+  CREST_TYPES.forEach(ct=>{
+    const val=saved[ct.id]||0;const pct=Math.min(Math.round(val/ct.limit*100),100);
+    h+=`<div class="crest-input-row">
+      <div class="crest-color" style="background:${ct.color}"></div>
+      <span class="crest-name">${ct.name}</span>
+      <input type="number" class="crest-num" id="ci_${ct.id}" value="${val}" min="0" max="${ct.limit}" oninput="updateCrestBar('${ct.id}')">
+      <span class="crest-limit">/ ${ct.limit}</span>
+      <div class="crest-pbar"><div class="crest-pfill" id="cpf_${ct.id}" style="width:${pct}%;background:${ct.col}"></div></div>
+      <span class="crest-pct" id="cpp_${ct.id}">${pct}%</span>
+    </div>`;
+  });
+  document.getElementById('crestInputs').innerHTML=h;
+  updateCrestPlan();
+}
+function updateCrestBar(id){
+  const ct=CREST_TYPES.find(c=>c.id===id);if(!ct)return;
+  const val=Math.min(parseInt(document.getElementById('ci_'+id).value)||0,ct.limit);
+  const pct=Math.round(val/ct.limit*100);
+  document.getElementById('cpf_'+id).style.width=pct+'%';
+  document.getElementById('cpp_'+id).textContent=pct+'%';
+}
+function saveCrests(){
+  const data={};
+  CREST_TYPES.forEach(ct=>{data[ct.id]=parseInt(document.getElementById('ci_'+ct.id).value)||0;});
+  localStorage.setItem(crestKey(),JSON.stringify(data));
+  // Save to history
+  const hKey='kr_crests_hist';
+  let hist=[];try{hist=JSON.parse(localStorage.getItem(hKey)||'[]')}catch{}
+  const week=crestKey().replace('kr_crests_','');
+  const existing=hist.findIndex(h=>h.week===week);
+  if(existing>=0)hist[existing]={week,...data};else hist.unshift({week,...data});
+  hist=hist.slice(0,8);
+  localStorage.setItem(hKey,JSON.stringify(hist));
+  const lbl=document.getElementById('crestSaveLabel');
+  lbl.textContent='&#10003; Guardado';lbl.style.opacity=1;
+  setTimeout(()=>{lbl.style.opacity=0;},2000);
+  updateCrestPlan();renderCrestHistory();
+}
+function resetCrests(){if(!confirm('Resetear crests de esta semana?'))return;localStorage.removeItem(crestKey());renderCrestInputs();}
+function updateCrestPlan(){
+  const saved=lCrests();
+  const el=document.getElementById('crestPlanCard');if(!el)return;
+  const wyrm=saved.wyrm||0,aspect=saved.aspect||0;
+  const upgrades=[];
+  if(wyrm>0){const steps=Math.floor(wyrm/15);upgrades.push({crest:"Wyrm's",have:wyrm,steps,pcs:Math.floor(steps/1),desc:'Pieza Heroic/Hero (15 crests/step)'})}
+  if(aspect>0){const steps=Math.floor(aspect/15);upgrades.push({crest:"Aspect's",have:aspect,steps,pcs:Math.floor(steps/1),desc:'Pieza Hero max/Mythic (15 crests/step)'})}
+  if(!upgrades.length){el.innerHTML='<h3>Plan de upgrades</h3><p style="color:var(--muted);font-size:.83em;margin-top:8px">Sin crests registrados aún.</p>';return;}
+  let h='<h3>Plan de upgrades con crests actuales</h3><div class="upgrade-plan">';
+  upgrades.forEach(u=>{
+    h+=`<div class="up-row"><span style="color:${u.crest==="Wyrm's"?'#60a5fa':'#c084f5'}">${u.crest} Crest</span><span><strong style="font-size:1.1em">${u.have}</strong> / ${u.crest==="Wyrm's"?90:15}</span></div>
+    <div class="up-row"><span style="color:var(--muted)">Pasos de upgrade posibles</span><span style="color:var(--green);font-weight:600">${u.steps} steps</span></div>
+    <div class="up-row"><span style="color:var(--muted)">Equivale a</span><span>~${u.steps} slots de 1 upgrade cada uno</span></div>`;
+  });
+  h+='</div><p style="font-size:.7em;color:var(--muted);margin-top:10px">Armadura: 15 crests/step &middot; Arma 2H: 30 crests/step</p>';
+  el.innerHTML=h;
+}
+function renderCrestHistory(){
+  const el=document.getElementById('crestHistory');if(!el)return;
+  let hist=[];try{hist=JSON.parse(localStorage.getItem('kr_crests_hist')||'[]')}catch{}
+  if(!hist.length){el.innerHTML='<p style="color:var(--muted);font-size:.83em">Sin historial guardado a&uacute;n.</p>';return;}
+  let h='<table style="width:100%;border-collapse:collapse;font-size:.8em"><thead><tr>';
+  h+='<th style="text-align:left;padding:6px 8px;color:var(--muted);font-size:.72em;border-bottom:1px solid var(--b2)">Semana</th>';
+  CREST_TYPES.forEach(ct=>{h+=`<th style="text-align:center;padding:6px 8px;color:${ct.col};font-size:.72em;border-bottom:1px solid var(--b2)">${ct.name.split("'")[0]}'s</th>`;});
+  h+='</tr></thead><tbody>';
+  hist.forEach(row=>{
+    h+=`<tr style="border-bottom:1px solid var(--b1)"><td style="padding:7px 8px;color:var(--muted);font-size:.78em">${row.week}</td>`;
+    CREST_TYPES.forEach(ct=>{
+      const val=row[ct.id]||0,pct=Math.round(val/ct.limit*100);
+      h+=`<td style="text-align:center;padding:7px 8px"><span style="color:${ct.col};font-weight:600">${val}</span><span style="font-size:.75em;color:var(--muted)">/${ct.limit}</span></td>`;
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+renderCrestInputs();renderCrestHistory();
+
+// ── NOTAS POR MAZMORRA ───────────────────────
+const DNGS_LIST=[
+  {id:'aa',name:"Algeth'ar Academy",emoji:'&#127981;',tags:['Interrumpir','AoE pesado','Skip disponible']},
+  {id:'mc',name:'Maisara Caverns',emoji:'&#127755;',tags:['Bolsas','Ruta alternativa','Boss mecánica']},
+  {id:'npx',name:'Nexus-Point Xenas',emoji:'&#127758;',tags:['Patios que saltar','Boss difícil','Pulls grandes']},
+  {id:'wrs',name:'Windrunner Spire',emoji:'&#127748;',tags:['Interrumpir','Adds boss','Skip']},
+  {id:'mt',name:"Magisters' Terrace",emoji:'&#127962;',tags:['Clásica','Interrumpir','Skip acceso']},
+  {id:'pos',name:'Pit of Saron',emoji:'&#10052;',tags:['Clásica','Minas','Interrupt cast crucial']},
+  {id:'seat',name:'Seat of the Triumvirate',emoji:'&#127758;',tags:['Clásica','Void','Boss final mecánica']},
+  {id:'sky',name:'Skyreach',emoji:'&#127965;',tags:['Clásica','Wind','Pulls aéreos']},
+];
+let curDng=null;
+function initNotes(){
+  const sel=document.getElementById('dngSelector');
+  DNGS_LIST.forEach(d=>{
+    const btn=document.createElement('button');
+    btn.className='dng-btn';
+    btn.innerHTML=`${d.emoji} ${d.name}`;
+    btn.onclick=()=>selectDng(d.id);
+    sel.appendChild(btn);
+  });
+}
+function selectDng(id){
+  curDng=id;
+  const d=DNGS_LIST.find(x=>x.id===id);
+  document.querySelectorAll('.dng-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.dng-btn').forEach(b=>{if(b.textContent.includes(d.name.substring(0,5)))b.classList.add('selected');});
+  document.getElementById('noteTitle').innerHTML=`${d.emoji} ${d.name}`;
+  document.getElementById('noteTags').innerHTML=d.tags.map(tag=>`<span class="ntag" style="background:rgba(248,183,0,.1);color:var(--gold);border-color:rgba(248,183,0,.25)" onclick="insertTag('${tag}')">${tag}</span>`).join('');
+  const saved=localStorage.getItem('kr_note_'+id)||'';
+  document.getElementById('noteTextarea').value=saved;
+  document.getElementById('noteEditor').style.display='block';
+  document.getElementById('noteEmpty').style.display='none';
+}
+function insertTag(tag){
+  const ta=document.getElementById('noteTextarea');
+  const pos=ta.selectionStart;const val=ta.value;
+  ta.value=val.slice(0,pos)+'['+tag+'] '+val.slice(pos);
+  ta.focus();ta.setSelectionRange(pos+tag.length+3,pos+tag.length+3);
+}
+function saveNote(){
+  if(!curDng)return;
+  localStorage.setItem('kr_note_'+curDng,document.getElementById('noteTextarea').value);
+  const s=document.getElementById('noteSaved');s.textContent='&#10003; Guardado';s.style.opacity=1;
+  setTimeout(()=>s.style.opacity=0,2000);
+}
+function clearNote(){if(!curDng)return;if(!confirm('Borrar notas de esta mazmorra?'))return;localStorage.removeItem('kr_note_'+curDng);document.getElementById('noteTextarea').value='';}
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='s'&&curDng){e.preventDefault();saveNote();}});
+initNotes();
+
+// ── SIMULADOR ROTACION ───────────────────────
+const ROT_DATA=[
+  // APERTURA
+  {phase:'Apertura',spell:'Marrowrend',cond:'Al inicio — construir Bone Shield',prio:'high'},
+  {phase:'Apertura',spell:'Marrowrend',cond:'Segunda vez si tienes runa disponible',prio:'high'},
+  {phase:'Apertura',spell:'Blood Boil',cond:'Aplicar Blood Plague en los enemigos',prio:'med'},
+  {phase:'Apertura',spell:'Dancing Rune Weapon',cond:'Usar inmediatamente después del pull',prio:'high'},
+  {phase:'Apertura',spell:'Heart Strike',cond:'Spam para generar Runic Power',prio:'med'},
+  // LOOP
+  {phase:'Loop',spell:'Death Strike',cond:'Si HP < 80% O si tienes más de 80 RP',prio:'high'},
+  {phase:'Loop',spell:'Marrowrend',cond:'Si Bone Shield tiene menos de 7 cargas',prio:'high'},
+  {phase:'Loop',spell:'Blood Boil',cond:'Si tienes 2 cargas disponibles (no desperdiciar)',prio:'med'},
+  {phase:'Loop',spell:'Heart Strike',cond:'Rellena el GCD y genera Runic Power',prio:'low'},
+  // COOLDOWNS
+  {phase:'Cooldowns',spell:'Dancing Rune Weapon',cond:'Cada 2 minutos — core del kit. Prioridad #1',prio:'high'},
+  {phase:'Cooldowns',spell:'Vampiric Blood',cond:'Antes de daño fuerte predecible o en emergencia',prio:'high'},
+  {phase:'Cooldowns',spell:'Tombstone',cond:'Consume Bone Shield para absorción de emergencia',prio:'med'},
+  {phase:'Cooldowns',spell:'Anti-Magic Shell',cond:'Mecánicas mágicas — no desperdiciar',prio:'med'},
+  {phase:'Cooldowns',spell:'Reaper\'s Mark',cond:'Aplicar en pull y refrescar — core Deathbringer',prio:'high'},
+];
+let rotStep=0,rotDone=new Set();
+const PHASES=['Apertura','Loop','Cooldowns'];
+
+function renderRot(){
+  const container=document.getElementById('rotSteps');
+  const phaseLabel=document.getElementById('rotPhaseLabel');
+  const curPhase=ROT_DATA[Math.min(rotStep,ROT_DATA.length-1)]?.phase||'';
+  phaseLabel.textContent='Fase: '+curPhase;
+  let h='';let lastPhase='';
+  ROT_DATA.forEach((s,i)=>{
+    if(s.phase!==lastPhase){h+=`<div style="font-size:.67em;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:${lastPhase?'10px':0} 0 4px;padding-top:${lastPhase?'8px':0};border-top:${lastPhase?'1px solid var(--b1)':0}">${s.phase}</div>`;lastPhase=s.phase;}
+    const isActive=i===rotStep&&!rotDone.has(i);const isDone=rotDone.has(i);
+    h+=`<div class="rot-step${isActive?' active-step':''}${isDone?' done-step':''}" onclick="clickStep(${i})">
+      <div class="step-num">${isDone?'&#10003;':i+1}</div>
+      <div class="step-info">
+        <div class="step-spell">${s.spell}</div>
+        <div class="step-cond">${s.cond}</div>
+        <span class="step-prio prio-${s.prio}">${s.prio==='high'?'ALTA PRIORIDAD':s.prio==='med'?'MEDIA':'BAJA'}</span>
+      </div>
+    </div>`;
+  });
+  container.innerHTML=h;
+  // CDs
+  const cds=[
+    {name:'Dancing Rune Weapon',cd:'2 min',color:var(--dk),'note':'Sempre usar quando disponible'},
+    {name:'Vampiric Blood',cd:'1.5 min',color:'#5ab4ff',note:'Daño incomeing fuerte'},
+    {name:'Tombstone',cd:'1 min',color:'#9ca3af',note:'Emergencia + Bone Shield'},
+    {name:'Anti-Magic Shell',cd:'45s',color:'#c084f5',note:'Mecánicas mágicas'},
+    {name:"Reaper's Mark",cd:'30s',color:'#ff8096',note:'Core Deathbringer'},
+    {name:'Blood Boil',cd:'Charges',color:'#e67e22',note:'Nunca >2 cargas'},
+  ];
+  document.getElementById('cdGrid').innerHTML=cds.map(c=>`<div class="cd-card">
+    <div class="cd-name" style="color:${c.color}">${c.name}</div>
+    <div class="cd-info">${c.note}</div>
+    <div class="cd-timer">&#9201; ${c.cd}</div>
+  </div>`).join('');
+}
+function clickStep(i){if(rotDone.has(i)){rotDone.delete(i);}else{rotDone.add(i);if(i===rotStep)rotStep=Math.min(rotStep+1,ROT_DATA.length-1);}renderRot();}
+function nextStep(){if(rotStep<ROT_DATA.length-1){rotDone.add(rotStep);rotStep++;renderRot();}}
+function resetRot(){rotStep=0;rotDone.clear();renderRot();}
+renderRot();
+
+// ── DUNGEON SCORES (Raider.io) ───────────────
+const DNGS_IO=["Algeth'ar Academy","Maisara Caverns","Nexus-Point Xenas","Windrunner Spire","Magisters' Terrace","Pit of Saron","Seat of the Triumvirate","Skyreach"];
 function renderDG(best){
   const el=document.getElementById('dgContent');if(!el)return;
   const map={};
   (best||[]).forEach(r=>{
-    const k=DNGS.find(n=>r.dungeon&&r.dungeon.toLowerCase().includes(n.split(' ')[0].toLowerCase().replace("'","")));
+    const k=DNGS_IO.find(n=>r.dungeon&&r.dungeon.toLowerCase().includes(n.split(' ')[0].toLowerCase().replace("'","")));
     if(k&&(!map[k]||r.score>map[k].score))map[k]=r;
   });
   const mx=Math.max(...Object.values(map).map(r=>r.score||0),1);
   let h='<div class="dg-grid">';
-  DNGS.forEach(name=>{
+  DNGS_IO.forEach(name=>{
     const r=map[name];const col=r?SC(r.score):'#555';const pct=r?Math.round(r.score/mx*100):0;
     const t=r&&r.num_keystone_upgrades>0;
     h+=`<div class="dg-card ${r?'has':'no'}">
       <div class="dg-name">${name}</div>
-      <div class="dg-key" style="color:${col}">${r?'+'+r.mythic_level:'&mdash;'}${r?`<span style="font-size:.38em;vertical-align:middle;color:${t?'#2ecc71':'#e74c3c'}"> ${t?'EN TIEMPO':'FUERA'}</span>`:''}
-      </div>
+      <div class="dg-key" style="color:${col}">${r?'+'+r.mythic_level:'&mdash;'}${r?`<span style="font-size:.38em;vertical-align:middle;color:${t?'#2ecc71':'#e74c3c'}"> ${t?'EN TIEMPO':'FUERA'}</span>`:''}</div>
       ${r?`<div class="dg-bbg"><div class="dg-bfill" style="width:${pct}%;background:${col}"></div></div><div class="dg-pts">${Math.round(r.score)} pts</div>`:'<div style="font-size:.72em;color:var(--muted);margin-top:5px">Sin run registrado</div>'}
     </div>`;
   });
@@ -563,25 +998,21 @@ function renderDG(best){
   el.innerHTML=h;
 }
 
-// ── RAIDER.IO ────────────────────────────────
+// ── RAIDER.IO LOAD ───────────────────────────
 async function loadData(){
   const url=`https://raider.io/api/v1/characters/profile?region=${R}&realm=${RL}&name=${N}&fields=${F}`;
   try{
     const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);
-    const d=await res.json();if(d.statusCode===400||d.error)throw new Error('Personaje no encontrado');
+    const d=await res.json();if(d.statusCode===400||d.error)throw new Error('No encontrado');
     renderHero(d);renderMP(d);renderRaid(d);renderDG(d.mythic_plus_best_runs);
   }catch(e){
-    ['heroStats','mpContent','raidContent','dgContent'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.innerHTML=`<div class="err">Error: ${e.message}</div>`;
-    });
+    ['heroStats','mpContent','raidContent','dgContent'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=`<div class="err">Error: ${e.message}</div>`;});
   }
 }
-
 function renderHero(d){
   const sc=d.mythic_plus_scores_by_season?.[0]?.scores?.all??0;
   const il=d.gear?.item_level_equipped??'&mdash;';
-  const th=d.thumbnail_url;
-  if(th)document.getElementById('portrait').outerHTML=`<img class="char-portrait" src="${th}" alt="Kreathor">`;
+  if(d.thumbnail_url)document.getElementById('portrait').outerHTML=`<img class="char-portrait" src="${d.thumbnail_url}" alt="Kreathor">`;
   document.getElementById('heroStats').innerHTML=`
     <div class="hstat"><span class="hstat-val" style="color:${SC(sc)}">${Math.round(sc).toLocaleString()}</span><span class="hstat-label">M+ Score</span></div>
     <div class="hstat"><span class="hstat-val" style="color:var(--gold)">${il}</span><span class="hstat-label">Item Level</span></div>
@@ -595,30 +1026,22 @@ function renderHero(d){
     <a class="hl hl-ext" href="https://www.archon.gg/wow/builds/blood/death-knight/mythic-plus/gear-and-tier-set/10/all-dungeons/this-week" target="_blank">Archon.gg &#8599;</a>
     <a class="hl hl-ext" href="https://www.method.gg/guides/blood-death-knight" target="_blank">Method.gg &#8599;</a>`;
 }
-
 function renderMP(d){
   const rec=d.mythic_plus_recent_runs??[],best=d.mythic_plus_best_runs??[];
   let h='';
   if(best.length){
-    h+=`<div class="stitle" style="margin-bottom:10px"><span class="acc">&#10022;</span> Mejores Runs (Temporada Actual)</div><div class="rg" style="margin-bottom:22px">`;
-    best.slice(0,8).forEach(r=>{
-      const t=r.num_keystone_upgrades>0;
-      h+=`<div class="rc"><div class="rkey"><span class="rkl">+${r.mythic_level}</span><span class="rks">${t?'&#10003;':'&#10007;'}</span></div><div class="ri"><div class="rdn">${r.dungeon}</div><div class="rm">${t?'<span class="t-yes">En tiempo</span>':'<span class="t-no">Fuera</span>'} &middot; ${new Date(r.completed_at).toLocaleDateString('es-CL')}</div></div><div class="rsc" style="color:${SC(r.score)}">${Math.round(r.score)}</div></div>`;
-    });
+    h+=`<div class="stitle" style="margin-bottom:10px"><span class="acc">&#10022;</span> Mejores Runs</div><div class="rg" style="margin-bottom:22px">`;
+    best.slice(0,8).forEach(r=>{const t=r.num_keystone_upgrades>0;h+=`<div class="rc"><div class="rkey"><span class="rkl">+${r.mythic_level}</span><span class="rks">${t?'&#10003;':'&#10007;'}</span></div><div class="ri"><div class="rdn">${r.dungeon}</div><div class="rm">${t?'<span class="t-yes">En tiempo</span>':'<span class="t-no">Fuera</span>'} &middot; ${new Date(r.completed_at).toLocaleDateString('es-CL')}</div></div><div class="rsc" style="color:${SC(r.score)}">${Math.round(r.score)}</div></div>`;});
     h+='</div>';
   }
   if(rec.length){
     h+=`<div class="stitle" style="margin-bottom:10px"><span class="acc">&#10022;</span> Runs Recientes</div><div class="rg">`;
-    rec.slice(0,9).forEach(r=>{
-      const t=r.num_keystone_upgrades>0;
-      h+=`<div class="rc"><div class="rkey"><span class="rkl">+${r.mythic_level}</span><span class="rks">${t?'&#10003;':'&#10007;'}</span></div><div class="ri"><div class="rdn">${r.dungeon}</div><div class="rm">${t?'<span class="t-yes">En tiempo</span>':'<span class="t-no">Fuera</span>'} &middot; ${new Date(r.completed_at).toLocaleDateString('es-CL')}</div></div><div class="rsc" style="color:${SC(r.score)}">${Math.round(r.score)}</div></div>`;
-    });
+    rec.slice(0,9).forEach(r=>{const t=r.num_keystone_upgrades>0;h+=`<div class="rc"><div class="rkey"><span class="rkl">+${r.mythic_level}</span><span class="rks">${t?'&#10003;':'&#10007;'}</span></div><div class="ri"><div class="rdn">${r.dungeon}</div><div class="rm">${t?'<span class="t-yes">En tiempo</span>':'<span class="t-no">Fuera</span>'} &middot; ${new Date(r.completed_at).toLocaleDateString('es-CL')}</div></div><div class="rsc" style="color:${SC(r.score)}">${Math.round(r.score)}</div></div>`;});
     h+='</div>';
   }
   if(!h)h='<p style="color:var(--muted);font-size:.83em;padding:14px 0">Sin runs registradas a&uacute;n.</p>';
   document.getElementById('mpContent').innerHTML=h;
 }
-
 function renderRaid(d){
   const prog=d.raid_progression??{};
   const raids=[{key:'voidspire',name:'Voidspire',total:6},{key:'dreamrift',name:'Dreamrift',total:1},{key:'march-on-queldanas',name:"March on Quel'Danas",total:2}];
@@ -638,26 +1061,24 @@ function renderRaid(d){
 
 // ── UPGRADE CALCULATOR ───────────────────────
 function calcU(){
-  const from=parseInt(document.getElementById('uFrom').value);
-  const to=parseInt(document.getElementById('uTo').value);
+  const from=parseInt(document.getElementById('uFrom').value),to=parseInt(document.getElementById('uTo').value);
   const isW=document.getElementById('uType').value==='weapon';
   const el=document.getElementById('uResult');
-  if(to<=from){el.innerHTML='<h3>Resultado</h3><p style="color:#e74c3c;font-size:.83em;margin-top:8px">El ilvl objetivo debe ser mayor que el actual.</p>';return;}
+  if(to<=from){el.innerHTML='<h3>Resultado</h3><p style="color:#e74c3c;font-size:.83em;margin-top:8px">El ilvl objetivo debe ser mayor.</p>';return;}
   const steps=Math.ceil((to-from)/3),base=isW?30:15,total=steps*base;
   let ct="Wyrm's Crest",cc='#60a5fa',cs='M+ 8-9 &middot; Heroic Raid';
   if(to>=280){ct="Aspect's Crest";cc='#c084f5';cs='M+ 10+ &middot; Mythic Raid';}
-  else if(to>=250){ct="Wyrm's Crest";cc='#60a5fa';cs='M+ 8-9 &middot; Heroic Raid';}
-  else if(to>=244){ct="Drake's Crest";cc='#4ade80';cs='M+ 6-7 &middot; Normal Raid';}
-  else{ct="Whelpling's Crest";cc='#9ca3af';cs='M+ 2-5 &middot; LFR';}
+  else if(to<244){ct="Whelpling's Crest";cc='#9ca3af';cs='M+ 2-5 &middot; LFR';}
+  else if(to<250){ct="Drake's Crest";cc='#4ade80';cs='M+ 6-7 &middot; Normal';}
   const wk=Math.ceil(total/90),wc=wk<=1?'#2ecc71':wk<=3?'#e67e22':'#e74c3c';
   el.innerHTML=`<h3 style="margin-bottom:12px">Resultado</h3>
     <div class="ur"><span class="lbl">Upgrade</span><span style="font-weight:600">${from} &rarr; ${to} ilvl</span></div>
     <div class="ur"><span class="lbl">Pasos</span><span>${steps} upgrades</span></div>
-    <div class="ur"><span class="lbl">Crest necesario</span><span style="color:${cc}">${ct}</span></div>
+    <div class="ur"><span class="lbl">Crest</span><span style="color:${cc}">${ct}</span></div>
     <div class="ur"><span class="lbl">Total crests</span><span style="font-family:'Cinzel',serif;font-size:1.2em;color:var(--gold)">${total}</span></div>
     <div class="ur"><span class="lbl">Fuente</span><span style="font-size:.8em">${cs}</span></div>
     <div class="ur"><span class="lbl">Semanas aprox.</span><span style="color:${wc}">${wk} semana${wk>1?'s':''}</span></div>
-    ${isW?'<p style="font-size:.7em;color:var(--muted);margin-top:6px">Las armas cuestan el doble de crests.</p>':''}`;
+    ${isW?'<p style="font-size:.7em;color:var(--muted);margin-top:6px">Armas cuestan 2x crests.</p>':''}`;
 }
 
 loadData();
