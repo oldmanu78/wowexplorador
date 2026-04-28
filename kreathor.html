@@ -607,7 +607,7 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 </div><!-- /main -->
 <script>
 const R='us',RL='quelthalas',N='Kreathor';
-const F='mythic_plus_scores_by_season:current,gear,raid_progression,spec,class,mythic_plus_recent_runs,mythic_plus_best_runs:current,thumbnail_url';
+const F='mythic_plus_scores_by_season:current,gear,raid_progression,class,mythic_plus_recent_runs,mythic_plus_best_runs:current,thumbnail_url';
 
 function ST(id){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -1016,7 +1016,7 @@ function renderHero(d){
   document.getElementById('heroStats').innerHTML=`
     <div class="hstat"><span class="hstat-val" style="color:${SC(sc)}">${Math.round(sc).toLocaleString()}</span><span class="hstat-label">M+ Score</span></div>
     <div class="hstat"><span class="hstat-val" style="color:var(--gold)">${il}</span><span class="hstat-label">Item Level</span></div>
-    <div class="hstat"><span class="hstat-val" style="color:var(--blue)">${d.spec?.name??'Blood'}</span><span class="hstat-label">Spec</span></div>
+    <div class="hstat"><span class="hstat-val" style="color:var(--blue)">${d.active_spec_name??'Blood'}</span><span class="hstat-label">Spec</span></div>
     <div class="hstat"><span class="hstat-val" style="color:#888">Midnight S1</span><span class="hstat-label">Temporada</span></div>`;
   const rio=`https://raider.io/characters/${R}/${RL}/${N}`;
   const arm=`https://worldofwarcraft.blizzard.com/en-us/character/${R}/${RL}/${N}`;
@@ -1044,7 +1044,7 @@ function renderMP(d){
 }
 function renderRaid(d){
   const prog=d.raid_progression??{};
-  const raids=[{key:'voidspire',name:'Voidspire',total:6},{key:'dreamrift',name:'Dreamrift',total:1},{key:'march-on-queldanas',name:"March on Quel'Danas",total:2}];
+  const raids=[{key:'tier-mn-1',name:'Midnight Tier 1',total:9}];
   let h='';
   raids.forEach(r=>{
     const p=prog[r.key];if(!p)return;
