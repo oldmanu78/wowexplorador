@@ -37,7 +37,7 @@ def obtener_jefe_de_mundo():
     ahora = datetime.now(timezone.utc)
     semanas_pasadas = int((ahora - inicio_temporada).total_seconds() // (7 * 24 * 3600))
     jefe_actual = jefes[semanas_pasadas % len(jefes)]
-    print(f"Semanas desde inicio: {semanas_pasadas} → Jefe: {jefe_actual}")
+    print(f"Semanas desde inicio: {semanas_pasadas} -> Jefe: {jefe_actual}")
     return jefe_actual
 
 def obtener_evento_semana():

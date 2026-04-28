@@ -240,13 +240,11 @@ const PERSONAJES = [
 
 const REALM  = 'quelthalas';
 const REGION = 'us';
-const FIELDS = 'mythic_plus_scores_by_season:current,gear,raid_progression,spec,class';
+const FIELDS = 'mythic_plus_scores_by_season:current,gear,raid_progression,class';
 
 // ── Raids conocidos de Midnight S1 ─────────────────────
 const RAIDS_S1 = [
-  { key: 'voidspire',          nombre: 'Voidspire',          total: 6 },
-  { key: 'dreamrift',          nombre: 'Dreamrift',           total: 1 },
-  { key: 'march-on-queldanas', nombre: "March on Quel'Danas", total: 2 },
+  { key: 'tier-mn-1', nombre: 'Midnight Tier 1', total: 9 },
 ];
 
 // ── Renderizar esqueleto de carga ──────────────────────
@@ -274,7 +272,7 @@ function renderCard(p, datos) {
   const classColor = CLASS_COLORS[datos.class] || '#F8B700';
   const score = datos.mythic_plus_scores_by_season?.[0]?.scores?.all ?? 0;
   const ilvl  = datos.gear?.item_level_equipped ?? '—';
-  const spec  = datos.spec?.name ?? '—';
+  const spec  = datos.active_spec_name ?? '—';
   const cls   = datos.class ?? '—';
   const role  = getRole(spec);
   const thumb = datos.thumbnail_url ?? null;
