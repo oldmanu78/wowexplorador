@@ -1,8 +1,8 @@
 {
-    "afijos": "Trato de Xal'atath: Ascendiente - Reforzada - Tiránica - Argucia de Xal'atath",
-    "evento": "Trato de Xal'atath: Ascendiente, Reforzada, Tiránica, Argucia de Xal'atath",
-    "ficha": "Buscando...",
-    "jefe": "Cragpine (Zul'Aman)",
+    "afijos": "Trato de Xal'atath: Ligada al Vacío - Tiránica - Reforzada - Argucia de Xal'atath",
+    "evento": "Trato de Xal'atath: Ligada al Vacío, Tiránica, Reforzada, Argucia de Xal'atath",
+    "ficha": "251.068",
+    "jefe": "Thorm'belan (Harandar)",
     "rutas": {
         "algethar-academy": [
             {
