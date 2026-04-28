@@ -2,5 +2,120 @@
     "afijos": "Trato de Xal'atath: Ascendiente - Reforzada - Tiránica - Argucia de Xal'atath",
     "evento": "Trato de Xal'atath: Ascendiente, Reforzada, Tiránica, Argucia de Xal'atath",
     "ficha": "Buscando...",
-    "jefe": "Cragpine (Zul'Aman)"
+    "jefe": "Cragpine (Zul'Aman)",
+    "rutas": {
+        "algethar-academy": [
+            {
+                "nombre": "Skandar Tank – AA PUG (+10/+15)",
+                "url": "https://keystone.guru/route/algethar-academy/hfTNdOk/skandar-tank-algethar-academy-10-15"
+            },
+            {
+                "nombre": "Yoda Easy",
+                "url": "https://keystone.guru/route/algethar-academy/chOOM8t/yoda-easy"
+            },
+            {
+                "nombre": "Quick N' Easy",
+                "url": "https://keystone.guru/route/algethar-academy/5gYIKGp/algethar-academy-quick-n-easy"
+            }
+        ],
+        "maisara-caverns": [
+            {
+                "nombre": "PUG-Friendly – Raider.IO Weekly Route",
+                "url": "https://keystone.guru/route/maisara-caverns/R8zRnBU/pug-friendly-raiderios-weekly-route"
+            },
+            {
+                "nombre": "Skandar Tank – MC (+10/+15)",
+                "url": "https://keystone.guru/route/maisara-caverns/qxBj04s/skandar-tank-maisara-caverns-10-15"
+            },
+            {
+                "nombre": "Yoda Easy – MC",
+                "url": "https://keystone.guru/route/maisara-caverns/ScwLdyU/yoda-easy"
+            }
+        ],
+        "nexuspoint-xenas": [
+            {
+                "nombre": "PUG-Friendly – Raider.IO Weekly Route",
+                "url": "https://keystone.guru/route/nexuspoint-xenas/AaWjJpg/nexus-point-xenas"
+            },
+            {
+                "nombre": "MTV Nexus Point",
+                "url": "https://keystone.guru/route/nexuspoint-xenas/koYRI0k/mtv-nexus-point"
+            },
+            {
+                "nombre": "First Week Nexus Point",
+                "url": "https://keystone.guru/route/nexuspoint-xenas/prYL2lp/first-week-nexus-point"
+            }
+        ],
+        "windrunner-spire": [
+            {
+                "nombre": "Skandar Tank – WRS PUG (+10/+15)",
+                "url": "https://keystone.guru/route/windrunner-spire/t7VR0ZC/skandar-tank-windrunner-spire-10-15"
+            },
+            {
+                "nombre": "Windrunner Spire – Crassix",
+                "url": "https://keystone.guru/route/windrunner-spire/tJU6X4O/windrunner-spire"
+            },
+            {
+                "nombre": "WRS Route #1 – Goebles",
+                "url": "https://keystone.guru/route/windrunner-spire/ENtNmAC/windrunner-spire-route-1"
+            }
+        ],
+        "magisters-terrace": [
+            {
+                "nombre": "PUG-Friendly – Raider.IO Weekly Route",
+                "url": "https://keystone.guru/route/magisters-terrace/ozpSk7R/pug-friendly-raiderios-weekly-route"
+            },
+            {
+                "nombre": "Skandar Tank – MT (+10/+15)",
+                "url": "https://keystone.guru/route/magisters-terrace/FBwOW7Q/skandar-tank-magisters-terrace-10-15"
+            },
+            {
+                "nombre": "Expert – Raider.IO Weekly Route",
+                "url": "https://keystone.guru/route/magisters-terrace/i9BZnYH/expert-raiderios-weekly-route"
+            }
+        ],
+        "pit-of-saron": [
+            {
+                "nombre": "PUG-Friendly – Raider.IO Weekly Route",
+                "url": "https://keystone.guru/route/pit-of-saron/uQ1ba0I/pug-friendly-raiderios-weekly-route"
+            },
+            {
+                "nombre": "Skandar Tank – POS (+10/+15)",
+                "url": "https://keystone.guru/route/pit-of-saron/cL3zwJR/skandar-tank-pit-of-saron-10-15"
+            },
+            {
+                "nombre": "Tactyks PUG Friendly – POS",
+                "url": "https://keystone.guru/route/pit-of-saron/22RypSt/tactyks-pug-friendly"
+            }
+        ],
+        "seat-of-the-triumvirate": [
+            {
+                "nombre": "PUG-Friendly – Raider.IO Weekly Route",
+                "url": "https://keystone.guru/route/seat-of-the-triumvirate/Tf03QDk/pug-friendly-raiderios-weekly-route"
+            },
+            {
+                "nombre": "SEAT Route #1 – Goebles",
+                "url": "https://keystone.guru/route/seat-of-the-triumvirate/H8c0Cl9/seat-of-the-triumvirate-route-1"
+            },
+            {
+                "nombre": "WG Seat v1 – WinningWarcraft",
+                "url": "https://keystone.guru/route/seat-of-the-triumvirate/i4s9c2Y/wg-seat-v1"
+            }
+        ],
+        "skyreach": [
+            {
+                "nombre": "PUG-Friendly – Raider.IO Weekly Route",
+                "url": "https://keystone.guru/route/skyreach/kqeL79Y/pug-friendly-raiderios-weekly-route"
+            },
+            {
+                "nombre": "Skandar Tank – SKY (+10/+15)",
+                "url": "https://keystone.guru/route/skyreach/UHZwjor/skandar-tank-skyreach-10-15"
+            },
+            {
+                "nombre": "Skyreach – Crassix",
+                "url": "https://keystone.guru/route/skyreach/8x9K2p1/skyreach-crassix"
+            }
+        ]
+    },
+    "actualizado": "28/4/2026"
 }

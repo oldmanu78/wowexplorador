@@ -71,6 +71,80 @@ def obtener_evento_semana():
     semanas_pasadas = int((ahora - inicio_temporada).total_seconds() // (7 * 24 * 3600))
     return eventos[semanas_pasadas % len(eventos)]
 
+def obtener_rutas_midnight():
+    """
+    Rutas curadas de Midnight S1 (Keystone.guru no tiene API pública — es SPA).
+    Lista las 3 más populares por mazmorra según investigación manual.
+    Actualizar esta lista cuando cambien las rutas top de la temporada.
+    """
+    return {
+        "algethar-academy": [
+            {"nombre": "Skandar Tank – AA PUG (+10/+15)",
+             "url": "https://keystone.guru/route/algethar-academy/hfTNdOk/skandar-tank-algethar-academy-10-15"},
+            {"nombre": "Yoda Easy",
+             "url": "https://keystone.guru/route/algethar-academy/chOOM8t/yoda-easy"},
+            {"nombre": "Quick N' Easy",
+             "url": "https://keystone.guru/route/algethar-academy/5gYIKGp/algethar-academy-quick-n-easy"},
+        ],
+        "maisara-caverns": [
+            {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
+             "url": "https://keystone.guru/route/maisara-caverns/R8zRnBU/pug-friendly-raiderios-weekly-route"},
+            {"nombre": "Skandar Tank – MC (+10/+15)",
+             "url": "https://keystone.guru/route/maisara-caverns/qxBj04s/skandar-tank-maisara-caverns-10-15"},
+            {"nombre": "Yoda Easy – MC",
+             "url": "https://keystone.guru/route/maisara-caverns/ScwLdyU/yoda-easy"},
+        ],
+        "nexuspoint-xenas": [
+            {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
+             "url": "https://keystone.guru/route/nexuspoint-xenas/AaWjJpg/nexus-point-xenas"},
+            {"nombre": "MTV Nexus Point",
+             "url": "https://keystone.guru/route/nexuspoint-xenas/koYRI0k/mtv-nexus-point"},
+            {"nombre": "First Week Nexus Point",
+             "url": "https://keystone.guru/route/nexuspoint-xenas/prYL2lp/first-week-nexus-point"},
+        ],
+        "windrunner-spire": [
+            {"nombre": "Skandar Tank – WRS PUG (+10/+15)",
+             "url": "https://keystone.guru/route/windrunner-spire/t7VR0ZC/skandar-tank-windrunner-spire-10-15"},
+            {"nombre": "Windrunner Spire – Crassix",
+             "url": "https://keystone.guru/route/windrunner-spire/tJU6X4O/windrunner-spire"},
+            {"nombre": "WRS Route #1 – Goebles",
+             "url": "https://keystone.guru/route/windrunner-spire/ENtNmAC/windrunner-spire-route-1"},
+        ],
+        "magisters-terrace": [
+            {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
+             "url": "https://keystone.guru/route/magisters-terrace/ozpSk7R/pug-friendly-raiderios-weekly-route"},
+            {"nombre": "Skandar Tank – MT (+10/+15)",
+             "url": "https://keystone.guru/route/magisters-terrace/FBwOW7Q/skandar-tank-magisters-terrace-10-15"},
+            {"nombre": "Expert – Raider.IO Weekly Route",
+             "url": "https://keystone.guru/route/magisters-terrace/i9BZnYH/expert-raiderios-weekly-route"},
+        ],
+        "pit-of-saron": [
+            {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
+             "url": "https://keystone.guru/route/pit-of-saron/uQ1ba0I/pug-friendly-raiderios-weekly-route"},
+            {"nombre": "Skandar Tank – POS (+10/+15)",
+             "url": "https://keystone.guru/route/pit-of-saron/cL3zwJR/skandar-tank-pit-of-saron-10-15"},
+            {"nombre": "Tactyks PUG Friendly – POS",
+             "url": "https://keystone.guru/route/pit-of-saron/22RypSt/tactyks-pug-friendly"},
+        ],
+        "seat-of-the-triumvirate": [
+            {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
+             "url": "https://keystone.guru/route/seat-of-the-triumvirate/Tf03QDk/pug-friendly-raiderios-weekly-route"},
+            {"nombre": "SEAT Route #1 – Goebles",
+             "url": "https://keystone.guru/route/seat-of-the-triumvirate/H8c0Cl9/seat-of-the-triumvirate-route-1"},
+            {"nombre": "WG Seat v1 – WinningWarcraft",
+             "url": "https://keystone.guru/route/seat-of-the-triumvirate/i4s9c2Y/wg-seat-v1"},
+        ],
+        "skyreach": [
+            {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
+             "url": "https://keystone.guru/route/skyreach/kqeL79Y/pug-friendly-raiderios-weekly-route"},
+            {"nombre": "Skandar Tank – SKY (+10/+15)",
+             "url": "https://keystone.guru/route/skyreach/UHZwjor/skandar-tank-skyreach-10-15"},
+            {"nombre": "Skyreach – Crassix",
+             "url": "https://keystone.guru/route/skyreach/8x9K2p1/skyreach-crassix"},
+        ],
+    }
+
+
 def obtener_datos_wow():
     print("Iniciando la búsqueda de datos en Azeroth...")
 
@@ -111,12 +185,18 @@ def obtener_datos_wow():
     # 4. Evento de la Semana
     evento_semana = obtener_evento_semana()
 
-    # 5. Empaquetar todo
+    # 5. Rutas populares (curadas manualmente — Keystone.guru es SPA sin API)
+    rutas_populares = obtener_rutas_midnight()
+
+    # 6. Empaquetar todo
+    ahora_cl = datetime.now(timezone(timedelta(hours=-4)))  # Chile verano UTC-4
     datos_para_web = {
         "afijos": texto_afijos,
         "evento": evento_semana,
         "ficha": precio_ficha_oro,
-        "jefe": jefe_activo
+        "jefe": jefe_activo,
+        "rutas": rutas_populares,
+        "actualizado": f"{ahora_cl.day}/{ahora_cl.month}/{ahora_cl.year}"
     }
 
     with open('datos.json', 'w', encoding='utf-8') as archivo:

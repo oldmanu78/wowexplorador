@@ -304,6 +304,30 @@
     }
     .btn-guide:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
+    /* ── POPULAR ROWS ──────────────────────── */
+    .popular-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .popular-row:hover { border-color: var(--gold); background: rgba(248,183,0,0.04); }
+    .popular-rank {
+      font-family: 'Cinzel', serif;
+      color: var(--gold);
+      font-size: 1em;
+      min-width: 28px;
+      font-weight: 700;
+    }
+    .popular-name { font-size: 0.88em; flex: 1; }
+    .popular-ext { color: var(--text-muted); font-size: 0.74em; white-space: nowrap; }
+
     /* ── FOOTER ─────────────────────────────── */
     .page-footer {
       text-align: center;
@@ -377,21 +401,21 @@ const DUNGEONS = [
         titulo: 'Skandar Tank – AA PUG (+10/+15)',
         desc: 'Ruta fácil para PUGs. BL en 1ª pull, 2º jefe fase 2, último jefe. Sin skips obligatorios.',
         kg_url: 'https://keystone.guru/route/algethar-academy/hfTNdOk/skandar-tank-algethar-academy-10-15',
-        thumb: 'https://uploads.keystone.guru/thumbnails/hfTNdOk/hfTNdOk_4_490dac89.jpg',
+        thumb: null,
       },
       {
         tipo: 'high',
         titulo: 'Yoda Easy',
         desc: 'Ruta popular de la comunidad. 100% trash sin complicaciones. Para claves intermedias.',
         kg_url: 'https://keystone.guru/route/algethar-academy/chOOM8t/yoda-easy',
-        thumb: 'https://uploads.keystone.guru/thumbnails/chOOM8t/chOOM8t_4_a914bd3b.jpg',
+        thumb: null,
       },
       {
         tipo: 'high',
         titulo: "Quick N' Easy",
         desc: 'Ruta directa y eficiente. 101% con camino optimizado. Buena para timing en claves altas.',
         kg_url: 'https://keystone.guru/route/algethar-academy/5gYIKGp/algethar-academy-quick-n-easy',
-        thumb: 'https://uploads.keystone.guru/thumbnails/5gYIKGp/5gYIKGp_4_e7a7fae3.jpg',
+        thumb: null,
       },
       {
         tipo: 'high',
@@ -791,7 +815,53 @@ function switchTab(idx) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+async function cargarRutasPopulares() {
+  try {
+    const res = await fetch('datos.json?t=' + Date.now());
+    if (!res.ok) return;
+    const datos = await res.json();
+    if (!datos.rutas || Object.keys(datos.rutas).length === 0) return;
+
+    // Mostrar fecha de actualización en el header
+    if (datos.actualizado) {
+      const sub = document.querySelector('.header .sub');
+      if (sub) sub.textContent += ' · Actualizado: ' + datos.actualizado;
+    }
+
+    DUNGEONS.forEach((d, idx) => {
+      const rutasData = datos.rutas[d.id];
+      if (!rutasData || rutasData.length === 0) return;
+
+      const panel = document.getElementById('panel-' + idx);
+      const grid = panel.querySelector('.routes-grid');
+
+      const popular = document.createElement('div');
+      popular.style.cssText = 'padding: 0 28px 20px;';
+
+      const items = rutasData.map((r, i) => `
+        <a href="${r.url}" target="_blank" rel="noopener" class="popular-row">
+          <span class="popular-rank">#${i + 1}</span>
+          <span class="popular-name">${r.nombre}</span>
+          <span class="popular-ext">Keystone.guru ↗</span>
+        </a>
+      `).join('');
+
+      popular.innerHTML = `
+        <div class="section-label" style="border-top:none;padding-top:18px;">
+          🔥 Más populares esta semana
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">${items}</div>
+      `;
+
+      grid.parentNode.insertBefore(popular, grid);
+    });
+  } catch(e) {
+    // datos.json no disponible localmente — silencioso
+  }
+}
+
 buildPage();
+cargarRutasPopulares();
 </script>
 </body>
 </html>
