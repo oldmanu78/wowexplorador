@@ -229,13 +229,13 @@ function roleBadge(role) {
 
 // ── Personajes ─────────────────────────────────────────
 const PERSONAJES = [
-  { nombre: 'Kreathor',    urlNombre: 'Kreathor' },
-  { nombre: 'Muchufaza',   urlNombre: 'Muchufaza' },
-  { nombre: 'Czernobög',   urlNombre: 'Czernob%C3%B6g' },
-  { nombre: 'Oldkreeper',  urlNombre: 'Oldkreeper' },
-  { nombre: 'Redguardïan', urlNombre: 'Redguard%C3%AFan' },
-  { nombre: 'Krëeper',     urlNombre: 'Kr%C3%ABeper' },
-  { nombre: 'Nösferätü',   urlNombre: 'N%C3%B6sfer%C3%A4t%C3%BC' },
+  { nombre: 'Kreathor',    urlNombre: 'Kreathor',           pagina: 'kreathor.html' },
+  { nombre: 'Muchufaza',   urlNombre: 'Muchufaza',          pagina: 'muchufaza.html' },
+  { nombre: 'Czernobög',   urlNombre: 'Czernob%C3%B6g',     pagina: 'czernobog.html' },
+  { nombre: 'Oldkreeper',  urlNombre: 'Oldkreeper',         pagina: 'oldkreeper.html' },
+  { nombre: 'Redguardïan', urlNombre: 'Redguard%C3%AFan',   pagina: 'redguardian.html' },
+  { nombre: 'Krëeper',     urlNombre: 'Kr%C3%ABeper',        pagina: 'kreeper.html' },
+  { nombre: 'Nösferätü',   urlNombre: 'N%C3%B6sfer%C3%A4t%C3%BC', pagina: 'nosferatu.html' },
 ];
 
 const REALM  = 'quelthalas';
@@ -338,7 +338,7 @@ function renderCard(p, datos) {
       </div>
       <div class="char-footer">
           <a class="rio-link" href="${rioUrl}" target="_blank">Ver en Raider.io ↗</a>
-          ${p.nombre === 'Kreathor' ? '<a class="rio-link" href="kreathor.html" style="color:#C41E3A;border-color:rgba(196,30,58,0.4)">⚔ Perfil completo</a>' : ''}
+          ${p.pagina ? `<a class="rio-link" href="${p.pagina}" style="color:${classColor};border-color:${classColor}40">⚔ Perfil completo</a>` : ''}
           ${roleBadge(role)}
       </div>
     </div>`;
