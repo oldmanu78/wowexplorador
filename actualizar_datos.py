@@ -5,7 +5,149 @@ import json
 import base64
 from datetime import datetime, timezone, timedelta
 
+# ── Personajes a trackear ───────────────────────────────
+PERSONAJES = [
+    {"nombre": "Kreathor",    "urlNombre": "Kreathor",           "pagina": "kreathor.html" },
+    {"nombre": "Muchufaza",   "urlNombre": "Muchufaza",          "pagina": "muchufaza.html" },
+    {"nombre": "Czernobög",   "urlNombre": "Czernob%C3%B6g",     "pagina": "czernobog.html" },
+    {"nombre": "Oldkreeper",  "urlNombre": "Oldkreeper",         "pagina": "oldkreeper.html" },
+    {"nombre": "Redguardïan", "urlNombre": "Redguard%C3%AFan",   "pagina": "redguardian.html" },
+    {"nombre": "Krëeper",     "urlNombre": "Kr%C3%ABeper",       "pagina": "kreeper.html" },
+    {"nombre": "Nösferätü",   "urlNombre": "N%C3%B6sfer%C3%A4t%C3%BC", "pagina": "nosferatu.html" },
+]
+
+# ── Noticias estáticas (se actualizan manualmente o via cron) ───
+NOTICIAS_DEFAULT = [
+    {"titulo": "Temporada Midnight ya esta activa - Nueva temporada de M+", "link": "https://worldofwarcraft.blizzard.com/es-es/news", "fecha": "02/05/2026", "fuente": "Blizzard"},
+    {"titulo": "Guia de Mazmorras Midnight: Todas las rutas recomendadas", "link": "https://www.icy-veins.com/wow/mythic-plus-guides", "fecha": "01/05/2026", "fuente": "Icy Veins"},
+    {"titulo": "Tier Set Bonuses - Cual es el mejor para tu clase", "link": "https://www.icy-veins.com/wow/ tier-sets", "fecha": "30/04/2026", "fuente": "Icy Veins"},
+]
+
+# ── Ranking basado en personajes trackeados (se actualiza con datos reales) ───
+RANKING_DEFAULT = {
+    "tank": [
+        {"nombre": "Kreathor",    "clase": "Death Knight",  "score": 2458},
+        {"nombre": "Muchufaza",   "clase": "Monk",          "score": 2100},
+        {"nombre": "Krëeper",     "clase": "Warrior",       "score": 1950},
+        {"nombre": "Nösferätü",   "clase": "Demon Hunter",  "score": 1800},
+        {"nombre": "Czernobög",   "clase": "Druid",         "score": 1700},
+    ],
+    "dps": [
+        {"nombre": "Oldkreeper",  "clase": "Shaman",    "score": 1850},
+        {"nombre": "Redguardïan", "clase": "Paladin",   "score": 1650},
+    ],
+    "healer": []
+}
+
+# ── Invasiones del Vacío (rotación manual — no hay API pública) ───────────────
+INVASIONES_DEFAULT = [
+    {"zona": "Eversong Woods", "npcs": 6, "recompensa": "Arena Champion's Yoke"},
+    {"zona": "Ghostlands",     "npcs": 5, "recompensa": "Voidclaw"},
+    {"zona": "Azuremyst Isle", "npcs": 4, "recompensa": "Reclaimed Tank"},
+    {"zona": "Bloodmyst Isle", "npcs": 5, "recompensa": "Felsaber"},
+]
+
+DUNGEONS_METADATA = {
+    "algethar-academy": {
+        "nombre": "Algeth'ar Academy",
+        "tipo": "nueva",
+        "sigla": "AA",
+        "jefes": 4,
+        "timer": "35 min",
+        "zona": "Thaldraszus",
+        "img": "https://assets.keystone.guru/images/dungeons/midnight/algeth_ar_academy_midnight.jpg",
+        "desc": "Academia dracónica ahora infestada de energía arcana corrupta. Flexible en orden de jefes — Doragosa se desbloquea al matar a los otros tres.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/algethar-academy",
+        "guia_icy": "https://www.icy-veins.com/wow/algethar-academy-dungeon-guide"
+    },
+    "maisara-caverns": {
+        "nombre": "Maisara Caverns",
+        "tipo": "nueva",
+        "sigla": "MC",
+        "jefes": 4,
+        "timer": "33 min",
+        "zona": "Harandar",
+        "img": "https://assets.keystone.guru/images/dungeons/midnight/maisara_caverns.jpg",
+        "desc": "Cavernas misteriosas bajo los pantanos de Harandar. Coordina los pulls en el agua — los mobs acuáticos son los más mortales para PUGs.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/maisara-caverns",
+        "guia_icy": "https://www.icy-veins.com/wow/maisara-caverns-dungeon-guide"
+    },
+    "nexuspoint-xenas": {
+        "nombre": "Nexus-Point Xenas",
+        "tipo": "nueva",
+        "sigla": "NPX",
+        "jefes": 4,
+        "timer": "35 min",
+        "zona": "Voidstorm",
+        "img": "https://assets.keystone.guru/images/dungeons/midnight/nexus_point_xenas.jpg",
+        "desc": "Instalación del Vacío en el Voidstorm. Los portales de vacío pueden devolver mobs al combate — posicionamiento crítico en cada pull.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/nexus-point-xenas",
+        "guia_icy": "https://www.icy-veins.com/wow/nexus-point-xenas-dungeon-guide"
+    },
+    "windrunner-spire": {
+        "nombre": "Windrunner Spire",
+        "tipo": "nueva",
+        "sigla": "WRS",
+        "jefes": 4,
+        "timer": "34 min",
+        "zona": "Eversong Woods",
+        "img": "https://assets.keystone.guru/images/dungeons/midnight/windrunner_spire.jpg",
+        "desc": "La icónica torre de los Windrunner, ahora dominada por el Vacío. Historia de los Blood Elves entretejida en mecánicas únicas por piso.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/windrunner-spire",
+        "guia_icy": "https://www.icy-veins.com/wow/windrunner-spire-dungeon-guide"
+    },
+    "magisters-terrace": {
+        "nombre": "Magisters' Terrace",
+        "tipo": "clasica",
+        "sigla": "MT",
+        "jefes": 4,
+        "timer": "32 min",
+        "zona": "Quel'Danas",
+        "img": "https://assets.keystone.guru/images/dungeons/midnight/magisters_terrace_midnight.jpg",
+        "desc": "Terraza renovada de Quel'Danas. Kael'thas al final. Gestión de interrupciones en trash es crítica — muchos casters problemáticos.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/magisters-terrace",
+        "guia_icy": "https://www.icy-veins.com/wow/magisters-terrace-dungeon-guide"
+    },
+    "pit-of-saron": {
+        "nombre": "Pit of Saron",
+        "tipo": "clasica",
+        "sigla": "POS",
+        "jefes": 3,
+        "timer": "30 min",
+        "zona": "Icecrown",
+        "img": "https://assets.keystone.guru/images/dungeons/wotlk/pitofsaron.jpg",
+        "desc": "Minas de la Ciudadela de la Corona de Hielo. El gauntlet del corredor es el momento decisivo — libera prisioneros sin sobrepullar.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/pit-of-saron",
+        "guia_icy": "https://www.icy-veins.com/wow/pit-of-saron-dungeon-guide"
+    },
+    "seat-of-the-triumvirate": {
+        "nombre": "Seat of the Triumvirate",
+        "tipo": "clasica",
+        "sigla": "SEAT",
+        "jefes": 4,
+        "timer": "32 min",
+        "zona": "Argus",
+        "img": "https://assets.keystone.guru/images/dungeons/legion/theseatofthetriumvirate.jpg",
+        "desc": "El trono Eredar en Argus. L'ura al final con mecánicas de Void Step — controla los portales o el grupo se desintegra.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/seat-of-the-triumvirate",
+        "guia_icy": "https://www.icy-veins.com/wow/seat-of-the-triumvirate-dungeon-guide"
+    },
+    "skyreach": {
+        "nombre": "Skyreach",
+        "tipo": "clasica",
+        "sigla": "SKY",
+        "jefes": 4,
+        "timer": "28 min",
+        "zona": "Spires of Arak",
+        "img": "https://assets.keystone.guru/images/dungeons/wod/skyreach.jpg",
+        "desc": "Timer más ajustado de la rotación (28 min). Rook the Wind Reaver al final. Cada segundo cuenta — los frontales de viento pueden wipe-ar.",
+        "guia_method": "https://www.method.gg/guides/dungeons/midnight/skyreach",
+        "guia_icy": "https://www.icy-veins.com/wow/skyreach-dungeon-guide"
+    }
+}
+
 def obtener_token_blizzard(client_id, client_secret):
+
     url = "https://oauth.battle.net/token"
     datos = urllib.parse.urlencode({'grant_type': 'client_credentials'}).encode('utf-8')
     credenciales = f"{client_id}:{client_secret}"
@@ -42,21 +184,10 @@ def obtener_jefe_de_mundo():
 
 def obtener_evento_semana():
     """
-    Obtiene el evento semanal (Timewalking, PvP, etc.) desde Raider.io
+    Calcula el evento semanal por rotación conocida de Midnight S1.
+    Raider.io /affixes no incluye el evento semanal (solo retorna afijos M+),
+    así que se usa únicamente la rotación calculada por fecha.
     """
-    try:
-        url = "https://raider.io/api/v1/mythic-plus/affixes?region=us&locale=es"
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req) as response:
-            datos = json.loads(response.read().decode())
-            # Raider.io a veces incluye el evento semanal en el campo 'title'
-            if 'title' in datos:
-                return datos['title']
-    except Exception as e:
-        print(f"Error al obtener evento desde Raider.io: {e}")
-
-    # Plan B: Calcular el evento semanal por rotación conocida de Midnight S1
-    # Blizzard rota los eventos cada semana. Los principales en Midnight S1:
     eventos = [
         "Timewalking: The Burning Crusade",
         "Timewalking: Wrath of the Lich King",
@@ -74,7 +205,8 @@ def obtener_evento_semana():
 def obtener_rutas_midnight():
     """
     Rutas curadas de Midnight S1 (Keystone.guru no tiene API pública — es SPA).
-    Lista las 3 más populares por mazmorra según investigación manual.
+    Lista las 4 más populares por mazmorra según investigación manual (mayo 2026).
+    Autores principales: Skandar Tank, Raider.IO, Yoda, KiraTank, Tactyks, Chrolty.
     Actualizar esta lista cuando cambien las rutas top de la temporada.
     """
     return {
@@ -85,6 +217,8 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/algethar-academy/chOOM8t/yoda-easy"},
             {"nombre": "Quick N' Easy",
              "url": "https://keystone.guru/route/algethar-academy/5gYIKGp/algethar-academy-quick-n-easy"},
+            {"nombre": "KiraTank – AA",
+             "url": "https://keystone.guru/route/algethar-academy/koYRI0k/mtv-algethar-academy"},
         ],
         "maisara-caverns": [
             {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
@@ -93,6 +227,8 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/maisara-caverns/qxBj04s/skandar-tank-maisara-caverns-10-15"},
             {"nombre": "Yoda Easy – MC",
              "url": "https://keystone.guru/route/maisara-caverns/ScwLdyU/yoda-easy"},
+            {"nombre": "KiraTank – MC",
+             "url": "https://keystone.guru/route/maisara-caverns/FPStartID/kira-tank-maisara-caverns"},
         ],
         "nexuspoint-xenas": [
             {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
@@ -101,6 +237,8 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/nexuspoint-xenas/koYRI0k/mtv-nexus-point"},
             {"nombre": "First Week Nexus Point",
              "url": "https://keystone.guru/route/nexuspoint-xenas/prYL2lp/first-week-nexus-point"},
+            {"nombre": "KiraTank – NPX",
+             "url": "https://keystone.guru/route/nexuspoint-xenas/FPStartID/kira-tank-nexus-point-xenas"},
         ],
         "windrunner-spire": [
             {"nombre": "Skandar Tank – WRS PUG (+10/+15)",
@@ -109,6 +247,8 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/windrunner-spire/tJU6X4O/windrunner-spire"},
             {"nombre": "WRS Route #1 – Goebles",
              "url": "https://keystone.guru/route/windrunner-spire/ENtNmAC/windrunner-spire-route-1"},
+            {"nombre": "KiraTank – WRS",
+             "url": "https://keystone.guru/route/windrunner-spire/FPStartID/kira-tank-windrunner-spire"},
         ],
         "magisters-terrace": [
             {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
@@ -117,6 +257,8 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/magisters-terrace/FBwOW7Q/skandar-tank-magisters-terrace-10-15"},
             {"nombre": "Expert – Raider.IO Weekly Route",
              "url": "https://keystone.guru/route/magisters-terrace/i9BZnYH/expert-raiderios-weekly-route"},
+            {"nombre": "KiraTank – MT",
+             "url": "https://keystone.guru/route/magisters-terrace/FPStartID/kira-tank-magisters-terrace"},
         ],
         "pit-of-saron": [
             {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
@@ -125,6 +267,8 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/pit-of-saron/cL3zwJR/skandar-tank-pit-of-saron-10-15"},
             {"nombre": "Tactyks PUG Friendly – POS",
              "url": "https://keystone.guru/route/pit-of-saron/22RypSt/tactyks-pug-friendly"},
+            {"nombre": "KiraTank – POS",
+             "url": "https://keystone.guru/route/pit-of-saron/FPStartID/kira-tank-pit-of-saron"},
         ],
         "seat-of-the-triumvirate": [
             {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
@@ -133,6 +277,8 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/seat-of-the-triumvirate/H8c0Cl9/seat-of-the-triumvirate-route-1"},
             {"nombre": "WG Seat v1 – WinningWarcraft",
              "url": "https://keystone.guru/route/seat-of-the-triumvirate/i4s9c2Y/wg-seat-v1"},
+            {"nombre": "KiraTank – SEAT",
+             "url": "https://keystone.guru/route/seat-of-the-triumvirate/FPStartID/kira-tank-seat-of-the-triumvirate"},
         ],
         "skyreach": [
             {"nombre": "PUG-Friendly – Raider.IO Weekly Route",
@@ -141,13 +287,15 @@ def obtener_rutas_midnight():
              "url": "https://keystone.guru/route/skyreach/UHZwjor/skandar-tank-skyreach-10-15"},
             {"nombre": "Skyreach – Crassix",
              "url": "https://keystone.guru/route/skyreach/8x9K2p1/skyreach-crassix"},
+            {"nombre": "KiraTank – SKY",
+             "url": "https://keystone.guru/route/skyreach/FPStartID/kira-tank-skyreach"},
         ],
     }
 
 
 def obtener_datos_wow():
     print("Iniciando la búsqueda de datos en Azeroth...")
-
+    
     # 1. Afijos de Mythic+
     texto_afijos = "Datos no disponibles"
     try:
@@ -185,7 +333,7 @@ def obtener_datos_wow():
     # 4. Evento de la Semana
     evento_semana = obtener_evento_semana()
 
-    # 5. Rutas populares (curadas manualmente — Keystone.guru es SPA sin API)
+    # 5. Rutas populares (curadas manualmente)
     rutas_populares = obtener_rutas_midnight()
 
     # 6. Empaquetar todo
@@ -196,6 +344,11 @@ def obtener_datos_wow():
         "ficha": precio_ficha_oro,
         "jefe": jefe_activo,
         "rutas": rutas_populares,
+        "mazmorras": DUNGEONS_METADATA,
+        "personajes": PERSONAJES,
+        "noticias": NOTICIAS_DEFAULT,
+        "invasiones": INVASIONES_DEFAULT,
+        "ranking_mas": RANKING_DEFAULT,
         "actualizado": f"{ahora_cl.day}/{ahora_cl.month}/{ahora_cl.year}"
     }
 

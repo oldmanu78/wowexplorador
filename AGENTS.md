@@ -7,7 +7,7 @@
 
 ```
 wowexplorador-temp/
-├── index.html               ← Panel semanal (afijos, evento, token, world boss)
+├── index.html               ← Panel semanal (afijos, evento, token, world boss, noticias, ranking M+)
 ├── personajes.html          ← Cards de 7 personajes (datos en vivo Raider.io)
 ├── rutas.html               ← 8 mazmorras con tabs + rutas curadas + sección dinámica
 ├── kreathor.html            ← Perfil principal — 13 tabs completas (Blood DK)
@@ -17,7 +17,7 @@ wowexplorador-temp/
 ├── redguardian.html         ← Template genérico (Paladin Retribution DPS)
 ├── kreeper.html             ← Template genérico (Warrior Protection Tank)
 ├── nosferatu.html           ← Template genérico (DH Vengeance Tank)
-├── datos.json               ← Datos semanales generados por Python
+├── datos.json               ← Datos semanales generados por Python (incluye noticias y ranking)
 ├── actualizar_datos.py      ← Script de actualización semanal (GH Actions)
 ├── gen_chars.py             ← Generador de páginas de personajes secundarios
 ├── .github/workflows/
@@ -40,12 +40,12 @@ actualizar_datos.py
    ├── obtener_rutas_midnight() → rutas hardcodeadas (Keystone.guru es SPA)
    └── obtener_jefe_de_mundo()  → rotación calculada por fecha
    ↓
-escribe datos.json
+escribe datos.json (afijos, evento, ficha, jefe, rutas, mazmorras, personajes, noticias, ranking_mas)
    ↓
 commit + push → GitHub Pages deploy
 
 Frontend (10 HTML independientes):
-   ├── index.html       → fetch('datos.json') — panel semanal estático
+   ├── index.html       → fetch('datos.json') — panel semanal con noticias y ranking M+
    ├── personajes.html  → 7× fetch(Raider.io) — datos en vivo al cargar
    ├── rutas.html       → datos hardcodeados en JS + fetch('datos.json') para rutas populares
    └── kreathor.html    → fetch(Raider.io) — 13 tabs interactivas con localStorage
@@ -116,6 +116,16 @@ Warrior: #C69B3A
 
 ### Roles
 - TANK: `#4488ff` | HEALER: `#44cc88` | DPS: `#ff4444`
+
+## 🎨 Diseño
+
+### Layout index.html (rediseño 2026)
+- **Fondo**: Gradiente con símbolo de la Horda (SVG inline con efecto de brillo automático)
+- **2 columnas**:
+  - Izquierda: Afijos M+, Evento semanal, Invasiones del Vacío, Token, World Boss
+  - Derecha: Noticias + Ranking M+ con tabs (DPS/Tanque/Sanador)
+- **CSS inline** no minificado
+- Responsive: colapsa a 1 columna en móvil
 
 ## 👤 Personajes (Quel'Thalas · US)
 
@@ -194,6 +204,31 @@ python -m http.server 8080       # → http://localhost:8080
 | `datos.spec?.name` undefined | API retorna `active_spec_name` en raíz | ✅ Fixeado (2026-04-28) |
 | Progreso raid "Sin datos" | Claves `voidspire/dreamrift/march` no existen en S1 | ✅ Fixeado → `tier-mn-1` |
 | Thumbnails rotos en rutas | Keystone.guru bloquea hotlink | ✅ Fixeado → placeholders 🗺️ |
+| RSS Wowhead no funciona | La URL del RSS cambió | ✅ Fixeado → datos estáticos |
+| Ranking M+ desde leaderboard | Endpoint de Raider.io cambió | ✅ Fixeado → usa personajes trackeados |
+
+## 📰 Noticias y Ranking M+
+
+### datos.json estructura adicional
+```json
+{
+  "noticias": [
+    {"titulo": "...", "link": "...", "fecha": "DD/MM/YYYY", "fuente": "Blizzard|Icy Veins"}
+  ],
+  "ranking_mas": {
+    "dps": [{"nombre": "...", "clase": "...", "score": N}],
+    "tank": [...],
+    "healer": [...]
+  }
+}
+```
+
+### Actualizar noticias/ranking manualmente
+Editar constantes en `actualizar_datos.py`:
+- `NOTICIAS_DEFAULT` (línea ~23)
+- `RANKING_DEFAULT` (línea ~35)
+
+Las APIs externas de noticias (Wowhead RSS) y ranking (Raider.io leaderboard) no están disponibles actualmente, los datos son estáticos.
 
 ## 🔧 Deuda técnica
 

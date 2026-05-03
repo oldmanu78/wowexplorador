@@ -187,6 +187,16 @@
   <a href="rutas.html">🗺️ Rutas M+</a>
 </div>
 
+<div style="max-width: 1200px; margin: 0 auto; padding: 16px 30px 0; display: flex; gap: 12px; flex-wrap: wrap;">
+  <input type="text" id="buscador" placeholder="🔍 Buscar personaje..." 
+    style="flex:1; min-width: 200px; padding: 10px 16px; border-radius: 6px; border: 1px solid #333; 
+           background: #1c1c1c; color: #e4e4e4; font-size: 0.9em; outline: none;">
+  <button onclick="ordenarPor('score')" style="padding: 8px 16px; border-radius: 6px; border: 1px solid #F8B700; 
+           background: transparent; color: #F8B700; cursor: pointer;">📊 Score</button>
+  <button onclick="ordenarPor('nombre')" style="padding: 8px 16px; border-radius: 6px; border: 1px solid #444; 
+           background: transparent; color: #aaa; cursor: pointer;">🔤 Nombre</button>
+</div>
+
 <div class="grid" id="grid"></div>
 
 <div class="last-updated" id="last-updated"></div>
@@ -227,16 +237,8 @@ function roleBadge(role) {
   return `<span class="role-badge ${map[role]||'role-dps'}">${label[role]||'DPS'}</span>`;
 }
 
-// ── Personajes ─────────────────────────────────────────
-const PERSONAJES = [
-  { nombre: 'Kreathor',    urlNombre: 'Kreathor',           pagina: 'kreathor.html' },
-  { nombre: 'Muchufaza',   urlNombre: 'Muchufaza',          pagina: 'muchufaza.html' },
-  { nombre: 'Czernobög',   urlNombre: 'Czernob%C3%B6g',     pagina: 'czernobog.html' },
-  { nombre: 'Oldkreeper',  urlNombre: 'Oldkreeper',         pagina: 'oldkreeper.html' },
-  { nombre: 'Redguardïan', urlNombre: 'Redguard%C3%AFan',   pagina: 'redguardian.html' },
-  { nombre: 'Krëeper',     urlNombre: 'Kr%C3%ABeper',        pagina: 'kreeper.html' },
-  { nombre: 'Nösferätü',   urlNombre: 'N%C3%B6sfer%C3%A4t%C3%BC', pagina: 'nosferatu.html' },
-];
+// ── Personajes (se cargan desde datos.json) ───────────
+let PERSONAJES = [];
 
 const REALM  = 'quelthalas';
 const REGION = 'us';
@@ -367,7 +369,21 @@ function renderError(p, msg) {
 async function cargarPersonajes() {
   const grid = document.getElementById('grid');
 
-  // Poner esqueletos primero
+  // 1. Cargar lista de personajes desde datos.json
+  try {
+    const resJson = await fetch('datos.json?t=' + Date.now());
+    if (resJson.ok) {
+      const datos = await resJson.json();
+      if (datos.personajes) PERSONAJES = datos.personajes;
+    }
+  } catch(e) { console.log('Usando personajes por defecto si falla fetch'); }
+
+  // 2. Poner esqueletos primero
+  if (!PERSONAJES.length) {
+    grid.innerHTML = '<div style="text-align:center;color:#666;padding:40px;">No hay personajes configurados</div>';
+    return;
+  }
+
   grid.innerHTML = PERSONAJES.map(p => crearEsqueleto(p.nombre)).join('');
 
   const resultados = await Promise.allSettled(
@@ -399,6 +415,15 @@ async function cargarPersonajes() {
   document.getElementById('last-updated').textContent =
     'Datos cargados: ' + new Date().toLocaleString('es-CL');
 }
+
+// Buscador en tiempo real
+document.getElementById('buscador').addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll('.char-card').forEach(card => {
+    const name = card.querySelector('.char-name').textContent.toLowerCase();
+    card.style.display = name.includes(term) ? 'block' : 'none';
+  });
+});
 
 cargarPersonajes();
 </script>

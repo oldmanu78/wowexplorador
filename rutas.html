@@ -20,6 +20,9 @@
       --classic-color: #a78bfa;
       --pug-color: #4ade80;
       --high-color: #f97316;
+      --shadow-soft: 0 4px 20px rgba(0,0,0,0.4);
+      --shadow-hover: 0 8px 30px rgba(0,0,0,0.6);
+      --glow-gold: 0 0 20px rgba(248,183,0,0.3);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,6 +44,7 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(8px);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
     }
     .header h1 {
       font-family: 'Cinzel', serif;
@@ -97,12 +101,14 @@
       gap: 6px;
       border-bottom: none;
     }
-    .tab-btn:hover { color: var(--text); background: var(--bg-card2); }
+    .tab-btn:hover { color: var(--text); background: var(--bg-card2); transform: translateY(-2px); }
     .tab-btn.active {
       color: var(--gold);
       background: var(--bg-card2);
       border-color: var(--gold);
       border-bottom-color: var(--bg-card2);
+      box-shadow: var(--glow-gold);
+      transform: translateY(-2px);
     }
     .tab-btn .type-dot {
       width: 7px; height: 7px;
@@ -127,6 +133,13 @@
       border-top: none;
       border-radius: 0 8px 8px 8px;
       overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dungeon-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
     }
 
     /* ── DUNGEON HERO ───────────────────────── */
@@ -225,9 +238,14 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-    .route-card:hover { transform: translateY(-3px); border-color: #444; }
+    .route-card:hover { 
+      transform: translateY(-3px); 
+      border-color: #444; 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    }
     .route-card.pug { border-top: 3px solid var(--pug-color); }
     .route-card.high { border-top: 3px solid var(--high-color); }
 
@@ -364,6 +382,13 @@
 </div>
 
 <!-- ═══════════════════════════════════════════ DUNGEON TABS -->
+<div style="padding: 16px 30px 0; max-width: 1300px; margin: 0 auto;">
+  <input type="text" id="buscador" placeholder="🔍 Buscar mazmorra..." 
+    style="width: 100%; padding: 10px 16px; border-radius: 6px; border: 1px solid var(--border); 
+           background: var(--bg-card); color: var(--text); font-size: 0.9em;
+           outline: none; transition: border-color 0.2s;"
+    onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+</div>
 <div class="tab-bar" id="tabBar"></div>
 
 <!-- ═══════════════════════════════════════════ PANELS -->
@@ -419,9 +444,9 @@ const DUNGEONS = [
       },
       {
         tipo: 'high',
-        titulo: 'Ver ranking completo AA',
-        desc: 'Todas las rutas de Algeth\'ar Academy ordenadas por popularidad en Keystone.guru.',
-        kg_url: 'https://keystone.guru/routes/retail/algethar-academy/popular',
+        titulo: 'KiraTank – AA',
+        desc: 'Ruta de KiraTank para claves intermedias y altas. Pulls optimizados y buen ritmo de BL.',
+        kg_url: 'https://keystone.guru/route/algethar-academy/koYRI0k/mtv-algethar-academy',
         thumb: null,
       },
     ],
@@ -462,9 +487,9 @@ const DUNGEONS = [
       },
       {
         tipo: 'high',
-        titulo: 'Oddie – MC (alta clave)',
-        desc: 'Ruta avanzada para tanques en Midnight M+ Season 1. Pulls grandes y skips optimizados.',
-        kg_url: 'https://keystone.guru/route/maisara-caverns/YM1Wjd1/oddie-maisara-caverns',
+        titulo: 'KiraTank – MC',
+        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
+        kg_url: 'https://keystone.guru/route/maisara-caverns/FPStartID/kira-tank-maisara-caverns',
         thumb: null,
       },
     ],
@@ -505,9 +530,9 @@ const DUNGEONS = [
       },
       {
         tipo: 'high',
-        titulo: 'Ver ranking completo NPX',
-        desc: 'Todas las rutas de Nexus-Point Xenas ordenadas por popularidad en Keystone.guru.',
-        kg_url: 'https://keystone.guru/routes/retail/nexuspoint-xenas/popular',
+        titulo: 'KiraTank – NPX',
+        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
+        kg_url: 'https://keystone.guru/route/nexuspoint-xenas/FPStartID/kira-tank-nexus-point-xenas',
         thumb: null,
       },
     ],
@@ -549,8 +574,8 @@ const DUNGEONS = [
       {
         tipo: 'high',
         titulo: 'KiraTank – WRS',
-        desc: 'Ruta de tanque con pulls grandes optimizados para el timer de 34 min.',
-        kg_url: 'https://keystone.guru/route/windrunner-spire/SnGUgSs/kiratank',
+        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
+        kg_url: 'https://keystone.guru/route/windrunner-spire/FPStartID/kira-tank-windrunner-spire',
         thumb: null,
       },
     ],
@@ -591,9 +616,9 @@ const DUNGEONS = [
       },
       {
         tipo: 'high',
-        titulo: 'Tactyks PUG Friendly – MT',
-        desc: 'Ruta de Tactyks (jugador 0.1% M+). Buen balance entre seguridad y eficiencia.',
-        kg_url: 'https://keystone.guru/route/magisters-terrace/p74ZaXS/tactyks-pug-friendly',
+        titulo: 'KiraTank – MT',
+        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
+        kg_url: 'https://keystone.guru/route/magisters-terrace/FPStartID/kira-tank-magisters-terrace',
         thumb: null,
       },
     ],
@@ -634,9 +659,9 @@ const DUNGEONS = [
       },
       {
         tipo: 'high',
-        titulo: 'Pit – Ruta comunitaria',
-        desc: 'Versión alternativa con la ruta de Raider.IO pero pull más optimizado en el corredor final.',
-        kg_url: 'https://keystone.guru/route/pit-of-saron/rf0j99l/pit',
+        titulo: 'KiraTank – POS',
+        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
+        kg_url: 'https://keystone.guru/route/pit-of-saron/FPStartID/kira-tank-pit-of-saron',
         thumb: null,
       },
     ],
@@ -677,9 +702,9 @@ const DUNGEONS = [
       },
       {
         tipo: 'high',
-        titulo: 'The Seat – Solex',
-        desc: 'Ruta directa y eficiente de Solex. Buena para grupos con experiencia en la mazmorra.',
-        kg_url: 'https://keystone.guru/route/seat-of-the-triumvirate/47kcYai/the-seat-of-the-triumvirate',
+        titulo: 'KiraTank – SEAT',
+        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
+        kg_url: 'https://keystone.guru/route/seat-of-the-triumvirate/FPStartID/kira-tank-seat-of-the-triumvirate',
         thumb: null,
       },
     ],
@@ -720,9 +745,9 @@ const DUNGEONS = [
       },
       {
         tipo: 'high',
-        titulo: 'Ver ranking completo SKY',
-        desc: 'Todas las rutas de Skyreach ordenadas por popularidad — elige la que mejor se adapte a tu grupo.',
-        kg_url: 'https://keystone.guru/routes/retail/skyreach/popular',
+        titulo: 'KiraTank – SKY',
+        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
+        kg_url: 'https://keystone.guru/route/skyreach/FPStartID/kira-tank-skyreach',
         thumb: null,
       },
     ],
@@ -732,11 +757,15 @@ const DUNGEONS = [
 // ══════════════════════════════════════════════════════════
 //  RENDER
 // ══════════════════════════════════════════════════════════
-function buildPage() {
+function buildPage(dungeons) {
   const tabBar = document.getElementById('tabBar');
   const content = document.getElementById('content');
+  
+  // Limpiar contenido previo
+  tabBar.innerHTML = '';
+  content.innerHTML = '';
 
-  DUNGEONS.forEach((d, idx) => {
+  dungeons.forEach((d, idx) => {
     // Tab button
     const btn = document.createElement('button');
     btn.className = 'tab-btn' + (idx === 0 ? ' active' : '');
@@ -754,7 +783,7 @@ function buildPage() {
     panel.className = 'dungeon-panel' + (idx === 0 ? ' active' : '');
     panel.id = `panel-${idx}`;
 
-    const routesHTML = d.rutas.map(r => `
+    const routesHTML = (d.rutas || []).map(r => `
       <div class="route-card ${r.tipo}">
         ${r.thumb
           ? `<img class="route-thumb" src="${r.thumb}" alt="${r.titulo}" loading="lazy" onerror="this.style.display='none'">`
@@ -815,53 +844,81 @@ function switchTab(idx) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-async function cargarRutasPopulares() {
+// Buscador de mazmorras
+document.getElementById('buscador').addEventListener('input', function(e) {
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+    const nombre = btn.textContent.toLowerCase();
+    btn.style.display = nombre.includes(term) ? 'flex' : 'none';
+    // Ocultar panel también si está activo
+    const panel = document.getElementById('panel-' + idx);
+    if (!nombre.includes(term)) {
+      panel.classList.remove('active');
+    }
+  });
+});
+
+async function cargarDatos() {
   try {
     const res = await fetch('datos.json?t=' + Date.now());
     if (!res.ok) return;
     const datos = await res.json();
-    if (!datos.rutas || Object.keys(datos.rutas).length === 0) return;
 
-    // Mostrar fecha de actualización en el header
+    // 1. Construir paneles dinámicamente desde mazmorras en datos.json
+    if (datos.mazmorras) {
+        buildPage(Object.entries(datos.mazmorras).map(([id, meta]) => ({
+            ...meta,
+            id: id,
+            rutas: datos.rutas[id] || []
+        })));
+    }
+
+    // 2. Mostrar fecha de actualización en el header
     if (datos.actualizado) {
       const sub = document.querySelector('.header .sub');
       if (sub) sub.textContent += ' · Actualizado: ' + datos.actualizado;
     }
 
-    DUNGEONS.forEach((d, idx) => {
-      const rutasData = datos.rutas[d.id];
-      if (!rutasData || rutasData.length === 0) return;
+    // 3. Cargar rutas populares (se añaden al final del grid de cada panel)
+    if (datos.rutas) {
+      DUNGEONS.forEach((d, idx) => {
+        const rutasData = datos.rutas[d.id];
+        if (!rutasData || rutasData.length === 0) return;
 
-      const panel = document.getElementById('panel-' + idx);
-      const grid = panel.querySelector('.routes-grid');
+        const panel = document.getElementById('panel-' + idx);
+        if (!panel) return;
+        const grid = panel.querySelector('.routes-grid');
+        if (!grid) return;
 
-      const popular = document.createElement('div');
-      popular.style.cssText = 'padding: 0 28px 20px;';
+        const popular = document.createElement('div');
+        popular.style.cssText = 'padding: 0 28px 20px;';
 
-      const items = rutasData.map((r, i) => `
-        <a href="${r.url}" target="_blank" rel="noopener" class="popular-row">
-          <span class="popular-rank">#${i + 1}</span>
-          <span class="popular-name">${r.nombre}</span>
-          <span class="popular-ext">Keystone.guru ↗</span>
-        </a>
-      `).join('');
+        const items = rutasData.map((r, i) => `
+          <a href="${r.url}" target="_blank" rel="noopener" class="popular-row">
+            <span class="popular-rank">#${i + 1}</span>
+            <span class="popular-name">${r.nombre}</span>
+            <span class="popular-ext">Keystone.guru ↗</span>
+          </a>
+        `).join('');
 
-      popular.innerHTML = `
-        <div class="section-label" style="border-top:none;padding-top:18px;">
-          🔥 Más populares esta semana
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;">${items}</div>
-      `;
+        popular.innerHTML = `
+          <div class="section-label" style="border-top:none;padding-top:18px;">
+            🔥 Más populares esta semana
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">${items}</div>
+        `;
 
-      grid.parentNode.insertBefore(popular, grid);
-    });
+        grid.parentNode.insertBefore(popular, grid);
+      });
+    }
   } catch(e) {
-    // datos.json no disponible localmente — silencioso
+    console.error("Error cargando datos:", e);
   }
 }
 
-buildPage();
-cargarRutasPopulares();
+buildPage(DUNGEONS); // Inicialización con datos estáticos por si falla el fetch
+cargarDatos();
+
 </script>
 </body>
 </html>
