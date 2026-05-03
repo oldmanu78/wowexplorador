@@ -16,28 +16,63 @@ PERSONAJES = [
     {"nombre": "Nösferätü",   "urlNombre": "N%C3%B6sfer%C3%A4t%C3%BC", "pagina": "nosferatu.html" },
 ]
 
+# ── Obtener scores M+ reales desde Raider.io ────────────
+def obtener_scores_mas_reales():
+    """Obtiene scores M+ reales desde Raider.io API para los personajes trackeados"""
+    rankings = {"tank": [], "dps": [], "healer": []}
+    
+    for p in PERSONAJES:
+        try:
+            url = f"https://raider.io/api/v1/characters/profile?region=us&realm=quelthalas&name={p['urlNombre']}&fields=mythic_plus_scores_by_season:current"
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=8) as response:
+                datos = json.loads(response.read().decode())
+                
+                # Extraer score M+ actual
+                scores = datos.get('mythic_plus_scores_by_season', [])
+                score_actual = 0
+                if scores and len(scores) > 0:
+                    score_data = scores[0].get('scores', {})
+                    score_actual = score_data.get('all', 0)  # Score global
+                
+                # Determinar clase y spec
+                clase = datos.get('class', '')
+                spec = datos.get('active_spec_name', '')
+                
+                # Clasificar por rol basado en spec
+                rol = "dps"  # Por defecto
+                if spec in ['Blood', 'Brewmaster', 'Guardian', 'Protection', 'Vengeance']:
+                    rol = "tank"
+                elif spec in ['Discipline', 'Holy', 'Mistweaver', 'Preservation', 'Restoration']:
+                    rol = "healer"
+                
+                rankings[rol].append({
+                    "nombre": p['nombre'],
+                    "clase": clase,
+                    "score": int(score_actual)
+                })
+        except Exception as e:
+            print(f"Error obteniendo score de {p['nombre']}: {e}")
+            # En caso de error, asignar score 0 para que aún aparezca en el ranking
+            rankings["dps"].append({
+                "nombre": p['nombre'], 
+                "clase": "Desconocido", 
+                "score": 0
+            })
+    
+    # Ordenar cada rol por score descendente y tomar top 5
+    for rol in rankings:
+        rankings[rol].sort(key=lambda x: x['score'], reverse=True)
+        rankings[rol] = rankings[rol][:5]
+    
+    return rankings
+
 # ── Noticias estáticas (se actualizan manualmente o via cron) ───
 NOTICIAS_DEFAULT = [
     {"titulo": "Temporada Midnight ya esta activa - Nueva temporada de M+", "link": "https://worldofwarcraft.blizzard.com/es-es/news", "fecha": "02/05/2026", "fuente": "Blizzard"},
     {"titulo": "Guia de Mazmorras Midnight: Todas las rutas recomendadas", "link": "https://www.icy-veins.com/wow/mythic-plus-guides", "fecha": "01/05/2026", "fuente": "Icy Veins"},
     {"titulo": "Tier Set Bonuses - Cual es el mejor para tu clase", "link": "https://www.icy-veins.com/wow/ tier-sets", "fecha": "30/04/2026", "fuente": "Icy Veins"},
 ]
-
-# ── Ranking basado en personajes trackeados (se actualiza con datos reales) ───
-RANKING_DEFAULT = {
-    "tank": [
-        {"nombre": "Kreathor",    "clase": "Death Knight",  "score": 2458},
-        {"nombre": "Muchufaza",   "clase": "Monk",          "score": 2100},
-        {"nombre": "Krëeper",     "clase": "Warrior",       "score": 1950},
-        {"nombre": "Nösferätü",   "clase": "Demon Hunter",  "score": 1800},
-        {"nombre": "Czernobög",   "clase": "Druid",         "score": 1700},
-    ],
-    "dps": [
-        {"nombre": "Oldkreeper",  "clase": "Shaman",    "score": 1850},
-        {"nombre": "Redguardïan", "clase": "Paladin",   "score": 1650},
-    ],
-    "healer": []
-}
 
 # ── Invasiones del Vacío (rotación manual — no hay API pública) ───────────────
 INVASIONES_DEFAULT = [
@@ -348,7 +383,7 @@ def obtener_datos_wow():
         "personajes": PERSONAJES,
         "noticias": NOTICIAS_DEFAULT,
         "invasiones": INVASIONES_DEFAULT,
-        "ranking_mas": RANKING_DEFAULT,
+        "ranking_mas": obtener_scores_mas_reales(),
         "actualizado": f"{ahora_cl.day}/{ahora_cl.month}/{ahora_cl.year}"
     }
 

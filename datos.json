@@ -284,12 +284,6 @@
             "pagina": "nosferatu.html"
         }
     ],
-    "invasiones": [
-        {"zona": "Eversong Woods", "npcs": 6, "recompensa": "Arena Champion's Yoke"},
-        {"zona": "Ghostlands",     "npcs": 5, "recompensa": "Voidclaw"},
-        {"zona": "Azuremyst Isle", "npcs": 4, "recompensa": "Reclaimed Tank"},
-        {"zona": "Bloodmyst Isle", "npcs": 5, "recompensa": "Felsaber"}
-    ],
     "noticias": [
         {
             "titulo": "Temporada Midnight ya esta activa - Nueva temporada de M+",
@@ -310,17 +304,67 @@
             "fuente": "Icy Veins"
         }
     ],
+    "invasiones": [
+        {
+            "zona": "Eversong Woods",
+            "npcs": 6,
+            "recompensa": "Arena Champion's Yoke"
+        },
+        {
+            "zona": "Ghostlands",
+            "npcs": 5,
+            "recompensa": "Voidclaw"
+        },
+        {
+            "zona": "Azuremyst Isle",
+            "npcs": 4,
+            "recompensa": "Reclaimed Tank"
+        },
+        {
+            "zona": "Bloodmyst Isle",
+            "npcs": 5,
+            "recompensa": "Felsaber"
+        }
+    ],
     "ranking_mas": {
         "tank": [
-            {"nombre": "Kreathor",    "clase": "Death Knight",  "score": 2458},
-            {"nombre": "Muchufaza",   "clase": "Monk",          "score": 2100},
-            {"nombre": "Krëeper",     "clase": "Warrior",       "score": 1950},
-            {"nombre": "Nösferätü",   "clase": "Demon Hunter",  "score": 1800},
-            {"nombre": "Czernobög",   "clase": "Druid",         "score": 1700}
+            {
+                "nombre": "Muchufaza",
+                "clase": "Monk",
+                "score": 2673
+            },
+            {
+                "nombre": "Kreathor",
+                "clase": "Death Knight",
+                "score": 2478
+            },
+            {
+                "nombre": "Krëeper",
+                "clase": "Warrior",
+                "score": 197
+            },
+            {
+                "nombre": "Nösferätü",
+                "clase": "Demon Hunter",
+                "score": 0
+            }
         ],
         "dps": [
-            {"nombre": "Oldkreeper",  "clase": "Shaman",    "score": 1850},
-            {"nombre": "Redguardïan", "clase": "Paladin",   "score": 1650}
+            {
+                "nombre": "Czernobög",
+                "clase": "Druid",
+                "score": 0
+            },
+            {
+                "nombre": "Oldkreeper",
+                "clase": "Shaman",
+                "score": 0
+            },
+            {
+                "nombre": "Redguardïan",
+                "clase": "Paladin",
+                "score": 0
+            }
         ],
         "healer": []
     },
