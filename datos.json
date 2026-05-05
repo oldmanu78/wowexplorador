@@ -1,8 +1,8 @@
 {
-    "afijos": "Trato de Xal'atath: Ligada al Vacío - Tiránica - Reforzada - Argucia de Xal'atath",
-    "evento": "Bonus: Batalla de Azeroth",
-    "ficha": "Buscando...",
-    "jefe": "Thorm'belan (Harandar)",
+    "afijos": "Trato de Xal'atath: Devorar - Reforzada - Tiránica - Argucia de Xal'atath",
+    "evento": "Timewalking: The Burning Crusade",
+    "ficha": "271.385",
+    "jefe": "Predaxas (Voidstorm)",
     "rutas": {
         "algethar-academy": [
             {
@@ -331,12 +331,17 @@
             {
                 "nombre": "Muchufaza",
                 "clase": "Monk",
-                "score": 2673
+                "score": 2711
             },
             {
                 "nombre": "Kreathor",
                 "clase": "Death Knight",
-                "score": 2478
+                "score": 2495
+            },
+            {
+                "nombre": "Czernobög",
+                "clase": "Druid",
+                "score": 1332
             },
             {
                 "nombre": "Krëeper",
@@ -351,11 +356,6 @@
         ],
         "dps": [
             {
-                "nombre": "Czernobög",
-                "clase": "Druid",
-                "score": 0
-            },
-            {
                 "nombre": "Oldkreeper",
                 "clase": "Shaman",
                 "score": 0
@@ -368,5 +368,5 @@
         ],
         "healer": []
     },
-    "actualizado": "2/5/2026"
+    "actualizado": "5/5/2026"
 }
