@@ -1,8 +1,8 @@
 {
-    "afijos": "Trato de Xal'atath: Devorar - Reforzada - Tiránica - Argucia de Xal'atath",
-    "evento": "Timewalking: The Burning Crusade",
-    "ficha": "271.385",
-    "jefe": "Predaxas (Voidstorm)",
+    "afijos": "Trato de Xal'atath: Ascendiente - Tiránica - Reforzada - Argucia de Xal'atath",
+    "evento": "Timewalking: Wrath of the Lich King",
+    "ficha": "263.744",
+    "jefe": "Lu'ashal (Eversong Woods)",
     "rutas": {
         "algethar-academy": [
             {
@@ -331,17 +331,17 @@
             {
                 "nombre": "Muchufaza",
                 "clase": "Monk",
-                "score": 2711
+                "score": 2776
             },
             {
                 "nombre": "Kreathor",
                 "clase": "Death Knight",
-                "score": 2495
+                "score": 2650
             },
             {
                 "nombre": "Czernobög",
                 "clase": "Druid",
-                "score": 1332
+                "score": 1988
             },
             {
                 "nombre": "Krëeper",
@@ -368,5 +368,5 @@
         ],
         "healer": []
     },
-    "actualizado": "5/5/2026"
+    "actualizado": "12/5/2026"
 }
