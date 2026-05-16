@@ -20,6 +20,164 @@ CHARS = [
 ROLE_EMOJI = {'TANK':'&#128737;', 'DPS':'&#9876;', 'HEALER':'&#10010;'}
 ROLE_TEXT  = {'TANK':'Tanque',    'DPS':'DPS',     'HEALER':'Sanador'}
 
+GEAR_SLOTS = [
+    ('weapon_2h', 'Arma 2H'),
+    ('weapon_1h', 'Arma 1H'),
+    ('offhand', 'Offhand'),
+    ('head', 'Casco'),
+    ('shoulder', 'Hombros'),
+    ('chest', 'Pecho'),
+    ('hands', 'Guantes'),
+    ('legs', 'Piernas'),
+    ('cloak', 'Capa'),
+    ('wrist', 'Mu\u00f1ecas'),
+    ('waist', 'Cintur\u00f3n'),
+    ('feet', 'Botas'),
+    ('ring1', 'Anillo 1'),
+    ('ring2', 'Anillo 2'),
+    ('neck', 'Cuello'),
+    ('trinket1', 'Trinket 1'),
+    ('trinket2', 'Trinket 2'),
+]
+
+PRIO_COLORS = {'SSS':'#ff8000','SS':'#a335ee','S':'#0070dd','A':'#1eff00','B':'#ffffff'}
+
+GEAR_DATA = {
+    'Muchufaza': {
+        'stats': 'Haste > Crit > Vers > Mastery',
+        'top_dungeon': 'Skyreach',
+        'tier_name': 'Vestment of the Ten Thunders (Monk Tier)',
+        'slots': {
+            'weapon_2h': {'nombre': 'Blood Knight\'s Warblade', 'icono': 'inv_sword_2h_questbloodelf_b_01', 'wowhead': 237846, 'fuente': 'Crafteado', 'prio': 'SS'},
+            'head': {'nombre': 'Crown of the Ten Thunders', 'icono': 'inv_helm_leather_raidmonkmidnight_d_01', 'wowhead': 249967, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'shoulder': {'nombre': 'Mantle of the Ten Thunders', 'icono': 'inv_shoulder_leather_raidmonkmidnight_d_01', 'wowhead': 249968, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'chest': {'nombre': 'Robe of the Ten Thunders', 'icono': 'inv_chest_leather_raidmonkmidnight_d_01', 'wowhead': 249969, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'hands': {'nombre': 'Handwraps of the Ten Thunders', 'icono': 'inv_gloves_leather_raidmonkmidnight_d_01', 'wowhead': 249970, 'fuente': 'Raid Midnight T1', 'prio': 'S', 'tier': True},
+            'legs': {'nombre': 'Leggings of the Ten Thunders', 'icono': 'inv_pants_leather_raidmonkmidnight_d_01', 'wowhead': 249971, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'cloak': {'nombre': 'Adherent\'s Silken Shroud', 'icono': 'inv_cape_cloth_questbloodelf_b_01', 'wowhead': 232355, 'fuente': 'Crafteado', 'prio': 'S'},
+            'wrist': {'nombre': 'Spellbreaker\'s Bracers', 'icono': 'inv_plate_questbloodelf_b_01_bracer', 'wowhead': 232340, 'fuente': 'Crafteado', 'prio': 'S'},
+            'waist': {'nombre': 'Girdle of the Ancient Pit', 'icono': 'inv_belt_plate_icecrown_d_01', 'wowhead': 232348, 'fuente': 'POS', 'prio': 'A'},
+            'feet': {'nombre': 'Surefoot Moccasins', 'icono': 'inv_boots_leather_dungeonharronir_c_01', 'wowhead': 249972, 'fuente': 'MC', 'prio': 'A'},
+            'ring1': {'nombre': 'Platinum Star Band', 'icono': 'inv_10_dungeonjewelry_explorer_ring_1_color1', 'wowhead': 238010, 'fuente': 'AA', 'prio': 'SS'},
+            'ring2': {'nombre': 'Occlusion of Void', 'icono': 'inv_12_trinket_devouring_host_currency1_bronze', 'wowhead': 238020, 'fuente': 'NPX', 'prio': 'SS'},
+            'neck': {'nombre': 'Barbed Ymirheim Choker', 'icono': 'inv_jewelry_necklace_22', 'wowhead': 238090, 'fuente': 'Crafteado', 'prio': 'S'},
+            'trinket1': {'nombre': 'Algeth\'ar Puzzle Box', 'icono': 'inv_misc_enggizmos_18', 'wowhead': 238050, 'fuente': 'AA', 'prio': 'SSS'},
+            'trinket2': {'nombre': 'Heart of Wind', 'icono': 'inv_10_jewelcrafting3_soulcage_air', 'wowhead': 238040, 'fuente': 'WRS', 'prio': 'SS'},
+        }
+    },
+    'Czernob\u00f6g': {
+        'stats': 'Haste > Mastery > Vers > Crit',
+        'top_dungeon': 'Windrunner Spire',
+        'tier_name': 'Wildstalker\'s Aspect (Druid Tier)',
+        'slots': {
+            'weapon_2h': {'nombre': 'Bloomforged Greataxe', 'icono': 'inv_axe_2h_dungeonharronir_c_01', 'wowhead': 237960, 'fuente': 'Crafteado', 'prio': 'SS'},
+            'head': {'nombre': 'Wildstalker\'s Aspect Helm', 'icono': 'inv_helm_leather_raiddruidmidnight_d_01', 'wowhead': 249973, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'shoulder': {'nombre': 'Wildstalker\'s Aspect Spaulders', 'icono': 'inv_shoulder_leather_raiddruidmidnight_d_01', 'wowhead': 249974, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'chest': {'nombre': 'Wildstalker\'s Aspect Tunic', 'icono': 'inv_chest_leather_raiddruidmidnight_d_01', 'wowhead': 249975, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'hands': {'nombre': 'Wildstalker\'s Aspect Grips', 'icono': 'inv_gloves_leather_raiddruidmidnight_d_01', 'wowhead': 249976, 'fuente': 'Raid Midnight T1', 'prio': 'S', 'tier': True},
+            'legs': {'nombre': 'Wildstalker\'s Aspect Leggings', 'icono': 'inv_pants_leather_raiddruidmidnight_d_01', 'wowhead': 249977, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'cloak': {'nombre': 'Adherent\'s Silken Shroud', 'icono': 'inv_cape_cloth_questbloodelf_b_01', 'wowhead': 232355, 'fuente': 'Crafteado', 'prio': 'S'},
+            'wrist': {'nombre': 'Spellbreaker\'s Bracers', 'icono': 'inv_plate_questbloodelf_b_01_bracer', 'wowhead': 232340, 'fuente': 'Crafteado', 'prio': 'S'},
+            'waist': {'nombre': 'Spellbreaker\'s Girdle', 'icono': 'inv_belt_plate_questbloodelf_b_01', 'wowhead': 232345, 'fuente': 'Crafteado', 'prio': 'A'},
+            'feet': {'nombre': 'Oathsworn Stompers', 'icono': 'inv_boots_plate_dungeon_c_01', 'wowhead': 232362, 'fuente': 'MT', 'prio': 'A'},
+            'ring1': {'nombre': 'Occlusion of Void', 'icono': 'inv_12_trinket_devouring_host_currency1_bronze', 'wowhead': 238020, 'fuente': 'NPX', 'prio': 'SS'},
+            'ring2': {'nombre': 'Omission of Light', 'icono': 'inv_12_trinket_devouring_host_currency1_silver', 'wowhead': 238030, 'fuente': 'NPX', 'prio': 'SS'},
+            'neck': {'nombre': 'Loa Worshiper\'s Band', 'icono': 'inv_12_profession_jewelcrafting_ring3_silver', 'wowhead': 232380, 'fuente': 'Crafteado', 'prio': 'S'},
+            'trinket1': {'nombre': 'Heart of Wind', 'icono': 'inv_10_jewelcrafting3_soulcage_air', 'wowhead': 238040, 'fuente': 'WRS', 'prio': 'SSS'},
+            'trinket2': {'nombre': 'Algeth\'ar Puzzle Box', 'icono': 'inv_misc_enggizmos_18', 'wowhead': 238050, 'fuente': 'AA', 'prio': 'SS'},
+        }
+    },
+    'Oldkreeper': {
+        'stats': 'Haste > Mastery > Crit > Vers',
+        'top_dungeon': 'Nexus-Point Xenas',
+        'tier_name': 'Primal Core (Elemental Tier)',
+        'slots': {
+            'weapon_1h': {'nombre': 'Excavating Cudgel', 'icono': 'inv_mace_1h_dungeonharronir_c_02', 'wowhead': 237940, 'fuente': 'MC', 'prio': 'SS'},
+            'offhand': {'nombre': 'Ward of the Spellbreaker', 'icono': 'inv_shield_1h_dungeonharronir_c_01', 'wowhead': 237950, 'fuente': 'MC', 'prio': 'S'},
+            'head': {'nombre': 'Crown of the Primal Core', 'icono': 'inv_helm_mail_raidelementalmidnight_d_01', 'wowhead': 249978, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'shoulder': {'nombre': 'Mantle of the Primal Core', 'icono': 'inv_shoulder_mail_raidelementalmidnight_d_01', 'wowhead': 249979, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'chest': {'nombre': 'Robe of the Primal Core', 'icono': 'inv_chest_mail_raidelementalmidnight_d_01', 'wowhead': 249980, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'hands': {'nombre': 'Gloves of the Primal Core', 'icono': 'inv_gloves_mail_raidelementalmidnight_d_01', 'wowhead': 249981, 'fuente': 'Raid Midnight T1', 'prio': 'S', 'tier': True},
+            'legs': {'nombre': 'Leggings of the Primal Core', 'icono': 'inv_pants_mail_raidelementalmidnight_d_01', 'wowhead': 249982, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'cloak': {'nombre': 'Adherent\'s Silken Shroud', 'icono': 'inv_cape_cloth_questbloodelf_b_01', 'wowhead': 232355, 'fuente': 'Crafteado', 'prio': 'S'},
+            'wrist': {'nombre': 'Spellbreaker\'s Bracers', 'icono': 'inv_plate_questbloodelf_b_01_bracer', 'wowhead': 232340, 'fuente': 'Crafteado', 'prio': 'S'},
+            'waist': {'nombre': 'Girdle of the Ancient Pit', 'icono': 'inv_belt_plate_icecrown_d_01', 'wowhead': 232348, 'fuente': 'POS', 'prio': 'A'},
+            'feet': {'nombre': 'Oathsworn Stompers', 'icono': 'inv_boots_plate_dungeon_c_01', 'wowhead': 232362, 'fuente': 'MT', 'prio': 'A'},
+            'ring1': {'nombre': 'Platinum Star Band', 'icono': 'inv_10_dungeonjewelry_explorer_ring_1_color1', 'wowhead': 238010, 'fuente': 'AA', 'prio': 'SS'},
+            'ring2': {'nombre': 'Occlusion of Void', 'icono': 'inv_12_trinket_devouring_host_currency1_bronze', 'wowhead': 238020, 'fuente': 'NPX', 'prio': 'SS'},
+            'neck': {'nombre': 'Barbed Ymirheim Choker', 'icono': 'inv_jewelry_necklace_22', 'wowhead': 238090, 'fuente': 'Crafteado', 'prio': 'S'},
+            'trinket1': {'nombre': 'Emberwing Feather', 'icono': 'inv_icon_feather06a', 'wowhead': 238060, 'fuente': 'WRS', 'prio': 'SSS'},
+            'trinket2': {'nombre': 'Gaze of the Alnseer', 'icono': 'inv_12_trinket_raid_dreamrift_gazeofthealnseer', 'wowhead': 238070, 'fuente': 'Raid Midnight T1', 'prio': 'SS'},
+        }
+    },
+    'Redguard\u00efan': {
+        'stats': 'Haste > Vers > Crit > Mastery',
+        'top_dungeon': 'Algeth\'ar Academy',
+        'tier_name': 'Luminant Verdict (Retribution Tier)',
+        'slots': {
+            'weapon_2h': {'nombre': 'Blood Knight\'s Warblade', 'icono': 'inv_sword_2h_questbloodelf_b_01', 'wowhead': 237846, 'fuente': 'Crafteado', 'prio': 'SS'},
+            'head': {'nombre': 'Crown of the Luminant Verdict', 'icono': 'inv_helm_plate_raidpaladinmidnight_d_01', 'wowhead': 249983, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'shoulder': {'nombre': 'Mantle of the Luminant Verdict', 'icono': 'inv_shoulder_plate_raidpaladinmidnight_d_01', 'wowhead': 249984, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'chest': {'nombre': 'Chestguard of the Luminant Verdict', 'icono': 'inv_chest_plate_raidpaladinmidnight_d_01', 'wowhead': 249985, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'hands': {'nombre': 'Gauntlets of the Luminant Verdict', 'icono': 'inv_gloves_plate_raidpaladinmidnight_d_01', 'wowhead': 249986, 'fuente': 'Raid Midnight T1', 'prio': 'S', 'tier': True},
+            'legs': {'nombre': 'Legguards of the Luminant Verdict', 'icono': 'inv_pants_plate_raidpaladinmidnight_d_01', 'wowhead': 249987, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'cloak': {'nombre': 'Adherent\'s Silken Shroud', 'icono': 'inv_cape_cloth_questbloodelf_b_01', 'wowhead': 232355, 'fuente': 'Crafteado', 'prio': 'S'},
+            'wrist': {'nombre': 'Spellbreaker\'s Bracers', 'icono': 'inv_plate_questbloodelf_b_01_bracer', 'wowhead': 232340, 'fuente': 'Crafteado', 'prio': 'S'},
+            'waist': {'nombre': 'Spellbreaker\'s Girdle', 'icono': 'inv_belt_plate_questbloodelf_b_01', 'wowhead': 232345, 'fuente': 'Crafteado', 'prio': 'A'},
+            'feet': {'nombre': 'Oathsworn Stompers', 'icono': 'inv_boots_plate_dungeon_c_01', 'wowhead': 232362, 'fuente': 'MT', 'prio': 'A'},
+            'ring1': {'nombre': 'Occlusion of Void', 'icono': 'inv_12_trinket_devouring_host_currency1_bronze', 'wowhead': 238020, 'fuente': 'NPX', 'prio': 'SS'},
+            'ring2': {'nombre': 'Omission of Light', 'icono': 'inv_12_trinket_devouring_host_currency1_silver', 'wowhead': 238030, 'fuente': 'NPX', 'prio': 'SS'},
+            'neck': {'nombre': 'Barbed Ymirheim Choker', 'icono': 'inv_jewelry_necklace_22', 'wowhead': 238090, 'fuente': 'Crafteado', 'prio': 'S'},
+            'trinket1': {'nombre': 'Algeth\'ar Puzzle Box', 'icono': 'inv_misc_enggizmos_18', 'wowhead': 238050, 'fuente': 'AA', 'prio': 'SSS'},
+            'trinket2': {'nombre': 'Solarflare Prism', 'icono': 'inv_enchant_shardbrilliantlarge', 'wowhead': 238080, 'fuente': 'POS', 'prio': 'SS'},
+        }
+    },
+    'Kr\u00ebeper': {
+        'stats': 'Haste > Vers > Mastery > Crit',
+        'top_dungeon': 'Algeth\'ar Academy',
+        'tier_name': 'Eternal Guardian (Protection Tier)',
+        'slots': {
+            'weapon_2h': {'nombre': 'Blood Knight\'s Warblade', 'icono': 'inv_sword_2h_questbloodelf_b_01', 'wowhead': 237846, 'fuente': 'Crafteado', 'prio': 'SS'},
+            'head': {'nombre': 'Helm of the Eternal Guardian', 'icono': 'inv_helm_plate_raidwarriormidnight_d_01', 'wowhead': 249988, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'shoulder': {'nombre': 'Pauldrons of the Eternal Guardian', 'icono': 'inv_shoulder_plate_raidwarriormidnight_d_01', 'wowhead': 249989, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'chest': {'nombre': 'Chestguard of the Eternal Guardian', 'icono': 'inv_chest_plate_raidwarriormidnight_d_01', 'wowhead': 249990, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'hands': {'nombre': 'Gauntlets of the Eternal Guardian', 'icono': 'inv_gloves_plate_raidwarriormidnight_d_01', 'wowhead': 249991, 'fuente': 'Raid Midnight T1', 'prio': 'S', 'tier': True},
+            'legs': {'nombre': 'Legguards of the Eternal Guardian', 'icono': 'inv_pants_plate_raidwarriormidnight_d_01', 'wowhead': 249992, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'cloak': {'nombre': 'Adherent\'s Silken Shroud', 'icono': 'inv_cape_cloth_questbloodelf_b_01', 'wowhead': 232355, 'fuente': 'Crafteado', 'prio': 'S'},
+            'wrist': {'nombre': 'Spellbreaker\'s Bracers', 'icono': 'inv_plate_questbloodelf_b_01_bracer', 'wowhead': 232340, 'fuente': 'Crafteado', 'prio': 'S'},
+            'waist': {'nombre': 'Spellbreaker\'s Girdle', 'icono': 'inv_belt_plate_questbloodelf_b_01', 'wowhead': 232345, 'fuente': 'Crafteado', 'prio': 'A'},
+            'feet': {'nombre': 'Oathsworn Stompers', 'icono': 'inv_boots_plate_dungeon_c_01', 'wowhead': 232362, 'fuente': 'MT', 'prio': 'A'},
+            'ring1': {'nombre': 'Occlusion of Void', 'icono': 'inv_12_trinket_devouring_host_currency1_bronze', 'wowhead': 238020, 'fuente': 'NPX', 'prio': 'SS'},
+            'ring2': {'nombre': 'Omission of Light', 'icono': 'inv_12_trinket_devouring_host_currency1_silver', 'wowhead': 238030, 'fuente': 'NPX', 'prio': 'SS'},
+            'neck': {'nombre': 'Loa Worshiper\'s Band', 'icono': 'inv_12_profession_jewelcrafting_ring3_silver', 'wowhead': 232380, 'fuente': 'Crafteado', 'prio': 'S'},
+            'trinket1': {'nombre': 'Algeth\'ar Puzzle Box', 'icono': 'inv_misc_enggizmos_18', 'wowhead': 238050, 'fuente': 'AA', 'prio': 'SSS'},
+            'trinket2': {'nombre': 'Heart of Wind', 'icono': 'inv_10_jewelcrafting3_soulcage_air', 'wowhead': 238040, 'fuente': 'WRS', 'prio': 'SS'},
+        }
+    },
+    'N\u00f6sfer\u00e4t\u00fc': {
+        'stats': 'Haste > Mastery > Vers > Crit',
+        'top_dungeon': 'Algeth\'ar Academy',
+        'tier_name': 'Darkweaver (Vengeance Tier)',
+        'slots': {
+            'weapon_2h': {'nombre': 'Blood Knight\'s Warblade', 'icono': 'inv_sword_2h_questbloodelf_b_01', 'wowhead': 237846, 'fuente': 'Crafteado', 'prio': 'SS'},
+            'head': {'nombre': 'Helm of the Darkweaver', 'icono': 'inv_helm_leather_raitdhmidnight_d_01', 'wowhead': 249993, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'shoulder': {'nombre': 'Pauldrons of the Darkweaver', 'icono': 'inv_shoulder_leather_raitdhmidnight_d_01', 'wowhead': 249994, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'chest': {'nombre': 'Chestguard of the Darkweaver', 'icono': 'inv_chest_leather_raitdhmidnight_d_01', 'wowhead': 249995, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'hands': {'nombre': 'Gauntlets of the Darkweaver', 'icono': 'inv_gloves_leather_raitdhmidnight_d_01', 'wowhead': 249996, 'fuente': 'Raid Midnight T1', 'prio': 'S', 'tier': True},
+            'legs': {'nombre': 'Legguards of the Darkweaver', 'icono': 'inv_pants_leather_raitdhmidnight_d_01', 'wowhead': 249997, 'fuente': 'Raid Midnight T1', 'prio': 'SSS', 'tier': True},
+            'cloak': {'nombre': 'Adherent\'s Silken Shroud', 'icono': 'inv_cape_cloth_questbloodelf_b_01', 'wowhead': 232355, 'fuente': 'Crafteado', 'prio': 'S'},
+            'wrist': {'nombre': 'Spellbreaker\'s Bracers', 'icono': 'inv_plate_questbloodelf_b_01_bracer', 'wowhead': 232340, 'fuente': 'Crafteado', 'prio': 'S'},
+            'waist': {'nombre': 'Spellbreaker\'s Girdle', 'icono': 'inv_belt_plate_questbloodelf_b_01', 'wowhead': 232345, 'fuente': 'Crafteado', 'prio': 'A'},
+            'feet': {'nombre': 'Oathsworn Stompers', 'icono': 'inv_boots_plate_dungeon_c_01', 'wowhead': 232362, 'fuente': 'MT', 'prio': 'A'},
+            'ring1': {'nombre': 'Occlusion of Void', 'icono': 'inv_12_trinket_devouring_host_currency1_bronze', 'wowhead': 238020, 'fuente': 'NPX', 'prio': 'SS'},
+            'ring2': {'nombre': 'Omission of Light', 'icono': 'inv_12_trinket_devouring_host_currency1_silver', 'wowhead': 238030, 'fuente': 'NPX', 'prio': 'SS'},
+            'neck': {'nombre': 'Barbed Ymirheim Choker', 'icono': 'inv_jewelry_necklace_22', 'wowhead': 238090, 'fuente': 'Crafteado', 'prio': 'S'},
+            'trinket1': {'nombre': 'Heart of Wind', 'icono': 'inv_10_jewelcrafting3_soulcage_air', 'wowhead': 238040, 'fuente': 'WRS', 'prio': 'SSS'},
+            'trinket2': {'nombre': 'Solarflare Prism', 'icono': 'inv_enchant_shardbrilliantlarge', 'wowhead': 238080, 'fuente': 'POS', 'prio': 'SS'},
+        }
+    },
+}
+
 def gen(c):
     col  = c['color']
     rgb  = hex_to_rgb(col)
@@ -30,6 +188,35 @@ def gen(c):
     px   = c['px']
     re   = ROLE_EMOJI[c['role']]
     rt   = ROLE_TEXT[c['role']]
+
+    gd = GEAR_DATA.get(name)
+    gear_section = ''
+    if gd:
+        rows = []
+        for key, sname in GEAR_SLOTS:
+            item = gd['slots'].get(key)
+            if not item:
+                continue
+            icon_url = f'https://assets.rpglogs.com/img/warcraft/abilities/{item["icono"]}.jpg'
+            wh_url = f'https://www.wowhead.com/item={item["wowhead"]}'
+            tier_tag = '<span class="tb">TIER</span>' if item.get('tier') else ''
+            prio_color = PRIO_COLORS.get(item['prio'], '#ffffff')
+            rows.append(f"""<tr><td><div style="display:flex;align-items:center;gap:7px"><img src="{icon_url}" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="{sname}"><div><div>{sname}</div><div class="sn">{key}</div></div></div></td><td class="in"><a href="{wh_url}" target="_blank">{item["nombre"]}</a>{tier_tag}</td><td><span class="sd">{item["fuente"]}</span></td><td><span style="font-weight:700;color:{prio_color}">{item["prio"]}</span></td></tr>""")
+        table_rows = '\n'.join(rows)
+        tier_info = ''
+        if gd.get('tier_name'):
+            tier_info = f"""<div class="tbox"><h4>{gd["tier_name"]}</h4></div>"""
+        gear_section = f"""<div class="stitle"><span class="acc">&#9876;</span> Gear BiS &mdash; Midnight S1</div>
+    <div class="two-col" style="margin-bottom:18px">
+      <div class="card"><h3>&#128202; Prioridad de Stats</h3><p style="font-size:.9em;color:var(--gold);font-family:'Cinzel',serif">{gd["stats"]}</p></div>
+      <div class="card"><h3>&#127758; Mejor Mazmorra</h3><p style="font-size:.9em;color:var(--gold);font-family:'Cinzel',serif">{gd["top_dungeon"]}</p><p style="font-size:.72em;color:var(--muted);margin-top:3px">Dungeon con m&aacute;s items BiS</p></div>
+    </div>
+    {tier_info}
+    <table class="gt"><thead><tr><th>Slot</th><th>Item BiS</th><th>Fuente</th><th>Prio</th></tr></thead><tbody>
+    {table_rows}
+    </tbody></table>"""
+    else:
+        gear_section = '<p style="color:var(--muted);font-size:.83em;padding:14px 0">Sin datos de gear disponibles.</p>'
 
     return f"""<!DOCTYPE html>
 <html lang="es">
@@ -162,6 +349,7 @@ a{{color:var(--gold);text-decoration:none}}a:hover{{text-decoration:underline}}
 .pd:nth-child(2){{animation-delay:.2s}}.pd:nth-child(3){{animation-delay:.4s}}
 @keyframes pulse{{0%,80%,100%{{opacity:.2}}40%{{opacity:1}}}}
 .err{{color:#e74c3c;font-size:.83em;padding:12px 0}}
+.gt{{width:100%;border-collapse:collapse;font-size:.8em}}.gt thead th{{text-align:left;padding:7px 9px;color:var(--muted);font-size:.72em;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--b2)}}.gt tbody tr{{border-bottom:1px solid var(--b1)}}.gt tbody tr:hover{{background:rgba(255,255,255,.025)}}.gt td{{padding:8px 9px;vertical-align:middle}}.sn{{color:var(--muted);font-size:.72em;margin-top:1px}}.in a{{color:#d8d0ff}}.in a:hover{{color:#fff}}.tb{{display:inline-block;background:rgba({rgb},.2);border:1px solid rgba({rgb},.4);color:var(--ac);font-size:.65em;padding:1px 5px;border-radius:3px;margin-left:3px;vertical-align:middle}}.tbox{{background:rgba({rgb},.08);border:1px solid rgba({rgb},.25);border-radius:6px;padding:13px 15px;margin-bottom:14px}}.tbox h4{{font-size:.8em;color:var(--ac);margin-bottom:7px;font-family:'Cinzel',serif}}.tbox p{{font-size:.78em;color:var(--muted);line-height:1.6;margin-bottom:3px}}
 </style>
 </head>
 <body>
@@ -197,6 +385,7 @@ a{{color:var(--gold);text-decoration:none}}a:hover{{text-decoration:underline}}
   <button class="tab-btn" onclick="ST('crests')">&#128142; Crests</button>
   <button class="tab-btn" onclick="ST('dungeons')">&#128505; Mazmorras</button>
   <button class="tab-btn" onclick="ST('notas')">&#128221; Notas</button>
+  <button class="tab-btn" onclick="ST('gear')">&#9876; Gear BiS</button>
   <button class="tab-btn" onclick="ST('mplus')">&#128202; M+ Runs</button>
   <button class="tab-btn" onclick="ST('raid')">&#127984; Raid</button>
   <button class="tab-btn" onclick="ST('upgrades')">&#11014; Upgrades</button>
@@ -326,6 +515,10 @@ a{{color:var(--gold);text-decoration:none}}a:hover{{text-decoration:underline}}
     <div class="cc" style="border-top:3px solid #1d4ed8"><div style="font-weight:600;color:#60a5fa;margin-bottom:7px">Wyrm's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Champion/Hero &middot; M+ 8-10 &middot; Heroic<br>90/semana &middot; hasta 272</div></div>
     <div class="cc" style="border-top:3px solid #7e22ce"><div style="font-weight:600;color:#c084f5;margin-bottom:7px">Aspect's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Hero max/Myth &middot; M+ 10+ &middot; Mythic<br>15/semana &middot; hasta 289</div></div>
   </div>
+</div>
+
+<div class="tab-panel" id="tab-gear">
+{gear_section}
 </div>
 
 </div>
