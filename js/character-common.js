@@ -53,7 +53,7 @@ function tick() {
   el.textContent = p.join(' ');
 }
 setInterval(tick, 1000);
-tick();
+try { tick(); } catch(e) { console.error('tick():', e); }
 
 // ── Checklist ──
 function wKey() {
@@ -139,7 +139,7 @@ function renderCL() {
     bar('M+ Vault', mD, 8, '#5ab4ff') + bar('Raids', rD, 3, '#c084f5') + bar('Nightmare Prey', pD, 3, '#e67e22') +
     '<p style="font-size:.7em;color:var(--muted);margin-top:10px">Reset semanal: martes 15:00 UTC &middot; Diario: cada d&iacute;a 15:00 UTC</p>';
 }
-renderCL();
+try { renderCL(); } catch(e) { console.error('renderCL:', e); }
 
 // ── Timeline semanal ──
 const WEEK_PLAN = [
@@ -207,7 +207,7 @@ function renderTL() {
   });
   document.getElementById('tlContainer').innerHTML = h;
 }
-renderTL();
+try { renderTL(); } catch(e) { console.error('renderTL:', e); }
 
 // ── Tracker Crests ──
 const CREST_TYPES = [
@@ -321,8 +321,7 @@ function renderCrestHistory() {
   h += '</tbody></table>';
   el.innerHTML = h;
 }
-renderCrestInputs();
-renderCrestHistory();
+try { renderCrestInputs(); renderCrestHistory(); } catch(e) { console.error('crest init:', e); }
 
 // ── Notas por mazmorra ──
 const DNGS_LIST = [
@@ -387,7 +386,7 @@ function clearNote() {
   document.getElementById('noteTextarea').value = '';
 }
 document.addEventListener('keydown', e => { if (e.ctrlKey && e.key === 's' && curDng) { e.preventDefault(); saveNote(); } });
-initNotes();
+try { initNotes(); } catch(e) { console.error('initNotes:', e); }
 
 // ── Dungeon scores ──
 const DNGS_IO = ["Algeth'ar Academy", "Maisara Caverns", "Nexus-Point Xenas", "Windrunner Spire", "Magisters' Terrace", "Pit of Saron", "Seat of the Triumvirate", "Skyreach"];
