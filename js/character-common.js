@@ -41,6 +41,8 @@ function nextReset() {
   return d;
 }
 function tick() {
+  const el = document.getElementById('countdown');
+  if (!el) return;
   const ms = nextReset() - Date.now();
   if (ms <= 0) { tick(); return; }
   const dy = Math.floor(ms / 86400000), hr = Math.floor(ms % 86400000 / 3600000),
@@ -48,7 +50,7 @@ function tick() {
   const p = [];
   if (dy) p.push(dy + 'd');
   p.push(String(hr).padStart(2, '0') + 'h ' + String(mn).padStart(2, '0') + 'm ' + String(sc).padStart(2, '0') + 's');
-  document.getElementById('countdown').textContent = p.join(' ');
+  el.textContent = p.join(' ');
 }
 setInterval(tick, 1000);
 tick();
@@ -119,8 +121,10 @@ function mkItem(sk, t) {
   </div>`;
 }
 function renderCL() {
+  const dlbl = document.getElementById('dlbl');
+  if (!dlbl) return;
   const wk = wKey(), dk = dKey(), wd = lC(wk), dd = lC(dk);
-  document.getElementById('dlbl').textContent = '— ' + new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'short' });
+  dlbl.textContent = '— ' + new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'short' });
   document.getElementById('wList').innerHTML = WT.map(t => mkItem(wk, t)).join('');
   document.getElementById('dList').innerHTML = DT.map(t => mkItem(dk, t)).join('');
   const wD = WT.filter(t => wd[t.id]).length, dD = DT.filter(t => dd[t.id]).length;
