@@ -498,7 +498,16 @@ function renderStats(d) {
     ilvl = bs.ilvl || 0;
   }
   if (!stats || !Object.keys(stats).length) {
-    el.innerHTML = '<p style="color:var(--muted);font-size:.83em;padding:14px 0">Stats no disponibles.</p>';
+    const sc = d.mythic_plus_scores_by_season?.[0]?.scores?.all ?? 0;
+    const sp = d.active_spec_name || (window.CHAR_SPEC || '');
+    const cl = d.class || '';
+    el.innerHTML = '<div class="stats-grid">' +
+      '<div class="stat-card"><div class="stat-val" style="color:var(--gold)">' + String(ilvl || '&mdash;') + '</div><div class="stat-label">Item Level</div></div>' +
+      '<div class="stat-card"><div class="stat-val" style="color:#00ffcc">' + Math.round(sc).toLocaleString() + '</div><div class="stat-label">M+ Score</div></div>' +
+      '<div class="stat-card"><div class="stat-val" style="color:var(--blue)">' + sp + '</div><div class="stat-label">Spec</div></div>' +
+      '<div class="stat-card"><div class="stat-val" style="color:var(--muted)">' + cl + '</div><div class="stat-label">Clase</div></div>' +
+      '</div>' +
+      '<p style="color:var(--muted);font-size:.78em;text-align:center;margin-top:10px">Stats detallados disponibles tras el cron semanal de GitHub Actions.</p>';
     return;
   }
   const cls = d.class || '';

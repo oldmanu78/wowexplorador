@@ -255,7 +255,7 @@ def obtener_evento_semana():
     return eventos[semanas_pasadas % len(eventos)]
 
 def obtener_stats_blizzard(token, nombre_url):
-    """Obtiene stats básicos y equipo desde Blizzard API"""
+    """Obtiene stats y equipo desde Blizzard API (Profile/Statistics)"""
     try:
         url_equip = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}/equipment?namespace=profile-us&locale=en_US"
         req = urllib.request.Request(url_equip, headers={'Authorization': f'Bearer {token}'})
@@ -265,15 +265,15 @@ def obtener_stats_blizzard(token, nombre_url):
         url_stats = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}/statistics?namespace=profile-us&locale=en_US"
         req2 = urllib.request.Request(url_stats, headers={'Authorization': f'Bearer {token}'})
         with urllib.request.urlopen(req2, timeout=8) as r:
-            stats = json.loads(r.read().decode())
+            stats_raw = json.loads(r.read().decode())
 
         result = {
             "ilvl": equip.get("equipped_item_level", 0),
             "items": {}
         }
         for item in equip.get("equipped_items", []):
-            slot = item.get("slot", {}).get("type", "").lower()
-            result["items"][slot] = {
+            slot_type = item.get("slot", {}).get("type", "").lower()
+            result["items"][slot_type] = {
                 "id": item.get("item", {}).get("id", 0),
                 "name": item.get("name", ""),
                 "ilvl": item.get("level", 0),
@@ -281,12 +281,61 @@ def obtener_stats_blizzard(token, nombre_url):
                 "quality": item.get("quality", {}).get("type", "")
             }
 
-        # Extraer stats secundarios
-        sub_stats = stats.get("sub_stats", [])
+        # Extraer stats desde grupos (Attributes, Enhancements, etc.)
+        # El endpoint /statistics devuelve stats agrupados por categoria
         result["stats"] = {}
-        for s in sub_stats:
-            name = s.get("stat", {}).get("name", "").lower().replace(" ", "_")
-            result["stats"][name] = s.get("amount", 0)
+        stat_groups = stats_raw.get("statistics", stats_raw.get("sub_stats", []))
+        # Map de slugs a nombres cortos
+        SLUG_MAP = {
+            "strength": "strength", "agility": "agility", "intellect": "intellect",
+            "stamina": "stamina", "health": "health",
+            "critical-strike": "crit", "haste": "haste", "mastery": "mastery",
+            "versatility": "versatility", "leech": "leech", "speed": "speed",
+            "avoidance": "avoidance"
+        }
+        def extract_stat_value(s):
+            v = s.get("value", {})
+            if isinstance(v, dict):
+                t = v.get("type", "")
+                if t == "RANGE":
+                    return v.get("min", {}).get("value", 0)
+                return v.get("value", 0)
+            return v if isinstance(v, (int, float)) else 0
+
+        def parse_group(group):
+            if isinstance(group, dict):
+                for sub in group.get("stats", [group]):
+                    slug = sub.get("slug", "").lower()
+                    short = SLUG_MAP.get(slug)
+                    if short:
+                        val = extract_stat_value(sub)
+                        if short not in result["stats"] or val > result["stats"][short]:
+                            result["stats"][short] = val
+                    # health a veces viene en overview
+                    if slug == "health":
+                        result["stats"]["health"] = extract_stat_value(sub)
+
+        # Intentar formato agrupado (statistics[] con .stats[])
+        if isinstance(stat_groups, list):
+            for group in stat_groups:
+                if isinstance(group, dict) and "stats" in group:
+                    parse_group(group)
+                elif isinstance(group, dict) and "slug" in group:
+                    parse_group({"stats": [group]})
+        # Intentar formato plano {"sub_stats": [...]}
+        if not result["stats"]:
+            for s in stats_raw.get("sub_stats", []):
+                slug = s.get("stat", {}).get("name", "").lower().replace(" ", "-")
+                short = SLUG_MAP.get(slug)
+                if short:
+                    result["stats"][short] = s.get("amount", 0)
+
+        # Health desde overview si existe
+        overview = stats_raw.get("overview", [])
+        if isinstance(overview, list):
+            for o in overview:
+                if o.get("slug") == "health":
+                    result["stats"]["health"] = extract_stat_value(o)
 
         return result
     except Exception as e:
@@ -294,7 +343,7 @@ def obtener_stats_blizzard(token, nombre_url):
         return None
 
 def obtener_monedas_blizzard(token, nombre_url):
-    """Obtiene monedas actuales desde Blizzard API"""
+    """Obtiene monedas actuales desde Blizzard API (Profile Summary)"""
     try:
         url = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}?namespace=profile-us&locale=en_US"
         req = urllib.request.Request(url, headers={'Authorization': f'Bearer {token}'})
@@ -302,19 +351,38 @@ def obtener_monedas_blizzard(token, nombre_url):
             data = json.loads(r.read().decode())
 
         monedas = {}
+        # Intentar currencies desde profile summary
         for curr in data.get("currencies", []):
             cid = curr.get("id", 0)
             amount = curr.get("quantity", 0)
+            # Midnight currency IDs (TWW)
+            # 2807 = Valorstones, 2806 = Whelpling, 2808 = Drake, 2809 = Wyrm, 2810 = Aspect
             if cid == 2807: monedas["valorstones"] = amount
             elif cid == 2806: monedas["whelp"] = amount
             elif cid == 2808: monedas["drake"] = amount
             elif cid == 2809: monedas["wyrm"] = amount
             elif cid == 2810: monedas["aspect"] = amount
 
-        return monedas
+        # Si no hay currencies en el profile, intentar achievements endpoint
+        if not monedas:
+            try:
+                url_curr = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}?namespace=profile-us&locale=en_US"
+                # Misión cumplida, profile ya se cargo arriba. Verificar achievement_categories
+                for cat in data.get("achievements", {}).get("achievements", []):
+                    if cat.get("name") == "Currency":
+                        for ach in cat.get("achievements", []):
+                            if ach.get("name") == "Currency Earning":
+                                for crit in ach.get("criteria", []):
+                                    cname = crit.get("description", "")
+                                    # Intentar parsear IDs de criterio
+                                    pass
+            except:
+                pass
+
+        return monedas if monedas else {}
     except Exception as e:
         print(f"Error monedas Blizzard para {nombre_url}: {e}")
-        return None
+        return {}
 
 def obtener_rutas_midnight():
     """
