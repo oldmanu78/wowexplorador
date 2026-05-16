@@ -190,31 +190,62 @@ def gen(c):
     rt   = ROLE_TEXT[c['role']]
 
     gd = GEAR_DATA.get(name)
-    gear_section = ''
     if gd:
-        rows = []
+        tier_items = []
+        mplus_items = []
+        dungeon_counts = {}
         for key, sname in GEAR_SLOTS:
             item = gd['slots'].get(key)
             if not item:
                 continue
             icon_url = f'https://assets.rpglogs.com/img/warcraft/abilities/{item["icono"]}.jpg'
             wh_url = f'https://www.wowhead.com/item={item["wowhead"]}'
-            tier_tag = '<span class="tb">TIER</span>' if item.get('tier') else ''
             prio_color = PRIO_COLORS.get(item['prio'], '#ffffff')
-            rows.append(f"""<tr><td><div style="display:flex;align-items:center;gap:7px"><img src="{icon_url}" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="{sname}"><div><div>{sname}</div><div class="sn">{key}</div></div></div></td><td class="in"><a href="{wh_url}" target="_blank">{item["nombre"]}</a>{tier_tag}</td><td><span class="sd">{item["fuente"]}</span></td><td><span style="font-weight:700;color:{prio_color}">{item["prio"]}</span></td></tr>""")
-        table_rows = '\n'.join(rows)
-        tier_info = ''
-        if gd.get('tier_name'):
-            tier_info = f"""<div class="tbox"><h4>{gd["tier_name"]}</h4></div>"""
-        gear_section = f"""<div class="stitle"><span class="acc">&#9876;</span> Gear BiS &mdash; Midnight S1</div>
-    <div class="two-col" style="margin-bottom:18px">
-      <div class="card"><h3>&#128202; Prioridad de Stats</h3><p style="font-size:.9em;color:var(--gold);font-family:'Cinzel',serif">{gd["stats"]}</p></div>
-      <div class="card"><h3>&#127758; Mejor Mazmorra</h3><p style="font-size:.9em;color:var(--gold);font-family:'Cinzel',serif">{gd["top_dungeon"]}</p><p style="font-size:.72em;color:var(--muted);margin-top:3px">Dungeon con m&aacute;s items BiS</p></div>
-    </div>
-    {tier_info}
-    <table class="gt"><thead><tr><th>Slot</th><th>Item BiS</th><th>Fuente</th><th>Prio</th></tr></thead><tbody>
-    {table_rows}
-    </tbody></table>"""
+            entry = f'''<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--b1)">
+  <img src="{icon_url}" style="width:28px;height:28px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="{sname}">
+  <div style="flex:1;min-width:0">
+    <div style="font-size:.8em;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><a href="{wh_url}" target="_blank">{item["nombre"]}</a></div>
+    <div style="font-size:.68em;color:var(--muted)">{sname}</div>
+  </div>
+  <span style="font-size:.7em;color:{prio_color};font-weight:600">{item["prio"]}</span>
+</div>'''
+            if item.get('tier'):
+                tier_items.append(entry)
+            else:
+                mplus_items.append(entry)
+                src = item["fuente"]
+                if 'Raid' not in src and 'Crafteado' not in src:
+                    dungeon_counts[src] = dungeon_counts.get(src, 0) + 1
+        tier_html = '\n    '.join(tier_items) if tier_items else '<div style="font-size:.78em;color:var(--muted);padding:8px 0">Sin datos de tier.</div>'
+        mplus_html = '\n    '.join(mplus_items) if mplus_items else '<div style="font-size:.78em;color:var(--muted);padding:8px 0">Sin datos de M+ BiS.</div>'
+        sorted_dngs = sorted(dungeon_counts.items(), key=lambda x: -x[1])
+        mx = sorted_dngs[0][1] if sorted_dngs else 1
+        dng_rows = ''
+        for src, count in sorted_dngs:
+            pct = round(count / mx * 100)
+            dng_rows += f'''<div class="dungeon-rank-row">
+  <span class="dungeon-rank-name">{src}</span>
+  <div class="dungeon-rank-bar"><div class="dungeon-rank-fill" style="width:{pct}%;background:var(--ac)"></div></div>
+  <span class="dungeon-rank-count">{count} pieza{"s" if count > 1 else ""}</span>
+</div>'''
+        gear_section = f'''<div class="gear-bis-grid" style="margin-bottom:18px">
+  <div class="tier-set-card" style="border-left:3px solid var(--ac);background:var(--bg2);border:1px solid var(--b1);border-radius:8px;padding:14px">
+    <h4 class="gear-section-title">&#127991; Tier Set</h4>
+    {tier_html}
+  </div>
+  <div class="mplus-card" style="border-left:3px solid #5ab4ff;background:var(--bg2);border:1px solid var(--b1);border-radius:8px;padding:14px">
+    <h4 class="gear-section-title">&#9876; M+ BiS</h4>
+    {mplus_html}
+  </div>
+</div>
+<div class="card">
+  <h4 class="gear-section-title">&#128200; Dungeon Ranking by BiS</h4>
+  {dng_rows if dng_rows else '<p style="color:var(--muted);font-size:.78em">Sin datos de mazmorras.</p>'}
+</div>
+<div class="two-col" style="margin-top:18px">
+  <div class="card"><h3>&#128202; Prioridad de Stats</h3><p style="font-size:.9em;color:var(--gold);font-family:\'Cinzel\',serif">{gd["stats"]}</p></div>
+  <div class="card"><h3>&#127758; Mejor Mazmorra</h3><p style="font-size:.9em;color:var(--gold);font-family:\'Cinzel\',serif">{gd["top_dungeon"]}</p><p style="font-size:.72em;color:var(--muted);margin-top:3px">Dungeon con m&aacute;s items BiS</p></div>
+</div>'''
     else:
         gear_section = '<p style="color:var(--muted);font-size:.83em;padding:14px 0">Sin datos de gear disponibles.</p>'
 
@@ -350,6 +381,13 @@ a{{color:var(--gold);text-decoration:none}}a:hover{{text-decoration:underline}}
 @keyframes pulse{{0%,80%,100%{{opacity:.2}}40%{{opacity:1}}}}
 .err{{color:#e74c3c;font-size:.83em;padding:12px 0}}
 .gt{{width:100%;border-collapse:collapse;font-size:.8em}}.gt thead th{{text-align:left;padding:7px 9px;color:var(--muted);font-size:.72em;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--b2)}}.gt tbody tr{{border-bottom:1px solid var(--b1)}}.gt tbody tr:hover{{background:rgba(255,255,255,.025)}}.gt td{{padding:8px 9px;vertical-align:middle}}.sn{{color:var(--muted);font-size:.72em;margin-top:1px}}.in a{{color:#d8d0ff}}.in a:hover{{color:#fff}}.tb{{display:inline-block;background:rgba({rgb},.2);border:1px solid rgba({rgb},.4);color:var(--ac);font-size:.65em;padding:1px 5px;border-radius:3px;margin-left:3px;vertical-align:middle}}.tbox{{background:rgba({rgb},.08);border:1px solid rgba({rgb},.25);border-radius:6px;padding:13px 15px;margin-bottom:14px}}.tbox h4{{font-size:.8em;color:var(--ac);margin-bottom:7px;font-family:'Cinzel',serif}}.tbox p{{font-size:.78em;color:var(--muted);line-height:1.6;margin-bottom:3px}}
+.gear-bis-grid{{display:grid;grid-template-columns:1fr 1fr;gap:20px}}@media(max-width:700px){{.gear-bis-grid{{grid-template-columns:1fr}}}}
+.gear-section-title{{font-family:'Cinzel',serif;font-size:.74em;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px}}
+.dungeon-rank-row{{display:flex;align-items:center;gap:10px;margin-bottom:6px}}
+.dungeon-rank-bar{{flex:1;height:8px;background:var(--b2);border-radius:4px;overflow:hidden}}
+.dungeon-rank-fill{{height:100%;border-radius:4px;transition:width .3s}}
+.dungeon-rank-name{{font-size:.8em;width:140px;flex-shrink:0}}
+.dungeon-rank-count{{font-size:.75em;color:var(--muted);width:60px;text-align:right}}
 </style>
 </head>
 <body>
@@ -380,77 +418,77 @@ a{{color:var(--gold);text-decoration:none}}a:hover{{text-decoration:underline}}
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="ST('checklist')">&#10003; Checklist</button>
-  <button class="tab-btn" onclick="ST('timeline')">&#128197; Semana</button>
-  <button class="tab-btn" onclick="ST('crests')">&#128142; Crests</button>
+  <button class="tab-btn active" onclick="ST('stats')">&#128202; Stats</button>
+  <button class="tab-btn" onclick="ST('monedas')">&#128176; Monedas</button>
+  <button class="tab-btn" onclick="ST('gear')">&#9876; Gear &amp; BiS</button>
+  <button class="tab-btn" onclick="ST('enchants')">&#10024; Encantamientos</button>
+  <button class="tab-btn" onclick="ST('builds')">&#9878; Builds</button>
+  <button class="tab-btn" onclick="ST('rotation')">&#9881; Rotaci&oacute;n</button>
   <button class="tab-btn" onclick="ST('dungeons')">&#128505; Mazmorras</button>
-  <button class="tab-btn" onclick="ST('notas')">&#128221; Notas</button>
-  <button class="tab-btn" onclick="ST('gear')">&#9876; Gear BiS</button>
+  <button class="tab-btn" onclick="ST('talents')">&#11088; Talentos</button>
   <button class="tab-btn" onclick="ST('mplus')">&#128202; M+ Runs</button>
   <button class="tab-btn" onclick="ST('raid')">&#127984; Raid</button>
-  <button class="tab-btn" onclick="ST('upgrades')">&#11014; Upgrades</button>
+  <button class="tab-btn" onclick="ST('notas')">&#128221; Notas</button>
 </div>
 
 <div class="main">
 
-<div class="tab-panel active" id="tab-checklist">
-  <div class="rbar">
-    <div>
-      <div class="rlabel">Pr&oacute;ximo reset semanal NA &middot; Martes 15:00 UTC</div>
-      <div class="rcd" id="countdown">Calculando...</div>
-    </div>
-    <div style="margin-left:auto">
-      <button onclick="clearAll()" style="background:rgba({rgb},.1);border:1px solid rgba({rgb},.3);color:var(--ac);font-size:.73em;padding:6px 13px;border-radius:4px;cursor:pointer;font-family:'Exo 2',sans-serif">&#128465; Limpiar todo</button>
-    </div>
-  </div>
-  <div class="two-col">
-    <div>
-      <div class="stitle"><span class="acc">&#128197;</span> Semanales <span style="font-size:.85em">(reset martes)</span></div>
-      <div class="card" id="wList"></div>
-    </div>
-    <div>
-      <div class="stitle"><span class="acc">&#9728;</span> Diarias <span id="dlbl" style="font-size:.85em"></span></div>
-      <div class="card" id="dList"></div>
-      <div class="stitle" style="margin-top:18px"><span class="acc">&#128200;</span> Progreso</div>
-      <div class="card" id="pCard"></div>
-    </div>
+<div class="tab-panel active" id="tab-stats">
+  <div class="stitle"><span class="acc">&#128202;</span> Stats en vivo <span style="font-size:.85em">(Raider.io)</span></div>
+  <div id="statsContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando stats...</span></div></div>
+</div>
+
+<div class="tab-panel" id="tab-monedas">
+  <div class="stitle"><span class="acc">&#128176;</span> Monedas y Crests &mdash; Semana actual</div>
+  <div class="card" id="monedasContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
+</div>
+
+<div class="tab-panel" id="tab-gear">
+  <div class="stitle"><span class="acc">&#9876;</span> Gear BiS &mdash; Midnight S1</div>
+{gear_section}
+</div>
+
+<div class="tab-panel" id="tab-enchants">
+  <div class="stitle"><span class="acc">&#10024;</span> Encantamientos &mdash; {name}</div>
+  <div class="card" style="text-align:center;padding:32px">
+    <p style="font-size:.9em;color:var(--muted)">Los datos de encantamientos no est&aacute;n disponibles para este personaje.</p>
   </div>
 </div>
 
-<div class="tab-panel" id="tab-timeline">
-  <div class="stitle"><span class="acc">&#128197;</span> Semana ideal &mdash; Midnight S1</div>
-  <p style="font-size:.78em;color:var(--muted);margin-bottom:18px;max-width:600px">Distribuci&oacute;n &oacute;ptima de actividades. Reset cada martes 15:00 UTC.</p>
-  <div class="timeline" id="tlContainer"></div>
+<div class="tab-panel" id="tab-builds">
+  <div class="stitle"><span class="acc">&#9878;</span> Builds &mdash; {spec} {cls}</div>
+  <div class="card" style="text-align:center;padding:32px">
+    <p style="font-size:.9em;color:var(--muted)">Pr&oacute;ximamente: comparador de builds para {name}.</p>
+  </div>
 </div>
 
-<div class="tab-panel" id="tab-crests">
-  <div class="stitle"><span class="acc">&#128142;</span> Tracker de Crests &mdash; Semana actual</div>
-  <div class="two-col">
-    <div>
-      <div class="card">
-        <h3>Crests acumulados esta semana</h3>
-        <div id="crestInputs"></div>
-        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--b1)">
-          <button onclick="saveCrests()" style="background:rgba({rgb},.15);border:1px solid rgba({rgb},.4);color:var(--ac);padding:7px 16px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:.75em">GUARDAR</button>
-          <button onclick="resetCrests()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);padding:7px 14px;border-radius:4px;cursor:pointer;font-size:.75em;margin-left:6px">Resetear</button>
-          <span style="font-size:.7em;color:var(--muted);margin-left:10px;opacity:0;transition:opacity .3s" id="crestSaveLabel">Guardado</span>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="card" id="crestPlanCard">
-        <h3>Plan de upgrades</h3>
-        <p style="color:var(--muted);font-size:.83em">Ingresa tus crests y guarda para ver qu&eacute; piezas puedes subir.</p>
-      </div>
-    </div>
+<div class="tab-panel" id="tab-rotation">
+  <div class="stitle"><span class="acc">&#9881;</span> Rotaci&oacute;n &mdash; {spec}</div>
+  <div class="card" style="text-align:center;padding:32px">
+    <p style="font-size:.9em;color:var(--muted)">Pr&oacute;ximamente: simulador de rotaci&oacute;n para {name}.</p>
   </div>
-  <div class="stitle" style="margin-top:20px"><span class="acc">&#128336;</span> Historial semanal</div>
-  <div class="card" id="crestHistory"><p style="color:var(--muted);font-size:.83em">Sin historial guardado a&uacute;n.</p></div>
 </div>
 
 <div class="tab-panel" id="tab-dungeons">
   <div class="stitle"><span class="acc">&#10022;</span> Score por Mazmorra <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
   <div id="dgContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
+</div>
+
+<div class="tab-panel" id="tab-talents">
+  <div class="stitle"><span class="acc">&#11088;</span> Talentos &mdash; {spec}</div>
+  <div class="card" style="text-align:center;padding:32px">
+    <p style="font-size:.9em;color:var(--muted)">Pr&oacute;ximamente: talentos detallados para {name}.</p>
+  </div>
+</div>
+
+<div class="tab-panel" id="tab-mplus">
+  <div class="stitle"><span class="acc">&#128202;</span> Actividad Mythic+ <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
+  <div id="mpContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
+</div>
+
+<div class="tab-panel" id="tab-raid">
+  <div class="stitle"><span class="acc">&#127984;</span> Progreso de Raid <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
+  <div id="raidContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
 </div>
 
 <div class="tab-panel" id="tab-notas">
@@ -469,56 +507,6 @@ a{{color:var(--gold);text-decoration:none}}a:hover{{text-decoration:underline}}
     <textarea class="note-area" id="noteTextarea" placeholder="Escribe tus notas aquí..."></textarea>
   </div>
   <div id="noteEmpty" style="color:var(--muted);font-size:.83em;padding:14px 0">Selecciona una mazmorra para empezar.</div>
-</div>
-
-<div class="tab-panel" id="tab-mplus">
-  <div class="stitle"><span class="acc">&#128202;</span> Actividad Mythic+ <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
-  <div id="mpContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
-</div>
-
-<div class="tab-panel" id="tab-raid">
-  <div class="stitle"><span class="acc">&#127984;</span> Progreso de Raid <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
-  <div id="raidContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
-</div>
-
-<div class="tab-panel" id="tab-upgrades">
-  <div class="stitle"><span class="acc">&#11014;</span> Calculadora de Upgrades</div>
-  <div class="two-col">
-    <div class="card ucal">
-      <label>Item Level actual</label>
-      <select id="uFrom">
-        <option value="233">233 &mdash; Adventurer</option><option value="242">242</option><option value="249">249 &mdash; Veteran</option>
-        <option value="258">258 &mdash; Champion</option><option value="265">265 &mdash; Hero</option>
-        <option value="272" selected>272 &mdash; Hero max</option><option value="285">285 &mdash; Myth</option>
-      </select>
-      <label>Item Level objetivo</label>
-      <select id="uTo">
-        <option value="249">249 &mdash; Veteran</option><option value="258">258 &mdash; Champion</option>
-        <option value="265">265 &mdash; Hero</option><option value="272">272 &mdash; Hero max</option>
-        <option value="285" selected>285 &mdash; Myth</option><option value="289">289 &mdash; Myth max</option>
-      </select>
-      <label>Tipo de item</label>
-      <select id="uType">
-        <option value="armor">Armadura (15 crests/step)</option>
-        <option value="weapon">Arma 2H (30 crests/step)</option>
-      </select>
-      <button class="ucal-btn" onclick="calcU()">CALCULAR</button>
-    </div>
-    <div class="card" id="uResult">
-      <h3>Resultado</h3>
-      <p style="color:var(--muted);font-size:.83em;margin-top:8px">Selecciona los ilvl y calcula.</p>
-    </div>
-  </div>
-  <div class="cg" style="margin-top:18px">
-    <div class="cc" style="border-top:3px solid #6b7280"><div style="font-weight:600;color:#9ca3af;margin-bottom:7px">Whelpling's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Adventurer &middot; M+ 2-5 &middot; LFR<br>90/semana &middot; hasta 249</div></div>
-    <div class="cc" style="border-top:3px solid #16a34a"><div style="font-weight:600;color:#4ade80;margin-bottom:7px">Drake's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Veteran &middot; M+ 6-7 &middot; Normal<br>90/semana &middot; hasta 256</div></div>
-    <div class="cc" style="border-top:3px solid #1d4ed8"><div style="font-weight:600;color:#60a5fa;margin-bottom:7px">Wyrm's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Champion/Hero &middot; M+ 8-10 &middot; Heroic<br>90/semana &middot; hasta 272</div></div>
-    <div class="cc" style="border-top:3px solid #7e22ce"><div style="font-weight:600;color:#c084f5;margin-bottom:7px">Aspect's Crest</div><div style="font-size:.76em;color:var(--muted);line-height:1.7">Hero max/Myth &middot; M+ 10+ &middot; Mythic<br>15/semana &middot; hasta 289</div></div>
-  </div>
-</div>
-
-<div class="tab-panel" id="tab-gear">
-{gear_section}
 </div>
 
 </div>

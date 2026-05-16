@@ -5,6 +5,9 @@
 //   window.CHAR_URL  — nombre URL-encoded para API (opcional, default = CHAR_NAME)
 //   window.CHAR_SPEC — spec por defecto (fallback si API no responde)
 
+// ── Injected CSS ──
+(function(){var s=document.createElement('style');s.textContent='.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}.stat-card{background:var(--bg2);border:1px solid var(--b1);border-radius:8px;padding:15px;text-align:center}.stat-val{font-family:"Cinzel",serif;font-size:1.4em;font-weight:600;display:block}.stat-label{font-size:.66em;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}.moneda-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--b1)}.moneda-row:last-child{border-bottom:none}.moneda-name{font-size:.82em;font-weight:500;width:140px;flex-shrink:0}.moneda-input{width:72px;background:var(--bg3);border:1px solid var(--b2);color:var(--text);font-family:"Cinzel",serif;font-size:1em;text-align:center;padding:4px 6px;border-radius:4px}.moneda-pbar{flex:1;height:7px;background:var(--b2);border-radius:3px;overflow:hidden}.moneda-pfill{height:100%;border-radius:3px;transition:width .3s}.moneda-pct{font-size:.7em;color:var(--muted);width:34px;text-align:right}.gear-bis-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:700px){.gear-bis-grid{grid-template-columns:1fr}}.gear-section-title{font-family:"Cinzel",serif;font-size:.74em;letter-spacing:2px;color:var(--ac);text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px}.dungeon-rank-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}.dungeon-rank-bar{flex:1;height:8px;background:var(--b2);border-radius:4px;overflow:hidden}.dungeon-rank-fill{height:100%;border-radius:4px;transition:width .3s}.dungeon-rank-name{font-size:.8em;width:140px;flex-shrink:0}.dungeon-rank-count{font-size:.75em;color:var(--muted);width:60px;text-align:right}';document.head.appendChild(s)})();
+
 const PX = window.CHAR_PX || 'kr';
 const N  = window.CHAR_URL || window.CHAR_NAME || 'Kreathor';
 const R  = 'us';
@@ -476,6 +479,97 @@ function renderHero(d) {
   document.getElementById('heroLinks').innerHTML = `
     <a class="hl hl-rio" href="${rio}" target="_blank">Raider.io &#8599;</a>
     <a class="hl hl-ext" href="${arm}" target="_blank">Armory &#8599;</a>`;
+  if (document.getElementById('statsContent')) renderStats(d);
+}
+
+// ── Stats panel ──
+function renderStats(d) {
+  const el = document.getElementById('statsContent');
+  if (!el) return;
+  const stats = d.gear?.stats;
+  if (!stats || !Object.keys(stats).length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:.83em;padding:14px 0">Stats no disponibles.</p>';
+    return;
+  }
+  const cls = d.class || '';
+  const primaryMap = {
+    'Death Knight':'strength','Demon Hunter':'agility','Druid':'agility',
+    'Monk':'agility','Paladin':'strength','Warrior':'strength',
+    'Hunter':'agility','Rogue':'agility','Evoker':'intellect','Mage':'intellect',
+    'Priest':'intellect','Warlock':'intellect'
+  };
+  const shamanSpec = d.active_spec_name || '';
+  const isEleResto = shamanSpec === 'Elemental' || shamanSpec === 'Restoration';
+  const pKey = cls === 'Shaman' ? (isEleResto ? 'intellect' : 'agility') : (primaryMap[cls] || 'strength');
+  const pLabel = {strength:'Fuerza',agility:'Agilidad',intellect:'Intelecto'}[pKey] || 'Fuerza';
+  const primVal = stats[pKey] || 0;
+  const fmt = v => Math.round(v).toLocaleString();
+  const defs = [
+    {l:'Item Level',v:d.gear?.item_level_equipped||0,c:'var(--gold)',f:true},
+    {l:'Health',v:stats.health||0,c:'#2ecc71',f:true},
+    {l:pLabel,v:primVal,c:'var(--ac)',f:true},
+    {l:'Stamina',v:stats.stamina||0,c:'#5ab4ff',f:true},
+    {l:'Cr\u00edtico',v:(stats.crit||0).toFixed(1)+'%',c:'#ff4466',f:false},
+    {l:'Prisa',v:(stats.haste||0).toFixed(1)+'%',c:'#44aaff',f:false},
+    {l:'Maestr\u00eda',v:(stats.mastery||0).toFixed(1)+'%',c:'#c084f5',f:false},
+    {l:'Versatilidad',v:(stats.versatility||0).toFixed(1)+'%',c:'#ff8844',f:false},
+    {l:'Leech',v:(stats.leech||0).toFixed(1)+'%',c:'#e67e22',f:false},
+    {l:'Speed',v:(stats.speed||0).toFixed(1)+'%',c:'#4ade80',f:false},
+    {l:'Avoidance',v:(stats.avoidance||0).toFixed(1)+'%',c:'#9ca3af',f:false},
+  ];
+  el.innerHTML = '<div class="stats-grid">' + defs.map(s =>
+    '<div class="stat-card"><div class="stat-val" style="color:' + s.c + '">' + (s.f ? fmt(s.v) : s.v) + '</div><div class="stat-label">' + s.l + '</div></div>'
+  ).join('') + '</div>';
+}
+
+// ── Monedas / Currency tracker ──
+function renderMonedas() {
+  const el = document.getElementById('monedasContent');
+  if (!el) return;
+  const mKey = PX + '_monedas';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(mKey) || '{}'); } catch(e) {}
+  var currs = [
+    {id:'valorstones',n:'Valorstones',l:9999,c:'#fbbf24',bar:true},
+    {id:'whelp',n:"Whelpling's Crest",l:90,c:'#9ca3af',bar:true},
+    {id:'drake',n:"Drake's Crest",l:90,c:'#4ade80',bar:true},
+    {id:'wyrm',n:"Wyrm's Crest",l:90,c:'#60a5fa',bar:true},
+    {id:'aspect',n:"Aspect's Crest",l:15,c:'#c084f5',bar:true},
+    {id:'gold',n:'Gold',l:0,c:'#fbbf24',bar:false}
+  ];
+  var h = '';
+  for (var i = 0; i < currs.length; i++) {
+    var c = currs[i], val = saved[c.id] || 0, pct = c.bar ? Math.min(Math.round(val / c.l * 100), 100) : 0;
+    h += '<div class="moneda-row"><span class="moneda-name" style="color:' + c.c + '">' + c.n + '</span>' +
+      '<input type="number" class="moneda-input" id="mon_' + c.id + '" value="' + val + '" min="0"' + (c.l ? ' max="' + c.l + '"' : '') + ' oninput="saveMonedas()">' +
+      (c.bar ? '<div class="moneda-pbar"><div class="moneda-pfill" id="mpf_' + c.id + '" style="width:' + pct + '%;background:' + c.c + '"></div></div><span class="moneda-pct" id="mpp_' + c.id + '">' + pct + '%</span>' : '') +
+      '</div>';
+  }
+  h += '<button onclick="resetMonedas()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);padding:6px 14px;border-radius:4px;cursor:pointer;font-size:.75em;margin-top:10px">Resetear</button>';
+  el.innerHTML = h;
+}
+function saveMonedas() {
+  var mKey = PX + '_monedas';
+  var ids = ['valorstones','whelp','drake','wyrm','aspect','gold'];
+  var limits = {valorstones:9999,whelp:90,drake:90,wyrm:90,aspect:15};
+  var data = {};
+  for (var i = 0; i < ids.length; i++) {
+    var inp = document.getElementById('mon_' + ids[i]);
+    data[ids[i]] = inp ? parseInt(inp.value) || 0 : 0;
+    if (limits[ids[i]]) {
+      var p = Math.min(Math.round(data[ids[i]] / limits[ids[i]] * 100), 100);
+      var bar = document.getElementById('mpf_' + ids[i]);
+      var pEl = document.getElementById('mpp_' + ids[i]);
+      if (bar) bar.style.width = p + '%';
+      if (pEl) pEl.textContent = p + '%';
+    }
+  }
+  localStorage.setItem(mKey, JSON.stringify(data));
+}
+function resetMonedas() {
+  if (!confirm('Resetear monedas/crests de esta semana?')) return;
+  localStorage.removeItem(PX + '_monedas');
+  renderMonedas();
 }
 
 // ── Raider.io API loader ──
@@ -487,11 +581,13 @@ async function loadData() {
     const d = await res.json();
     if (d.statusCode === 400 || d.error) throw new Error('No encontrado');
     renderHero(d);
+    renderStats(d);
+    renderMonedas();
     renderMP(d);
     renderRaid(d);
     renderDG(d.mythic_plus_best_runs);
   } catch (e) {
-    ['heroStats', 'mpContent', 'raidContent', 'dgContent'].forEach(id => {
+    ['heroStats', 'statsContent', 'monedasContent', 'mpContent', 'raidContent', 'dgContent'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.innerHTML = `<div class="err">Error: ${e.message}</div>`;
     });

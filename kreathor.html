@@ -224,6 +224,13 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 @keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
 .err{color:#e74c3c;font-size:.83em;padding:12px 0}
 .info-chip{display:inline-block;font-size:.7em;padding:2px 8px;border-radius:3px;margin-left:6px}
+.gear-bis-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:700px){.gear-bis-grid{grid-template-columns:1fr}}
+.gear-section-title{font-family:'Cinzel',serif;font-size:.74em;letter-spacing:2px;color:var(--dk);text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:8px}
+.dungeon-rank-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.dungeon-rank-bar{flex:1;height:8px;background:var(--b2);border-radius:4px;overflow:hidden}
+.dungeon-rank-fill{height:100%;border-radius:4px;transition:width .3s}
+.dungeon-rank-name{font-size:.8em;width:140px;flex-shrink:0}
+.dungeon-rank-count{font-size:.75em;color:var(--muted);width:60px;text-align:right}
 </style>
 </head>
 <body>
@@ -253,224 +260,134 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="ST('checklist')">&#10003; Checklist</button>
-  <button class="tab-btn" onclick="ST('timeline')">&#128197; Semana</button>
-  <button class="tab-btn" onclick="ST('crests')">&#128142; Crests</button>
+  <button class="tab-btn active" onclick="ST('stats')">&#128202; Stats</button>
+  <button class="tab-btn" onclick="ST('monedas')">&#128176; Monedas</button>
   <button class="tab-btn" onclick="ST('bis')">&#9876; Gear &amp; BiS</button>
-  <button class="tab-btn" onclick="ST('dungeons')">&#128505; Mazmorras</button>
-  <button class="tab-btn" onclick="ST('notas')">&#128221; Notas</button>
-  <button class="tab-btn" onclick="ST('rotation')">&#9881; Rotaci&oacute;n</button>
-  <button class="tab-btn" onclick="ST('builds')">&#9878; Builds</button>
   <button class="tab-btn" onclick="ST('enchants')">&#10024; Encantamientos</button>
+  <button class="tab-btn" onclick="ST('builds')">&#9878; Builds</button>
+  <button class="tab-btn" onclick="ST('rotation')">&#9881; Rotaci&oacute;n</button>
+  <button class="tab-btn" onclick="ST('dungeons')">&#128505; Mazmorras</button>
   <button class="tab-btn" onclick="ST('talents')">&#11088; Talentos</button>
   <button class="tab-btn" onclick="ST('mplus')">&#128202; M+ Runs</button>
   <button class="tab-btn" onclick="ST('raid')">&#127984; Raid</button>
+  <button class="tab-btn" onclick="ST('notas')">&#128221; Notas</button>
+  <button class="tab-btn" onclick="ST('timeline')">&#128197; Semana</button>
+  <button class="tab-btn" onclick="ST('crests')">&#128142; Crests</button>
   <button class="tab-btn" onclick="ST('upgrades')">&#11014; Upgrades</button>
 </div>
 
 <div class="main">
 
-<!-- ========== CHECKLIST ========== -->
-<div class="tab-panel active" id="tab-checklist">
-  <div class="rbar">
-    <div>
-      <div class="rlabel">Pr&oacute;ximo reset semanal NA &middot; Martes 15:00 UTC</div>
-      <div class="rcd" id="countdown">Calculando...</div>
-    </div>
-    <div style="margin-left:auto">
-      <button onclick="clearAll()" style="background:rgba(196,30,58,.1);border:1px solid rgba(196,30,58,.3);color:#ff8096;font-size:.73em;padding:6px 13px;border-radius:4px;cursor:pointer;font-family:'Exo 2',sans-serif">&#128465; Limpiar todo</button>
-    </div>
-  </div>
-  <div class="two-col">
-    <div>
-      <div class="stitle"><span class="acc">&#128197;</span> Semanales <span style="font-size:.85em">(reset martes)</span></div>
-      <div class="card" id="wList"></div>
-    </div>
-    <div>
-      <div class="stitle"><span class="acc">&#9728;</span> Diarias <span id="dlbl" style="font-size:.85em"></span></div>
-      <div class="card" id="dList"></div>
-      <div class="stitle" style="margin-top:18px"><span class="acc">&#128200;</span> Progreso</div>
-      <div class="card" id="pCard"></div>
-    </div>
-  </div>
+<!-- ========== STATS ========== -->
+<div class="tab-panel active" id="tab-stats">
+  <div class="stitle"><span class="acc">&#128202;</span> Stats en vivo <span style="font-size:.85em">(Raider.io)</span></div>
+  <div id="statsContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando stats...</span></div></div>
 </div>
 
-<!-- ========== TIMELINE SEMANAL ========== -->
-<div class="tab-panel" id="tab-timeline">
-  <div class="stitle"><span class="acc">&#128197;</span> Semana ideal de Kreathor &mdash; Midnight S1</div>
-  <p style="font-size:.78em;color:var(--muted);margin-bottom:18px;max-width:600px">Distribuci&oacute;n &oacute;ptima de actividades durante la semana. El reset ocurre cada martes a las 15:00 UTC (11:00 AM EST / 08:00 AM PST).</p>
-  <div class="timeline" id="tlContainer"></div>
-</div>
-
-<!-- ========== TRACKER CRESTS ========== -->
-<div class="tab-panel" id="tab-crests">
-  <div class="stitle"><span class="acc">&#128142;</span> Tracker de Crests &mdash; Semana actual</div>
-  <div class="two-col">
-    <div>
-      <div class="card">
-        <h3>&#128203; Crests acumulados esta semana</h3>
-        <div id="crestInputs"></div>
-        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--b1)">
-          <button onclick="saveCrests()" style="background:rgba(196,30,58,.15);border:1px solid rgba(196,30,58,.4);color:#ff8096;padding:7px 16px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:.75em;letter-spacing:.5px">GUARDAR</button>
-          <button onclick="resetCrests()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);padding:7px 14px;border-radius:4px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:.75em;margin-left:6px">Resetear</button>
-          <span style="font-size:.7em;color:var(--muted);margin-left:10px" id="crestSaveLabel"></span>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="card" id="crestPlanCard">
-        <h3>&#128200; Plan de upgrades con crests actuales</h3>
-        <p style="color:var(--muted);font-size:.83em">Ingresa tus crests y guarda para ver qu&eacute; piezas puedes subir.</p>
-      </div>
-    </div>
-  </div>
-  <div class="stitle" style="margin-top:20px"><span class="acc">&#128336;</span> Historial semanal</div>
-  <div class="card" id="crestHistory">
-    <p style="color:var(--muted);font-size:.83em">Sin historial guardado a&uacute;n.</p>
-  </div>
+<!-- ========== MONEDAS ========== -->
+<div class="tab-panel" id="tab-monedas">
+  <div class="stitle"><span class="acc">&#128176;</span> Monedas y Crests &mdash; Semana actual</div>
+  <div class="card" id="monedasContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
 </div>
 
 <!-- ========== GEAR & BIS ========== -->
 <div class="tab-panel" id="tab-bis">
-  <div class="tbox">
-    <h4>Set Tier 35 &mdash; Relentless Rider's Lament</h4>
-    <p><strong>(2) Set:</strong> Blood Boil inflige 8% m&aacute;s da&ntilde;o y genera 3 Runic Power.</p>
-    <p><strong>(4) Set:</strong> Death Strike inflige 8% m&aacute;s da&ntilde;o y tiene 10% de probabilidad de otorgar carga de Blood Boil.</p>
-    <p style="margin-top:7px;font-size:.73em">Piezas: Casco, Hombros, Pecho y Piernas. Prioriza Mythic+ (Head/Shoulder/Legs) + Raid (Chest)</p>
-  </div>
-  <div class="gear-tabs">
-    <button class="gtab hero active" onclick="SG('heroic')">&#128309; Heroic BiS (272)</button>
-    <button class="gtab myth" onclick="SG('mythic')">&#128994; Mythic BiS (285-289)</button>
-  </div>
+  <div class="stitle"><span class="acc">&#9876;</span> Gear BiS &mdash; Midnight S1</div>
   <p style="font-size:.71em;color:var(--muted);margin-bottom:12px">Fuentes: <a href="https://www.icy-veins.com/wow/blood-death-knight-pve-tank-gear-best-in-slot" target="_blank">Icy-Veins</a> &middot; <a href="https://www.method.gg/guides/blood-death-knight/gearing" target="_blank">Method.gg</a> &middot; <a href="https://www.archon.gg/wow/builds/blood/death-knight/mythic-plus/gear-and-tier-set/10/all-dungeons/this-week" target="_blank">Archon.gg</a> &middot; Midnight S1 12.0.1</p>
-  <div class="gpanel active" id="gear-heroic">
-  <table class="gt"><thead><tr><th>Slot</th><th>&Iacute;tem BiS Heroic</th><th>iLvl</th><th>Fuente</th><th>Prio</th></tr></thead><tbody>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_helm_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Casco"><div><div>Casco</div><div class="sn">Head</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232419" target="_blank">Helm of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Umbral Nullifier</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_profession_jewelcrafting_ring3_silver.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Cuello"><div><div>Cuello</div><div class="sn">Neck</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232380" target="_blank">Loa Worshiper's Band</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Joyer&iacute;a (Embellishment)</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_shoulder_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Hombros"><div><div>Hombros</div><div class="sn">Shoulder</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232420" target="_blank">Pauldrons of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Crown of the Cosmos</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_misc_cape_05.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Capa"><div><div>Capa</div><div class="sn">Back</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232350" target="_blank">Cloak of the Void Sovereign</a></span></td><td><span class="ih">272</span></td><td><span class="sr">Dreamrift &mdash; Alnathe</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_chest_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Pecho"><div><div>Pecho</div><div class="sn">Chest</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232421" target="_blank">Chestguard of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Xal'atath</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_plate_questbloodelf_b_01_bracer.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Muñecas"><div><div>Mu&ntilde;ecas</div><div class="sn">Wrist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232340" target="_blank">Spellbreaker's Bracers</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_gauntlets_plate_void_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Guantes"><div><div>Guantes</div><div class="sn">Hands</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232358" target="_blank">Voidclaw Gauntlets</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Seat of the Triumvirate &mdash; L'ura</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_belt_plate_questbloodelf_b_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Cinturón"><div><div>Cintur&oacute;n</div><div class="sn">Waist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232345" target="_blank">Spellbreaker's Girdle</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_pants_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Piernas"><div><div>Piernas</div><div class="sn">Legs</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232422" target="_blank">Legguards of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="ih">272</span></td><td><span class="sr">Voidspire &mdash; Shatterweave</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_boots_plate_dungeon_c_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Botas"><div><div>Botas</div><div class="sn">Feet</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232362" target="_blank">Oathsworn Stompers</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Magisters' Terrace &mdash; Kael'thas</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_trinket_devouring_host_currency1_bronze.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Anillo 1"><div><div>Anillo 1</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232375" target="_blank">Occulsion of Void</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Nexus-Point Xenas &mdash; Zhar'koveth</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_trinket_devouring_host_currency1_silver.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Anillo 2"><div><div>Anillo 2</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232376" target="_blank">Omission of Light</a></span></td><td><span class="ih">272</span></td><td><span class="sd">Nexus-Point Xenas &mdash; Zhar'koveth</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_trinket_seed_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Trinket 1"><div><div>Trinket 1</div><div class="sn">On-Use</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232291" target="_blank">Seed of the Devouring Wild</a></span></td><td><span class="ih">272</span></td><td><span class="sr">Dreamrift &mdash; Alnathe</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_trinket_sapling_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Trinket 2"><div><div>Trinket 2</div><div class="sn">Passive</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232290" target="_blank">Sapling of the Dawnroot</a></span></td><td><span class="ih">272</span></td><td><span class="sr">Dreamrift &mdash; Alnathe</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_sword_2h_questbloodelf_b_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Arma"><div><div>Arma</div><div class="sn">2H Weapon</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=237846" target="_blank">Blood Knight's Warblade</a></span></td><td><span class="ih">265</span></td><td><span class="sc">&#10024; Crafteado &mdash; Herrero</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  </tbody></table></div>
-  <div class="gpanel" id="gear-mythic">
-  <table class="gt"><thead><tr><th>Slot</th><th>&Iacute;tem BiS Mythic</th><th>iLvl</th><th>Fuente</th><th>Prio</th></tr></thead><tbody>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_helm_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Casco"><div><div>Casco</div><div class="sn">Head</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232419" target="_blank">Helm of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_profession_jewelcrafting_ring3_silver.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Cuello"><div><div>Cuello</div><div class="sn">Neck</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232380" target="_blank">Loa Worshiper's Band</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_shoulder_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Hombros"><div><div>Hombros</div><div class="sn">Shoulder</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232420" target="_blank">Pauldrons of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_misc_cape_05.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Capa"><div><div>Capa</div><div class="sn">Back</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232350" target="_blank">Cloak of the Void Sovereign</a></span></td><td><span class="im">285</span></td><td><span class="sr">Dreamrift Mythic</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_chest_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Pecho"><div><div>Pecho</div><div class="sn">Chest</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232421" target="_blank">Chestguard of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_plate_questbloodelf_b_01_bracer.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Muñecas"><div><div>Mu&ntilde;ecas</div><div class="sn">Wrist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232340" target="_blank">Spellbreaker's Bracers</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_gauntlets_plate_void_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Guantes"><div><div>Guantes</div><div class="sn">Hands</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232358" target="_blank">Voidclaw Gauntlets</a></span></td><td><span class="im">289</span></td><td><span class="sd">Seat of the Triumvirate +10</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_belt_plate_icecrown_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Cinturón"><div><div>Cintur&oacute;n</div><div class="sn">Waist</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232348" target="_blank">Girdle of the Ancient Pit</a></span></td><td><span class="im">289</span></td><td><span class="sd">Pit of Saron +10</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_pants_plate_raiddeathknightmidnight_d_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Piernas"><div><div>Piernas</div><div class="sn">Legs</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232422" target="_blank">Legguards of the Relentless Rider</a></span><span class="tb">TIER</span></td><td><span class="im">285</span></td><td><span class="sr">Voidspire Mythic</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_boots_plate_dungeon_c_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Botas"><div><div>Botas</div><div class="sn">Feet</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232362" target="_blank">Oathsworn Stompers</a></span></td><td><span class="im">289</span></td><td><span class="sd">Magisters' Terrace +10</span></td><td><span style="font-weight:700;color:#0070dd">S</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_trinket_devouring_host_currency1_bronze.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Anillo 1"><div><div>Anillo 1</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232375" target="_blank">Occulsion of Void</a></span></td><td><span class="im">289</span></td><td><span class="sd">Nexus-Point Xenas +10</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_trinket_devouring_host_currency1_silver.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Anillo 2"><div><div>Anillo 2</div><div class="sn">Ring</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232376" target="_blank">Omission of Light</a></span></td><td><span class="im">289</span></td><td><span class="sd">Nexus-Point Xenas +10</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_trinket_seed_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Trinket 1"><div><div>Trinket 1</div><div class="sn">On-Use</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232291" target="_blank">Seed of the Devouring Wild</a></span></td><td><span class="im">285</span></td><td><span class="sr">Dreamrift Mythic</span></td><td><span style="font-weight:700;color:#ff8000">SSS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_trinket_globule_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Trinket 2"><div><div>Trinket 2</div><div class="sn">Passive</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=232292" target="_blank">Rotting Globule</a></span></td><td><span class="im">289</span></td><td><span class="sd">Pit of Saron +10</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  <tr><td><div style="display:flex;align-items:center;gap:7px"><img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_sword_2h_questbloodelf_b_01.jpg" style="width:30px;height:30px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Arma"><div><div>Arma</div><div class="sn">2H Weapon</div></div></div></td><td><span class="in"><a href="https://www.wowhead.com/item=237846" target="_blank">Blood Knight's Warblade</a></span></td><td><span class="im">285</span></td><td><span class="sc">&#10024; Crafteado Myth</span></td><td><span style="font-weight:700;color:#a335ee">SS</span></td></tr>
-  </tbody></table></div>
-</div>
-
-<!-- ========== MAZMORRAS ========== -->
-<div class="tab-panel" id="tab-dungeons">
-  <div class="stitle"><span class="acc">&#10022;</span> Score por Mazmorra <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
-  <div id="dgContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
-</div>
-
-<!-- ========== NOTAS POR MAZMORRA ========== -->
-<div class="tab-panel" id="tab-notas">
-  <div class="stitle"><span class="acc">&#128221;</span> Notas por Mazmorra &mdash; Estrategias y pulls</div>
-  <p style="font-size:.78em;color:var(--muted);margin-bottom:14px">Selecciona una mazmorra y escribe tus notas personales. Se guardan en el navegador.</p>
-  <div class="dng-selector" id="dngSelector"></div>
-  <div id="noteEditor" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-      <div style="font-family:'Cinzel',serif;font-size:.9em;color:var(--gold)" id="noteTitle"></div>
-      <div style="display:flex;gap:6px">
-        <button onclick="clearNote()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);font-size:.72em;padding:4px 10px;border-radius:3px;cursor:pointer">&#128465; Borrar</button>
-        <button onclick="saveNote()" style="background:rgba(196,30,58,.15);border:1px solid rgba(196,30,58,.4);color:#ff8096;font-size:.72em;padding:4px 12px;border-radius:3px;cursor:pointer;font-family:'Cinzel',serif">GUARDAR</button>
-        <span id="noteSaved" style="font-size:.7em;color:var(--green);align-self:center;opacity:0;transition:opacity .3s"></span>
+  <div class="gear-bis-grid" style="margin-bottom:18px">
+    <div class="tier-set-card" style="border-left:3px solid var(--dk);background:var(--bg2);border:1px solid var(--b1);border-radius:8px;padding:14px">
+      <h4 class="gear-section-title">&#127991; Tier Set</h4>
+      <div class="tbox" style="margin-bottom:10px">
+        <h4>Relentless Rider's Lament (4pc)</h4>
+        <p><strong>(2) Set:</strong> Blood Boil +8% da&ntilde;o, +3 RP.</p>
+        <p><strong>(4) Set:</strong> Death Strike +8% da&ntilde;o, 10% reset Blood Boil.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_helm_plate_raiddeathknightmidnight_d_01.jpg" style="width:28px;height:28px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Head">
+        <div style="flex:1;min-width:0"><div style="font-size:.8em;font-weight:500"><a href="https://www.wowhead.com/item=232419" target="_blank">Helm of the Relentless Rider</a></div><div style="font-size:.68em;color:var(--muted)">Head (Voidspire)</div></div>
+        <span style="font-size:.7em;color:#ff8000;font-weight:600">SSS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_shoulder_plate_raiddeathknightmidnight_d_01.jpg" style="width:28px;height:28px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Shoulder">
+        <div style="flex:1;min-width:0"><div style="font-size:.8em;font-weight:500"><a href="https://www.wowhead.com/item=232420" target="_blank">Pauldrons of the Relentless Rider</a></div><div style="font-size:.68em;color:var(--muted)">Shoulder (Voidspire)</div></div>
+        <span style="font-size:.7em;color:#ff8000;font-weight:600">SSS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_chest_plate_raiddeathknightmidnight_d_01.jpg" style="width:28px;height:28px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Chest">
+        <div style="flex:1;min-width:0"><div style="font-size:.8em;font-weight:500"><a href="https://www.wowhead.com/item=232421" target="_blank">Chestguard of the Relentless Rider</a></div><div style="font-size:.68em;color:var(--muted)">Chest (Voidspire)</div></div>
+        <span style="font-size:.7em;color:#ff8000;font-weight:600">SSS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_pants_plate_raiddeathknightmidnight_d_01.jpg" style="width:28px;height:28px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Legs">
+        <div style="flex:1;min-width:0"><div style="font-size:.8em;font-weight:500"><a href="https://www.wowhead.com/item=232422" target="_blank">Legguards of the Relentless Rider</a></div><div style="font-size:.68em;color:var(--muted)">Legs (Voidspire)</div></div>
+        <span style="font-size:.7em;color:#ff8000;font-weight:600">SSS</span>
       </div>
     </div>
-    <div class="note-tags" id="noteTags"></div>
-    <textarea class="note-area" id="noteTextarea" placeholder="Escribe tus notas aquí: pulls, interrupciones clave, patios que saltar, estrategia de tu grupo..."></textarea>
-    <p style="font-size:.7em;color:var(--muted);margin-top:6px">&#128276; Ctrl+S para guardar r&aacute;pido</p>
-  </div>
-  <div id="noteEmpty" style="color:var(--muted);font-size:.83em;padding:20px 0;text-align:center">
-    &#8593; Selecciona una mazmorra para ver o editar tus notas
-  </div>
-</div>
-
-<!-- ========== SIMULADOR ROTACION ========== -->
-<div class="tab-panel" id="tab-rotation">
-  <div class="stitle"><span class="acc">&#9881;</span> Simulador de Rotaci&oacute;n &mdash; Blood DK Deathbringer</div>
-  <div class="two-col" style="margin-bottom:20px">
-    <div>
-      <div style="font-size:.7em;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Haz clic en cada habilidad para marcarla como ejecutada</div>
-      <div class="rot-nav">
-        <button class="rot-btn primary" onclick="resetRot()">&#8635; Reiniciar</button>
-        <button class="rot-btn" onclick="nextStep()">Siguiente &rarr;</button>
-        <span id="rotPhaseLabel" style="font-size:.75em;color:var(--muted);align-self:center;margin-left:4px"></span>
+    <div class="mplus-card" style="border-left:3px solid #5ab4ff;background:var(--bg2);border:1px solid var(--b1);border-radius:8px;padding:14px">
+      <h4 class="gear-section-title">&#9876; M+ BiS</h4>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_sword_2h_questbloodelf_b_01.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Weapon">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=237846" target="_blank">Blood Knight's Warblade</a></div><div style="font-size:.64em;color:var(--muted)">Arma 2H &middot; Crafteado</div></div>
+        <span style="font-size:.65em;color:#a335ee;font-weight:600">SS</span>
       </div>
-      <div class="rot-steps" id="rotSteps"></div>
-    </div>
-    <div>
-      <div style="font-family:'Cinzel',serif;font-size:.74em;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--b1)">Cooldowns activos</div>
-      <div class="cd-grid" id="cdGrid"></div>
-      <div style="margin-top:16px;padding:12px;background:var(--bg3);border:1px solid var(--b1);border-radius:6px;font-size:.78em;line-height:1.7">
-        <p style="color:var(--gold);font-family:'Cinzel',serif;font-size:.82em;margin-bottom:6px">REGLAS CLAVE</p>
-        <p>&#8227; Mant&eacute;n Bone Shield &ge;7 cargas siempre</p>
-        <p>&#8227; Death Strike cuando HP &lt; 80% <em>o</em> &gt;80 RP</p>
-        <p>&#8227; No desperdicies Blood Boil en 2 cargas</p>
-        <p>&#8227; Usa DRW siempre que est&eacute; disponible</p>
-        <p>&#8227; Vampiric Blood antes de da&ntilde;o predecible</p>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_profession_jewelcrafting_ring3_silver.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Neck">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232380" target="_blank">Loa Worshiper's Band</a></div><div style="font-size:.64em;color:var(--muted)">Cuello &middot; Crafteado</div></div>
+        <span style="font-size:.65em;color:#a335ee;font-weight:600">SS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_misc_cape_05.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Back">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232350" target="_blank">Cloak of the Void Sovereign</a></div><div style="font-size:.64em;color:var(--muted)">Capa &middot; Dreamrift</div></div>
+        <span style="font-size:.65em;color:#0070dd;font-weight:600">S</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_gauntlets_plate_void_d_01.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Hands">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232358" target="_blank">Voidclaw Gauntlets</a></div><div style="font-size:.64em;color:var(--muted)">Guantes &middot; SEAT</div></div>
+        <span style="font-size:.65em;color:#0070dd;font-weight:600">S</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_plate_questbloodelf_b_01_bracer.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Wrist">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232340" target="_blank">Spellbreaker's Bracers</a></div><div style="font-size:.64em;color:var(--muted)">Mu&ntilde;ecas &middot; Crafteado</div></div>
+        <span style="font-size:.65em;color:#0070dd;font-weight:600">S</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_belt_plate_questbloodelf_b_01.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Waist">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232345" target="_blank">Spellbreaker's Girdle</a></div><div style="font-size:.64em;color:var(--muted)">Cintur&oacute;n &middot; Crafteado</div></div>
+        <span style="font-size:.65em;color:#0070dd;font-weight:600">S</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_boots_plate_dungeon_c_01.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Feet">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232362" target="_blank">Oathsworn Stompers</a></div><div style="font-size:.64em;color:var(--muted)">Botas &middot; MT</div></div>
+        <span style="font-size:.65em;color:#0070dd;font-weight:600">S</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_trinket_devouring_host_currency1_bronze.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Ring1">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232375" target="_blank">Occulsion of Void</a></div><div style="font-size:.64em;color:var(--muted)">Anillo 1 &middot; NPX</div></div>
+        <span style="font-size:.65em;color:#a335ee;font-weight:600">SS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_12_trinket_devouring_host_currency1_silver.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Ring2">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232376" target="_blank">Omission of Light</a></div><div style="font-size:.64em;color:var(--muted)">Anillo 2 &middot; NPX</div></div>
+        <span style="font-size:.65em;color:#a335ee;font-weight:600">SS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--b1)">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_trinket_seed_01.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Trinket1">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232291" target="_blank">Seed of the Devouring Wild</a></div><div style="font-size:.64em;color:var(--muted)">Trinket 1 &middot; Dreamrift</div></div>
+        <span style="font-size:.65em;color:#ff8000;font-weight:600">SSS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0">
+        <img src="https://assets.rpglogs.com/img/warcraft/abilities/inv_trinket_sapling_01.jpg" style="width:26px;height:26px;border-radius:4px;border:1px solid var(--b2);background:var(--bg3)" alt="Trinket2">
+        <div style="flex:1;min-width:0"><div style="font-size:.76em;font-weight:500"><a href="https://www.wowhead.com/item=232290" target="_blank">Sapling of the Dawnroot</a></div><div style="font-size:.64em;color:var(--muted)">Trinket 2 &middot; Dreamrift</div></div>
+        <span style="font-size:.65em;color:#a335ee;font-weight:600">SS</span>
       </div>
     </div>
   </div>
-</div>
-
-<!-- ========== COMPARADOR BUILDS ========== -->
-<div class="tab-panel" id="tab-builds">
-  <div class="stitle"><span class="acc">&#9878;</span> Comparador de Builds &mdash; Midnight S1</div>
-  <p style="font-size:.78em;color:var(--muted);margin-bottom:16px;max-width:640px">Deathbringer vs San'layn para Blood DK. Ambas son viables; la elecci&oacute;n depende del contenido y preferencia de playstyle.</p>
-  <div class="compare-grid">
-    <div class="cmp-header db">&#128308; Deathbringer <span style="font-size:.75em;font-weight:400">(recomendado S1)</span></div>
-    <div class="cmp-header sl">&#128994; San'layn</div>
-    <div class="cmp-cat db">THROUGHPUT</div><div class="cmp-cat sl">THROUGHPUT</div>
-    <div class="cmp-cell db"><span class="win">Mayor burst con DRW</span><br><span style="font-size:.75em;color:var(--muted)">Reaper's Mark genera stacks passivos de da&ntilde;o shadowfrost</span></div>
-    <div class="cmp-cell sl"><span class="tie">Sostenido m&aacute;s parejo</span><br><span style="font-size:.75em;color:var(--muted)">Vampiric Strikes &amp; Gift of the San'layn para healing/DPS</span></div>
-    <div class="cmp-cat db">DEFENSIVO</div><div class="cmp-cat sl">DEFENSIVO</div>
-    <div class="cmp-cell db"><span class="win">Mejor burst mitigation</span><br><span style="font-size:.75em;color:var(--muted)">Dance of Midnight spawnea DRW adicionales = m&aacute;s absorci&oacute;n</span></div>
-    <div class="cmp-cell sl"><span class="tie">Mejor healing sostenido</span><br><span style="font-size:.75em;color:var(--muted)">Vampiric Strikes aumenta el healing de Death Strike</span></div>
-    <div class="cmp-cat db">MYTHIC+</div><div class="cmp-cat sl">MYTHIC+</div>
-    <div class="cmp-cell db"><span class="win">Superior en Midnight S1</span><br><span style="font-size:.75em;color:var(--muted)">Mejor en keys altas (&gt;+8) donde el burst damage importa m&aacute;s</span></div>
-    <div class="cmp-cell sl"><span class="tie">Bueno en keys bajas/medias</span><br><span style="font-size:.75em;color:var(--muted)">M&aacute;s f&aacute;cil de jugar en contenido donde el autoheal es suficiente</span></div>
-    <div class="cmp-cat db">RAID</div><div class="cmp-cat sl">RAID</div>
-    <div class="cmp-cell db"><span class="win">Mejor en fight cortos</span><br><span style="font-size:.75em;color:var(--muted)">Reaper's Mark s-tier en fights con burst window</span></div>
-    <div class="cmp-cell sl"><span class="tie">Mejor en fights largos</span><br><span style="font-size:.75em;color:var(--muted)">Healing sostenido reduce presion sobre healers en prog largo</span></div>
-    <div class="cmp-cat db">HERO TALENT</div><div class="cmp-cat sl">HERO TALENT</div>
-    <div class="cmp-cell db"><span class="win">Dance of Midnight (Apex)</span><br><span style="font-size:.75em;color:var(--muted)">Spawn DRW extra al consumir Reaper's Mark. Fuerte con 4pc tier</span></div>
-    <div class="cmp-cell sl"><span class="tie">Gift of the San'layn</span><br><span style="font-size:.75em;color:var(--muted)">Buff temporal que mejora Death Strike y Heart Strike. M&aacute;s forgiving</span></div>
-    <div class="cmp-cat db">STAT PRIORITY</div><div class="cmp-cat sl">STAT PRIORITY</div>
-    <div class="cmp-cell db"><span style="color:var(--text)">STR &gt; <span class="win">Crit</span> &gt; Vers &gt; Mastery &gt; Haste</span><br><span style="font-size:.75em;color:var(--muted)">Crit sinergia perfecta con Reaper's Mark stacks</span></div>
-    <div class="cmp-cell sl"><span style="color:var(--text)">STR &gt; <span class="win">Haste</span> &gt; Vers &gt; Mastery &gt; Crit</span><br><span style="font-size:.75em;color:var(--muted)">Haste = m&aacute;s Vampiric Strikes = m&aacute;s healing</span></div>
-    <div class="cmp-cat db">COMPLEJIDAD</div><div class="cmp-cat sl">COMPLEJIDAD</div>
-    <div class="cmp-cell db"><span style="color:var(--ora)">Alta</span><br><span style="font-size:.75em;color:var(--muted)">Requiere gestionar bien el timing de DRW y Reaper's Mark</span></div>
-    <div class="cmp-cell sl"><span class="win">Media</span><br><span style="font-size:.75em;color:var(--muted)">Rotaci&oacute;n m&aacute;s simple, autoheal m&aacute;s perdona errores</span></div>
-  </div>
-  <div class="verdict" style="border-color:rgba(196,30,58,.3);background:rgba(196,30,58,.05)">
-    <strong style="color:#ff8096;font-family:'Cinzel',serif">Veredicto para Kreathor (Midnight S1):</strong><br>
-    <strong style="color:var(--dk)">Deathbringer</strong> es la elecci&oacute;n &oacute;ptima para Mythic+ alto y raid prog. El synergy con el set tier 35 (4pc Blood Boil + DRW) es muy fuerte. San'layn sigue siendo viable si prefieres un playstyle m&aacute;s c&oacute;modo o ests en contenido casual (Normal/Heroic + keys bajas).
-    <br><span style="font-size:.75em;color:var(--muted)">Fuente: Archon.gg &middot; Method.gg &middot; Icy-Veins Midnight S1 tier lists</span>
+  <div class="card">
+    <h4 class="gear-section-title">&#128200; Dungeon Ranking by BiS</h4>
+    <div class="dungeon-rank-row"><span class="dungeon-rank-name">Dreamrift</span><div class="dungeon-rank-bar"><div class="dungeon-rank-fill" style="width:100%;background:var(--dk)"></div></div><span class="dungeon-rank-count">3 piezas</span></div>
+    <div class="dungeon-rank-row"><span class="dungeon-rank-name">Nexus-Point Xenas</span><div class="dungeon-rank-bar"><div class="dungeon-rank-fill" style="width:67%;background:var(--dk)"></div></div><span class="dungeon-rank-count">2 piezas</span></div>
+    <div class="dungeon-rank-row"><span class="dungeon-rank-name">Seat of the Triumvirate</span><div class="dungeon-rank-bar"><div class="dungeon-rank-fill" style="width:33%;background:var(--dk)"></div></div><span class="dungeon-rank-count">1 pieza</span></div>
+    <div class="dungeon-rank-row"><span class="dungeon-rank-name">Magisters' Terrace</span><div class="dungeon-rank-bar"><div class="dungeon-rank-fill" style="width:33%;background:var(--dk)"></div></div><span class="dungeon-rank-count">1 pieza</span></div>
   </div>
 </div>
 
@@ -509,6 +426,75 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
       </div>
     </div>
   </div>
+</div>
+
+<!-- ========== COMPARADOR BUILDS ========== -->
+<div class="tab-panel" id="tab-builds">
+  <div class="stitle"><span class="acc">&#9878;</span> Comparador de Builds &mdash; Midnight S1</div>
+  <p style="font-size:.78em;color:var(--muted);margin-bottom:16px;max-width:640px">Deathbringer vs San'layn para Blood DK. Ambas son viables; la elecci&oacute;n depende del contenido y preferencia de playstyle.</p>
+  <div class="compare-grid">
+    <div class="cmp-header db">&#128308; Deathbringer <span style="font-size:.75em;font-weight:400">(recomendado S1)</span></div>
+    <div class="cmp-header sl">&#128994; San'layn</div>
+    <div class="cmp-cat db">THROUGHPUT</div><div class="cmp-cat sl">THROUGHPUT</div>
+    <div class="cmp-cell db"><span class="win">Mayor burst con DRW</span><br><span style="font-size:.75em;color:var(--muted)">Reaper's Mark genera stacks passivos de da&ntilde;o shadowfrost</span></div>
+    <div class="cmp-cell sl"><span class="tie">Sostenido m&aacute;s parejo</span><br><span style="font-size:.75em;color:var(--muted)">Vampiric Strikes &amp; Gift of the San'layn para healing/DPS</span></div>
+    <div class="cmp-cat db">DEFENSIVO</div><div class="cmp-cat sl">DEFENSIVO</div>
+    <div class="cmp-cell db"><span class="win">Mejor burst mitigation</span><br><span style="font-size:.75em;color:var(--muted)">Dance of Midnight spawnea DRW adicionales = m&aacute;s absorci&oacute;n</span></div>
+    <div class="cmp-cell sl"><span class="tie">Mejor healing sostenido</span><br><span style="font-size:.75em;color:var(--muted)">Vampiric Strikes aumenta el healing de Death Strike</span></div>
+    <div class="cmp-cat db">MYTHIC+</div><div class="cmp-cat sl">MYTHIC+</div>
+    <div class="cmp-cell db"><span class="win">Superior en Midnight S1</span><br><span style="font-size:.75em;color:var(--muted)">Mejor en keys altas (&gt;+8) donde el burst damage importa m&aacute;s</span></div>
+    <div class="cmp-cell sl"><span class="tie">Bueno en keys bajas/medias</span><br><span style="font-size:.75em;color:var(--muted)">M&aacute;s f&aacute;cil de jugar en contenido donde el autoheal es suficiente</span></div>
+    <div class="cmp-cat db">RAID</div><div class="cmp-cat sl">RAID</div>
+    <div class="cmp-cell db"><span class="win">Mejor en fight cortos</span><br><span style="font-size:.75em;color:var(--muted)">Reaper's Mark s-tier en fights con burst window</span></div>
+    <div class="cmp-cell sl"><span class="tie">Mejor en fights largos</span><br><span style="font-size:.75em;color:var(--muted)">Healing sostenido reduce presion sobre healers en prog largo</span></div>
+    <div class="cmp-cat db">HERO TALENT</div><div class="cmp-cat sl">HERO TALENT</div>
+    <div class="cmp-cell db"><span class="win">Dance of Midnight (Apex)</span><br><span style="font-size:.75em;color:var(--muted)">Spawn DRW extra al consumir Reaper's Mark. Fuerte con 4pc tier</span></div>
+    <div class="cmp-cell sl"><span class="tie">Gift of the San'layn</span><br><span style="font-size:.75em;color:var(--muted)">Buff temporal que mejora Death Strike y Heart Strike. M&aacute;s forgiving</span></div>
+    <div class="cmp-cat db">STAT PRIORITY</div><div class="cmp-cat sl">STAT PRIORITY</div>
+    <div class="cmp-cell db"><span style="color:var(--text)">STR &gt; <span class="win">Crit</span> &gt; Vers &gt; Mastery &gt; Haste</span><br><span style="font-size:.75em;color:var(--muted)">Crit sinergia perfecta con Reaper's Mark stacks</span></div>
+    <div class="cmp-cell sl"><span style="color:var(--text)">STR &gt; <span class="win">Haste</span> &gt; Vers &gt; Mastery &gt; Crit</span><br><span style="font-size:.75em;color:var(--muted)">Haste = m&aacute;s Vampiric Strikes = m&aacute;s healing</span></div>
+    <div class="cmp-cat db">COMPLEJIDAD</div><div class="cmp-cat sl">COMPLEJIDAD</div>
+    <div class="cmp-cell db"><span style="color:var(--ora)">Alta</span><br><span style="font-size:.75em;color:var(--muted)">Requiere gestionar bien el timing de DRW y Reaper's Mark</span></div>
+    <div class="cmp-cell sl"><span class="win">Media</span><br><span style="font-size:.75em;color:var(--muted)">Rotaci&oacute;n m&aacute;s simple, autoheal m&aacute;s perdona errores</span></div>
+  </div>
+  <div class="verdict" style="border-color:rgba(196,30,58,.3);background:rgba(196,30,58,.05)">
+    <strong style="color:#ff8096;font-family:'Cinzel',serif">Veredicto para Kreathor (Midnight S1):</strong><br>
+    <strong style="color:var(--dk)">Deathbringer</strong> es la elecci&oacute;n &oacute;ptima para Mythic+ alto y raid prog. El synergy con el set tier 35 (4pc Blood Boil + DRW) es muy fuerte. San'layn sigue siendo viable si prefieres un playstyle m&aacute;s c&oacute;modo o ests en contenido casual (Normal/Heroic + keys bajas).<br><span style="font-size:.75em;color:var(--muted)">Fuente: Archon.gg &middot; Method.gg &middot; Icy-Veins Midnight S1 tier lists</span>
+  </div>
+</div>
+
+<!-- ========== SIMULADOR ROTACION ========== -->
+<div class="tab-panel" id="tab-rotation">
+  <div class="stitle"><span class="acc">&#9881;</span> Simulador de Rotaci&oacute;n &mdash; Blood DK Deathbringer</div>
+  <div class="two-col" style="margin-bottom:20px">
+    <div>
+      <div style="font-size:.7em;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Haz clic en cada habilidad para marcarla como ejecutada</div>
+      <div class="rot-nav">
+        <button class="rot-btn primary" onclick="resetRot()">&#8635; Reiniciar</button>
+        <button class="rot-btn" onclick="nextStep()">Siguiente &rarr;</button>
+        <span id="rotPhaseLabel" style="font-size:.75em;color:var(--muted);align-self:center;margin-left:4px"></span>
+      </div>
+      <div class="rot-steps" id="rotSteps"></div>
+    </div>
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:.74em;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--b1)">Cooldowns activos</div>
+      <div class="cd-grid" id="cdGrid"></div>
+      <div style="margin-top:16px;padding:12px;background:var(--bg3);border:1px solid var(--b1);border-radius:6px;font-size:.78em;line-height:1.7">
+        <p style="color:var(--gold);font-family:'Cinzel',serif;font-size:.82em;margin-bottom:6px">REGLAS CLAVE</p>
+        <p>&#8227; Mant&eacute;n Bone Shield &ge;7 cargas siempre</p>
+        <p>&#8227; Death Strike cuando HP &lt; 80% <em>o</em> &gt;80 RP</p>
+        <p>&#8227; No desperdicies Blood Boil en 2 cargas</p>
+        <p>&#8227; Usa DRW siempre que est&eacute; disponible</p>
+        <p>&#8227; Vampiric Blood antes de da&ntilde;o predecible</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MAZMORRAS ========== -->
+<div class="tab-panel" id="tab-dungeons">
+  <div class="stitle"><span class="acc">&#10022;</span> Score por Mazmorra <span style="font-size:.85em">(en vivo &middot; Raider.io)</span></div>
+  <div id="dgContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
 </div>
 
 <!-- ========== TALENTOS ========== -->
@@ -563,6 +549,60 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
   <div id="raidContent"><div class="lp"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span>Cargando...</span></div></div>
 </div>
 
+<!-- ========== NOTAS POR MAZMORRA ========== -->
+<div class="tab-panel" id="tab-notas">
+  <div class="stitle"><span class="acc">&#128221;</span> Notas por Mazmorra &mdash; Estrategias y pulls</div>
+  <p style="font-size:.78em;color:var(--muted);margin-bottom:14px">Selecciona una mazmorra y escribe tus notas personales. Se guardan en el navegador.</p>
+  <div class="dng-selector" id="dngSelector"></div>
+  <div id="noteEditor" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+      <div style="font-family:'Cinzel',serif;font-size:.9em;color:var(--gold)" id="noteTitle"></div>
+      <div style="display:flex;gap:6px">
+        <button onclick="clearNote()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);font-size:.72em;padding:4px 10px;border-radius:3px;cursor:pointer">&#128465; Borrar</button>
+        <button onclick="saveNote()" style="background:rgba(196,30,58,.15);border:1px solid rgba(196,30,58,.4);color:#ff8096;font-size:.72em;padding:4px 12px;border-radius:3px;cursor:pointer;font-family:'Cinzel',serif">GUARDAR</button>
+        <span id="noteSaved" style="font-size:.7em;color:var(--green);align-self:center;opacity:0;transition:opacity .3s"></span>
+      </div>
+    </div>
+    <div class="note-tags" id="noteTags"></div>
+    <textarea class="note-area" id="noteTextarea" placeholder="Escribe tus notas aqu&iacute;: pulls, interrupciones clave, patios que saltar, estrategia de tu grupo..."></textarea>
+    <p style="font-size:.7em;color:var(--muted);margin-top:6px">&#128276; Ctrl+S para guardar r&aacute;pido</p>
+  </div>
+  <div id="noteEmpty" style="color:var(--muted);font-size:.83em;padding:20px 0;text-align:center">&#8593; Selecciona una mazmorra para ver o editar tus notas</div>
+</div>
+
+<!-- ========== TIMELINE SEMANAL ========== -->
+<div class="tab-panel" id="tab-timeline">
+  <div class="stitle"><span class="acc">&#128197;</span> Semana ideal de Kreathor &mdash; Midnight S1</div>
+  <p style="font-size:.78em;color:var(--muted);margin-bottom:18px;max-width:600px">Distribuci&oacute;n &oacute;ptima de actividades durante la semana. El reset ocurre cada martes a las 15:00 UTC (11:00 AM EST / 08:00 AM PST).</p>
+  <div class="timeline" id="tlContainer"></div>
+</div>
+
+<!-- ========== TRACKER CRESTS ========== -->
+<div class="tab-panel" id="tab-crests">
+  <div class="stitle"><span class="acc">&#128142;</span> Tracker de Crests &mdash; Semana actual</div>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <h3>&#128203; Crests acumulados esta semana</h3>
+        <div id="crestInputs"></div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--b1)">
+          <button onclick="saveCrests()" style="background:rgba(196,30,58,.15);border:1px solid rgba(196,30,58,.4);color:#ff8096;padding:7px 16px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:.75em;letter-spacing:.5px">GUARDAR</button>
+          <button onclick="resetCrests()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--muted);padding:7px 14px;border-radius:4px;cursor:pointer;font-family:'Exo 2',sans-serif;font-size:.75em;margin-left:6px">Resetear</button>
+          <span style="font-size:.7em;color:var(--muted);margin-left:10px" id="crestSaveLabel"></span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" id="crestPlanCard">
+        <h3>&#128200; Plan de upgrades con crests actuales</h3>
+        <p style="color:var(--muted);font-size:.83em">Ingresa tus crests y guarda para ver qu&eacute; piezas puedes subir.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stitle" style="margin-top:20px"><span class="acc">&#128336;</span> Historial semanal</div>
+  <div class="card" id="crestHistory"><p style="color:var(--muted);font-size:.83em">Sin historial guardado a&uacute;n.</p></div>
+</div>
+
 <!-- ========== UPGRADES ========== -->
 <div class="tab-panel" id="tab-upgrades">
   <div class="stitle"><span class="acc">&#10022;</span> Simulador de Upgrades &mdash; Crests necesarios</div>
@@ -586,7 +626,7 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
       </select>
       <label>Tipo de pieza</label>
       <select id="uType">
-        <option value="armor">Armadura / Joyería / Trinket</option>
+        <option value="armor">Armadura / Joyer&iacute;a / Trinket</option>
         <option value="weapon">Arma 2H (2x crests)</option>
       </select>
       <button class="ucal-btn" onclick="calcU()">CALCULAR</button>
@@ -608,14 +648,6 @@ a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
 <script>const CHAR_PX='kr';</script>
 <script src="js/character-common.js"></script>
 <script>
-// ── Gear tabs (solo Blood DK) ──
-function SG(id){
-  document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('active','hero','myth'));
-  document.querySelectorAll('.gpanel').forEach(p=>p.classList.remove('active'));
-  document.querySelector(`[onclick="SG('${id}')"]`).classList.add('active',id==='heroic'?'hero':'myth');
-  document.getElementById('gear-'+id).classList.add('active');
-}
-
 // ── Hero stats extendido con links extra para Kreathor ──
 function renderHero(d){
   const sc=d.mythic_plus_scores_by_season?.[0]?.scores?.all??0;
@@ -633,6 +665,7 @@ function renderHero(d){
     <a class="hl hl-ext" href="${arm}" target="_blank">Armory &#8599;</a>
     <a class="hl hl-ext" href="https://www.archon.gg/wow/builds/blood/death-knight/mythic-plus/gear-and-tier-set/10/all-dungeons/this-week" target="_blank">Archon.gg &#8599;</a>
     <a class="hl hl-ext" href="https://www.method.gg/guides/blood-death-knight" target="_blank">Method.gg &#8599;</a>`;
+  if (document.getElementById('statsContent')) renderStats(d);
 }
 
 // ── Simulador de Rotacion (Blood DK Deathbringer) ──
