@@ -510,7 +510,7 @@ a{{color:var(--gold);text-decoration:none}}a:hover{{text-decoration:underline}}
 </div>
 
 </div>
-<script>const CHAR_PX='{px}';const CHAR_NAME='{name}';const CHAR_URL='{url}';const CHAR_SPEC='{spec}';</script>
+<script>window.CHAR_PX='{px}';window.CHAR_NAME='{name}';window.CHAR_URL='{url}';window.CHAR_SPEC='{spec}';</script>
 <script src="js/character-common.js"></script>
 </body>
 </html>"""
