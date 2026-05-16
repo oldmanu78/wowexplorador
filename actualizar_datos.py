@@ -237,6 +237,68 @@ def obtener_evento_semana():
     semanas_pasadas = int((ahora - inicio_temporada).total_seconds() // (7 * 24 * 3600))
     return eventos[semanas_pasadas % len(eventos)]
 
+def obtener_stats_blizzard(token, nombre_url):
+    """Obtiene stats básicos y equipo desde Blizzard API"""
+    try:
+        url_equip = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}/equipment?namespace=profile-us&locale=en_US"
+        req = urllib.request.Request(url_equip, headers={'Authorization': f'Bearer {token}'})
+        with urllib.request.urlopen(req, timeout=8) as r:
+            equip = json.loads(r.read().decode())
+
+        url_stats = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}/statistics?namespace=profile-us&locale=en_US"
+        req2 = urllib.request.Request(url_stats, headers={'Authorization': f'Bearer {token}'})
+        with urllib.request.urlopen(req2, timeout=8) as r:
+            stats = json.loads(r.read().decode())
+
+        result = {
+            "ilvl": equip.get("equipped_item_level", 0),
+            "items": {}
+        }
+        for item in equip.get("equipped_items", []):
+            slot = item.get("slot", {}).get("type", "").lower()
+            result["items"][slot] = {
+                "id": item.get("item", {}).get("id", 0),
+                "name": item.get("name", ""),
+                "ilvl": item.get("level", 0),
+                "icon": item.get("media", {}).get("id", ""),
+                "quality": item.get("quality", {}).get("type", "")
+            }
+
+        # Extraer stats secundarios
+        sub_stats = stats.get("sub_stats", [])
+        result["stats"] = {}
+        for s in sub_stats:
+            name = s.get("stat", {}).get("name", "").lower().replace(" ", "_")
+            result["stats"][name] = s.get("amount", 0)
+
+        return result
+    except Exception as e:
+        print(f"Error stats Blizzard para {nombre_url}: {e}")
+        return None
+
+def obtener_monedas_blizzard(token, nombre_url):
+    """Obtiene monedas actuales desde Blizzard API"""
+    try:
+        url = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}?namespace=profile-us&locale=en_US"
+        req = urllib.request.Request(url, headers={'Authorization': f'Bearer {token}'})
+        with urllib.request.urlopen(req, timeout=8) as r:
+            data = json.loads(r.read().decode())
+
+        monedas = {}
+        for curr in data.get("currencies", []):
+            cid = curr.get("id", 0)
+            amount = curr.get("quantity", 0)
+            if cid == 2807: monedas["valorstones"] = amount
+            elif cid == 2806: monedas["whelp"] = amount
+            elif cid == 2808: monedas["drake"] = amount
+            elif cid == 2809: monedas["wyrm"] = amount
+            elif cid == 2810: monedas["aspect"] = amount
+
+        return monedas
+    except Exception as e:
+        print(f"Error monedas Blizzard para {nombre_url}: {e}")
+        return None
+
 def obtener_rutas_midnight():
     """
     Rutas curadas de Midnight S1 (Keystone.guru no tiene API pública — es SPA).
@@ -330,6 +392,19 @@ def obtener_datos_wow():
     else:
         print("Faltan las llaves secretas en GitHub.")
 
+    # 5.5 Stats y monedas de personajes via Blizzard API
+    personajes_data = {}
+    if client_id and client_secret and pase_blizzard:
+        for p in PERSONAJES:
+            nombre_url = p['urlNombre']
+            print(f"  Obteniendo datos de {p['nombre']}...")
+            stats = obtener_stats_blizzard(pase_blizzard, nombre_url)
+            monedas = obtener_monedas_blizzard(pase_blizzard, nombre_url)
+            personajes_data[p['nombre']] = {
+                "stats": stats,
+                "monedas": monedas
+            }
+
     # 3. Jefe de Mundo (calculado por rotación)
     jefe_activo = obtener_jefe_de_mundo()
 
@@ -352,6 +427,7 @@ def obtener_datos_wow():
         "noticias": NOTICIAS_DEFAULT,
         "invasiones": INVASIONES_DEFAULT,
         "ranking_mas": obtener_scores_mas_reales(),
+        "personajes_data": personajes_data,
         "actualizado": f"{ahora_cl.day}/{ahora_cl.month}/{ahora_cl.year}"
     }
 

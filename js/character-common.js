@@ -14,6 +14,17 @@ const R  = 'us';
 const RL = 'quelthalas';
 const F  = 'mythic_plus_scores_by_season:current,gear,raid_progression,class,mythic_plus_recent_runs,mythic_plus_best_runs:current,thumbnail_url';
 
+let CHAR_DATA = null;
+async function loadCharData() {
+  try {
+    const r = await fetch('datos.json?t=' + Date.now());
+    if (r.ok) {
+      const d = await r.json();
+      CHAR_DATA = d.personajes_data && d.personajes_data[window.CHAR_NAME || 'Kreathor'];
+    }
+  } catch(e) {}
+}
+
 // ── Tab switching ──
 function ST(id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -489,7 +500,12 @@ function renderHero(d) {
 function renderStats(d) {
   const el = document.getElementById('statsContent');
   if (!el) return;
-  const stats = d.gear?.stats;
+  let stats = d.gear?.stats;
+  let ilvl = d.gear?.item_level_equipped;
+  if ((!stats || !Object.keys(stats).length) && CHAR_DATA && CHAR_DATA.stats) {
+    stats = CHAR_DATA.stats.stats || {};
+    ilvl = CHAR_DATA.stats.ilvl || 0;
+  }
   if (!stats || !Object.keys(stats).length) {
     el.innerHTML = '<p style="color:var(--muted);font-size:.83em;padding:14px 0">Stats no disponibles.</p>';
     return;
@@ -508,7 +524,7 @@ function renderStats(d) {
   const primVal = stats[pKey] || 0;
   const fmt = v => Math.round(v).toLocaleString();
   const defs = [
-    {l:'Item Level',v:d.gear?.item_level_equipped||0,c:'var(--gold)',f:true},
+    {l:'Item Level',v:ilvl||0,c:'var(--gold)',f:true},
     {l:'Health',v:stats.health||0,c:'#2ecc71',f:true},
     {l:pLabel,v:primVal,c:'var(--ac)',f:true},
     {l:'Stamina',v:stats.stamina||0,c:'#5ab4ff',f:true},
@@ -532,6 +548,10 @@ function renderMonedas() {
   const mKey = PX + '_monedas';
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(mKey) || '{}'); } catch(e) {}
+  if (CHAR_DATA && CHAR_DATA.monedas && Object.keys(saved).length === 0) {
+    saved = CHAR_DATA.monedas;
+    localStorage.setItem(mKey, JSON.stringify(saved));
+  }
   var currs = [
     {id:'valorstones',n:'Valorstones',l:9999,c:'#fbbf24',bar:true},
     {id:'whelp',n:"Whelpling's Crest",l:90,c:'#9ca3af',bar:true},
@@ -577,6 +597,7 @@ function resetMonedas() {
 
 // ── Raider.io API loader ──
 async function loadData() {
+  await loadCharData();
   const url = `https://raider.io/api/v1/characters/profile?region=${R}&realm=${RL}&name=${N}&fields=${F}`;
   try {
     const res = await fetch(url);
