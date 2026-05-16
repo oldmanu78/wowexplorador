@@ -254,15 +254,16 @@ def obtener_evento_semana():
     semanas_pasadas = int((ahora - inicio_temporada).total_seconds() // (7 * 24 * 3600))
     return eventos[semanas_pasadas % len(eventos)]
 
-def obtener_stats_blizzard(token, nombre_url):
+def obtener_stats_blizzard(token, nombre):
     """Obtiene stats y equipo desde Blizzard API (Profile/Statistics)"""
     try:
-        url_equip = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}/equipment?namespace=profile-us&locale=en_US"
+        name_encoded = urllib.parse.quote(nombre, safe='')
+        url_equip = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{name_encoded}/equipment?namespace=profile-us&locale=en_US"
         req = urllib.request.Request(url_equip, headers={'Authorization': f'Bearer {token}'})
         with urllib.request.urlopen(req, timeout=8) as r:
             equip = json.loads(r.read().decode())
 
-        url_stats = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}/statistics?namespace=profile-us&locale=en_US"
+        url_stats = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{name_encoded}/statistics?namespace=profile-us&locale=en_US"
         req2 = urllib.request.Request(url_stats, headers={'Authorization': f'Bearer {token}'})
         with urllib.request.urlopen(req2, timeout=8) as r:
             stats_raw = json.loads(r.read().decode())
@@ -339,13 +340,14 @@ def obtener_stats_blizzard(token, nombre_url):
 
         return result
     except Exception as e:
-        print(f"Error stats Blizzard para {nombre_url}: {e}")
+        print(f"Error stats Blizzard para {nombre}: {e}")
         return None
 
-def obtener_monedas_blizzard(token, nombre_url):
+def obtener_monedas_blizzard(token, nombre):
     """Obtiene monedas actuales desde Blizzard API (Profile Summary)"""
     try:
-        url = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}?namespace=profile-us&locale=en_US"
+        name_encoded = urllib.parse.quote(nombre, safe='')
+        url = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{name_encoded}?namespace=profile-us&locale=en_US"
         req = urllib.request.Request(url, headers={'Authorization': f'Bearer {token}'})
         with urllib.request.urlopen(req, timeout=8) as r:
             data = json.loads(r.read().decode())
@@ -363,25 +365,9 @@ def obtener_monedas_blizzard(token, nombre_url):
             elif cid == 2809: monedas["wyrm"] = amount
             elif cid == 2810: monedas["aspect"] = amount
 
-        # Si no hay currencies en el profile, intentar achievements endpoint
-        if not monedas:
-            try:
-                url_curr = f"https://us.api.blizzard.com/profile/wow/character/quelthalas/{nombre_url}?namespace=profile-us&locale=en_US"
-                # Misión cumplida, profile ya se cargo arriba. Verificar achievement_categories
-                for cat in data.get("achievements", {}).get("achievements", []):
-                    if cat.get("name") == "Currency":
-                        for ach in cat.get("achievements", []):
-                            if ach.get("name") == "Currency Earning":
-                                for crit in ach.get("criteria", []):
-                                    cname = crit.get("description", "")
-                                    # Intentar parsear IDs de criterio
-                                    pass
-            except:
-                pass
-
         return monedas if monedas else {}
     except Exception as e:
-        print(f"Error monedas Blizzard para {nombre_url}: {e}")
+        print(f"Error monedas Blizzard para {nombre}: {e}")
         return {}
 
 def obtener_rutas_midnight():
@@ -483,10 +469,10 @@ def obtener_datos_wow():
     # 5.6 Stats y monedas via Blizzard API
     if client_id and client_secret and pase_blizzard:
         for p in PERSONAJES:
-            nombre_url = p['urlNombre']
-            print(f"  Obteniendo datos Blizzard de {p['nombre']}...")
-            stats = obtener_stats_blizzard(pase_blizzard, nombre_url)
-            monedas = obtener_monedas_blizzard(pase_blizzard, nombre_url)
+            nombre = p['nombre']
+            print(f"  Obteniendo datos Blizzard de {nombre}...")
+            stats = obtener_stats_blizzard(pase_blizzard, nombre)
+            monedas = obtener_monedas_blizzard(pase_blizzard, nombre)
             if perfiles.get(p['nombre']):
                 perfiles[p['nombre']]['blizzard'] = {}
                 if stats: perfiles[p['nombre']]['blizzard']['stats'] = stats
