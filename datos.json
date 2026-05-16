@@ -1,7 +1,7 @@
 {
     "afijos": "Trato de Xal'atath: Ascendiente - Tiránica - Reforzada - Argucia de Xal'atath",
     "evento": "Timewalking: Wrath of the Lich King",
-    "ficha": "Buscando...",
+    "ficha": "262.827",
     "jefe": "Lu'ashal (Eversong Woods)",
     "rutas": {
         "algethar-academy": [
@@ -448,8 +448,8 @@
         "dps": [
             {
                 "nombre": "Kreathor",
-                "clase": "Desconocido",
-                "score": 0
+                "clase": "Death Knight",
+                "score": 2650
             },
             {
                 "nombre": "Oldkreeper",
@@ -2029,7 +2029,8 @@
                         "mythic_bosses_killed": 0
                     }
                 }
-            }
+            },
+            "blizzard": {}
         },
         "Muchufaza": {
             "rio": {
@@ -3588,7 +3589,8 @@
                         "mythic_bosses_killed": 0
                     }
                 }
-            }
+            },
+            "blizzard": {}
         },
         "Czernobög": {
             "rio": {
@@ -5001,7 +5003,8 @@
                         "mythic_bosses_killed": 0
                     }
                 }
-            }
+            },
+            "blizzard": {}
         },
         "Oldkreeper": {
             "rio": {
@@ -5749,7 +5752,8 @@
                         "mythic_bosses_killed": 0
                     }
                 }
-            }
+            },
+            "blizzard": {}
         },
         "Redguardïan": {
             "rio": {
@@ -6417,7 +6421,8 @@
                         "mythic_bosses_killed": 0
                     }
                 }
-            }
+            },
+            "blizzard": {}
         },
         "Krëeper": {
             "rio": {
@@ -6982,7 +6987,8 @@
                         "mythic_bosses_killed": 0
                     }
                 }
-            }
+            },
+            "blizzard": {}
         },
         "Nösferätü": {
             "rio": {
@@ -7661,7 +7667,8 @@
                         "mythic_bosses_killed": 0
                     }
                 }
-            }
+            },
+            "blizzard": {}
         }
     },
     "actualizado": "16/5/2026"
