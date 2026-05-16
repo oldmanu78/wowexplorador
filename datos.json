@@ -1,151 +1,247 @@
 {
     "afijos": "Trato de Xal'atath: Ascendiente - Tiránica - Reforzada - Argucia de Xal'atath",
     "evento": "Timewalking: Wrath of the Lich King",
-    "ficha": "263.744",
+    "ficha": "Buscando...",
     "jefe": "Lu'ashal (Eversong Woods)",
     "rutas": {
         "algethar-academy": [
             {
                 "nombre": "Skandar Tank – AA PUG (+10/+15)",
-                "url": "https://keystone.guru/route/algethar-academy/hfTNdOk/skandar-tank-algethar-academy-10-15"
+                "url": "https://keystone.guru/route/algethar-academy/hfTNdOk/skandar-tank-algethar-academy-10-15",
+                "tipo": "pug",
+                "desc": "Ruta fácil para PUGs. BL en 1ª pull, 2º jefe fase 2, último jefe. Sin skips obligatorios.",
+                "thumb": null
             },
             {
                 "nombre": "Yoda Easy",
-                "url": "https://keystone.guru/route/algethar-academy/chOOM8t/yoda-easy"
+                "url": "https://keystone.guru/route/algethar-academy/chOOM8t/yoda-easy",
+                "tipo": "high",
+                "desc": "Ruta popular de la comunidad. 100% trash sin complicaciones. Para claves intermedias.",
+                "thumb": null
             },
             {
                 "nombre": "Quick N' Easy",
-                "url": "https://keystone.guru/route/algethar-academy/5gYIKGp/algethar-academy-quick-n-easy"
+                "url": "https://keystone.guru/route/algethar-academy/5gYIKGp/algethar-academy-quick-n-easy",
+                "tipo": "high",
+                "desc": "Ruta directa y eficiente. 101% con camino optimizado. Buena para timing en claves altas.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – AA",
-                "url": "https://keystone.guru/route/algethar-academy/koYRI0k/mtv-algethar-academy"
+                "url": "https://keystone.guru/route/algethar-academy/koYRI0k/mtv-algethar-academy",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves intermedias y altas. Pulls optimizados y buen ritmo de BL.",
+                "thumb": null
             }
         ],
         "maisara-caverns": [
             {
                 "nombre": "PUG-Friendly – Raider.IO Weekly Route",
-                "url": "https://keystone.guru/route/maisara-caverns/R8zRnBU/pug-friendly-raiderios-weekly-route"
+                "url": "https://keystone.guru/route/maisara-caverns/R8zRnBU/pug-friendly-raiderios-weekly-route",
+                "tipo": "pug",
+                "desc": "Ruta oficial de Raider.IO para PUGs. Sin skips complejos. BL en 1ª pull, tras 1er jefe y en el último jefe (intermission).",
+                "thumb": "https://uploads.keystone.guru/thumbnails/R8zRnBU/R8zRnBU_2_746cc3a3.jpg"
             },
             {
                 "nombre": "Skandar Tank – MC (+10/+15)",
-                "url": "https://keystone.guru/route/maisara-caverns/qxBj04s/skandar-tank-maisara-caverns-10-15"
+                "url": "https://keystone.guru/route/maisara-caverns/qxBj04s/skandar-tank-maisara-caverns-10-15",
+                "tipo": "pug",
+                "desc": "Ruta fácil para PUGs y claves hasta +15. BL 1ª pull, después del 1er jefe y en el último durante la intermission.",
+                "thumb": "https://uploads.keystone.guru/thumbnails/qxBj04s/qxBj04s_2_c0b7d9dd.jpg"
             },
             {
                 "nombre": "Yoda Easy – MC",
-                "url": "https://keystone.guru/route/maisara-caverns/ScwLdyU/yoda-easy"
+                "url": "https://keystone.guru/route/maisara-caverns/ScwLdyU/yoda-easy",
+                "tipo": "high",
+                "desc": "Ruta popular de nagg_boi. Limpia y eficiente para claves intermedias y altas.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – MC",
-                "url": "https://keystone.guru/route/maisara-caverns/FPStartID/kira-tank-maisara-caverns"
+                "url": "https://keystone.guru/route/maisara-caverns/FPStartID/kira-tank-maisara-caverns",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.",
+                "thumb": null
             }
         ],
         "nexuspoint-xenas": [
             {
                 "nombre": "PUG-Friendly – Raider.IO Weekly Route",
-                "url": "https://keystone.guru/route/nexuspoint-xenas/AaWjJpg/nexus-point-xenas"
+                "url": "https://keystone.guru/route/nexuspoint-xenas/AaWjJpg/nexus-point-xenas",
+                "tipo": "pug",
+                "desc": "Ruta oficial de Raider.IO para PUGs. Empieza por el lado izquierdo. Sin skips complicados.",
+                "thumb": null
             },
             {
                 "nombre": "MTV Nexus Point",
-                "url": "https://keystone.guru/route/nexuspoint-xenas/koYRI0k/mtv-nexus-point"
+                "url": "https://keystone.guru/route/nexuspoint-xenas/koYRI0k/mtv-nexus-point",
+                "tipo": "high",
+                "desc": "Ruta de mechanizedtv. Pulls grandes con buen control de cooldowns. Para claves intermedias/altas.",
+                "thumb": null
             },
             {
                 "nombre": "First Week Nexus Point",
-                "url": "https://keystone.guru/route/nexuspoint-xenas/prYL2lp/first-week-nexus-point"
+                "url": "https://keystone.guru/route/nexuspoint-xenas/prYL2lp/first-week-nexus-point",
+                "tipo": "high",
+                "desc": "Ruta de Perniepower probada en la primera semana de la temporada. Sólida y directa.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – NPX",
-                "url": "https://keystone.guru/route/nexuspoint-xenas/FPStartID/kira-tank-nexus-point-xenas"
+                "url": "https://keystone.guru/route/nexuspoint-xenas/FPStartID/kira-tank-nexus-point-xenas",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.",
+                "thumb": null
             }
         ],
         "windrunner-spire": [
             {
                 "nombre": "Skandar Tank – WRS PUG (+10/+15)",
-                "url": "https://keystone.guru/route/windrunner-spire/t7VR0ZC/skandar-tank-windrunner-spire-10-15"
+                "url": "https://keystone.guru/route/windrunner-spire/t7VR0ZC/skandar-tank-windrunner-spire-10-15",
+                "tipo": "pug",
+                "desc": "Ruta fácil para PUGs y claves bajas/medias. Lineal y sin skips de comms.",
+                "thumb": null
             },
             {
                 "nombre": "Windrunner Spire – Crassix",
-                "url": "https://keystone.guru/route/windrunner-spire/tJU6X4O/windrunner-spire"
+                "url": "https://keystone.guru/route/windrunner-spire/tJU6X4O/windrunner-spire",
+                "tipo": "high",
+                "desc": "Ruta de Crassix, uno de los creadores más activos en Keystone.guru para Midnight S1.",
+                "thumb": null
             },
             {
                 "nombre": "WRS Route #1 – Goebles",
-                "url": "https://keystone.guru/route/windrunner-spire/ENtNmAC/windrunner-spire-route-1"
+                "url": "https://keystone.guru/route/windrunner-spire/ENtNmAC/windrunner-spire-route-1",
+                "tipo": "high",
+                "desc": "Ruta comunitaria estable, buenas valoraciones. Válida para claves intermedias y altas.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – WRS",
-                "url": "https://keystone.guru/route/windrunner-spire/FPStartID/kira-tank-windrunner-spire"
+                "url": "https://keystone.guru/route/windrunner-spire/FPStartID/kira-tank-windrunner-spire",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.",
+                "thumb": null
             }
         ],
         "magisters-terrace": [
             {
                 "nombre": "PUG-Friendly – Raider.IO Weekly Route",
-                "url": "https://keystone.guru/route/magisters-terrace/ozpSk7R/pug-friendly-raiderios-weekly-route"
+                "url": "https://keystone.guru/route/magisters-terrace/ozpSk7R/pug-friendly-raiderios-weekly-route",
+                "tipo": "pug",
+                "desc": "Ruta oficial de Raider.IO. Sin skips requeridos — ideal para cualquier nivel de clave.",
+                "thumb": null
             },
             {
                 "nombre": "Skandar Tank – MT (+10/+15)",
-                "url": "https://keystone.guru/route/magisters-terrace/FBwOW7Q/skandar-tank-magisters-terrace-10-15"
+                "url": "https://keystone.guru/route/magisters-terrace/FBwOW7Q/skandar-tank-magisters-terrace-10-15",
+                "tipo": "high",
+                "desc": "Ruta fácil para PUGs hasta +15. Flujo natural de la mazmorra, sin sorpresas.",
+                "thumb": null
             },
             {
                 "nombre": "Expert – Raider.IO Weekly Route",
-                "url": "https://keystone.guru/route/magisters-terrace/i9BZnYH/expert-raiderios-weekly-route"
+                "url": "https://keystone.guru/route/magisters-terrace/i9BZnYH/expert-raiderios-weekly-route",
+                "tipo": "high",
+                "desc": "Ruta avanzada vista en las leaderboards de Midnight S1 Beta. No recomendada para PUGs sin comms.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – MT",
-                "url": "https://keystone.guru/route/magisters-terrace/FPStartID/kira-tank-magisters-terrace"
+                "url": "https://keystone.guru/route/magisters-terrace/FPStartID/kira-tank-magisters-terrace",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.",
+                "thumb": null
             }
         ],
         "pit-of-saron": [
             {
                 "nombre": "PUG-Friendly – Raider.IO Weekly Route",
-                "url": "https://keystone.guru/route/pit-of-saron/uQ1ba0I/pug-friendly-raiderios-weekly-route"
+                "url": "https://keystone.guru/route/pit-of-saron/uQ1ba0I/pug-friendly-raiderios-weekly-route",
+                "tipo": "pug",
+                "desc": "Ruta oficial de Raider.IO. Libera prisioneros con cuidado, sin pulls caóticos en el gauntlet.",
+                "thumb": null
             },
             {
                 "nombre": "Skandar Tank – POS (+10/+15)",
-                "url": "https://keystone.guru/route/pit-of-saron/cL3zwJR/skandar-tank-pit-of-saron-10-15"
+                "url": "https://keystone.guru/route/pit-of-saron/cL3zwJR/skandar-tank-pit-of-saron-10-15",
+                "tipo": "high",
+                "desc": "Ruta fácil para PUGs hasta +15. BL en el primer pull. Limpia y directa.",
+                "thumb": null
             },
             {
                 "nombre": "Tactyks PUG Friendly – POS",
-                "url": "https://keystone.guru/route/pit-of-saron/22RypSt/tactyks-pug-friendly"
+                "url": "https://keystone.guru/route/pit-of-saron/22RypSt/tactyks-pug-friendly",
+                "tipo": "high",
+                "desc": "Ruta de Tactyks adaptada para PUGs. Buen manejo del gauntlet y los prisioneros.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – POS",
-                "url": "https://keystone.guru/route/pit-of-saron/FPStartID/kira-tank-pit-of-saron"
+                "url": "https://keystone.guru/route/pit-of-saron/FPStartID/kira-tank-pit-of-saron",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.",
+                "thumb": null
             }
         ],
         "seat-of-the-triumvirate": [
             {
                 "nombre": "PUG-Friendly – Raider.IO Weekly Route",
-                "url": "https://keystone.guru/route/seat-of-the-triumvirate/Tf03QDk/pug-friendly-raiderios-weekly-route"
+                "url": "https://keystone.guru/route/seat-of-the-triumvirate/Tf03QDk/pug-friendly-raiderios-weekly-route",
+                "tipo": "pug",
+                "desc": "Sin skips requeridos. Válida para varios niveles de clave. Incluye notas en los pulls.",
+                "thumb": null
             },
             {
                 "nombre": "SEAT Route #1 – Goebles",
-                "url": "https://keystone.guru/route/seat-of-the-triumvirate/H8c0Cl9/seat-of-the-triumvirate-route-1"
+                "url": "https://keystone.guru/route/seat-of-the-triumvirate/H8c0Cl9/seat-of-the-triumvirate-route-1",
+                "tipo": "high",
+                "desc": "Ruta comunitaria con buenas valoraciones. Estable para claves intermedias y altas.",
+                "thumb": null
             },
             {
                 "nombre": "WG Seat v1 – WinningWarcraft",
-                "url": "https://keystone.guru/route/seat-of-the-triumvirate/i4s9c2Y/wg-seat-v1"
+                "url": "https://keystone.guru/route/seat-of-the-triumvirate/i4s9c2Y/wg-seat-v1",
+                "tipo": "high",
+                "desc": "Ruta avanzada de WinningWarcraft para claves altas. Pulls grandes, buen ritmo de BL.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – SEAT",
-                "url": "https://keystone.guru/route/seat-of-the-triumvirate/FPStartID/kira-tank-seat-of-the-triumvirate"
+                "url": "https://keystone.guru/route/seat-of-the-triumvirate/FPStartID/kira-tank-seat-of-the-triumvirate",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.",
+                "thumb": null
             }
         ],
         "skyreach": [
             {
                 "nombre": "PUG-Friendly – Raider.IO Weekly Route",
-                "url": "https://keystone.guru/route/skyreach/kqeL79Y/pug-friendly-raiderios-weekly-route"
+                "url": "https://keystone.guru/route/skyreach/kqeL79Y/pug-friendly-raiderios-weekly-route",
+                "tipo": "pug",
+                "desc": "Ruta oficial de Raider.IO. Straightforward — divide los pulls como necesites según el grupo.",
+                "thumb": null
             },
             {
                 "nombre": "Skandar Tank – SKY (+10/+15)",
-                "url": "https://keystone.guru/route/skyreach/UHZwjor/skandar-tank-skyreach-10-15"
+                "url": "https://keystone.guru/route/skyreach/UHZwjor/skandar-tank-skyreach-10-15",
+                "tipo": "high",
+                "desc": "Ruta fácil para PUGs. BL en 1ª pull y 2º jefe. Limpia y sin skips difíciles.",
+                "thumb": null
             },
             {
                 "nombre": "Skyreach – Crassix",
-                "url": "https://keystone.guru/route/skyreach/8x9K2p1/skyreach-crassix"
+                "url": "https://keystone.guru/route/skyreach/8x9K2p1/skyreach-crassix",
+                "tipo": "high",
+                "desc": "Ruta de Crassix con pulls optimizados para el timer de 28 min. Para claves intermedias/altas.",
+                "thumb": null
             },
             {
                 "nombre": "KiraTank – SKY",
-                "url": "https://keystone.guru/route/skyreach/FPStartID/kira-tank-skyreach"
+                "url": "https://keystone.guru/route/skyreach/FPStartID/kira-tank-skyreach",
+                "tipo": "high",
+                "desc": "Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.",
+                "thumb": null
             }
         ]
     },
@@ -299,7 +395,7 @@
         },
         {
             "titulo": "Tier Set Bonuses - Cual es el mejor para tu clase",
-            "link": "https://www.icy-veins.com/wow/ tier-sets",
+            "link": "https://www.icy-veins.com/wow/tier-sets",
             "fecha": "30/04/2026",
             "fuente": "Icy Veins"
         }
@@ -334,14 +430,9 @@
                 "score": 2776
             },
             {
-                "nombre": "Kreathor",
-                "clase": "Death Knight",
-                "score": 2650
-            },
-            {
                 "nombre": "Czernobög",
                 "clase": "Druid",
-                "score": 1988
+                "score": 2243
             },
             {
                 "nombre": "Krëeper",
@@ -356,6 +447,11 @@
         ],
         "dps": [
             {
+                "nombre": "Kreathor",
+                "clase": "Death Knight",
+                "score": 2650
+            },
+            {
                 "nombre": "Oldkreeper",
                 "clase": "Shaman",
                 "score": 0
@@ -368,5 +464,5 @@
         ],
         "healer": []
     },
-    "actualizado": "12/5/2026"
+    "actualizado": "16/5/2026"
 }

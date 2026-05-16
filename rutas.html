@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WoW Explorador - Rutas Mythic+</title>
+  <link rel="stylesheet" href="css/fonts.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Nunito:wght@300;400;600&display=swap');
 
     :root {
       --gold: #F8B700;
@@ -392,7 +392,12 @@
 <div class="tab-bar" id="tabBar"></div>
 
 <!-- ═══════════════════════════════════════════ PANELS -->
-<div class="content" id="content"></div>
+<div class="content" id="content">
+  <div style="text-align:center;padding:60px 20px;color:var(--text-muted)">
+    <div style="font-size:2em;margin-bottom:12px;">🗺️</div>
+    <p>Cargando mazmorras...</p>
+  </div>
+</div>
 
 <div class="page-footer">
   Rutas obtenidas de <a href="https://keystone.guru" target="_blank">Keystone.guru</a> ·
@@ -402,357 +407,8 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════
-//  DATOS DE MAZMORRAS — actualiza los routeId cuando quieras
-//  Los links de KG siguen el patrón:
-//  https://keystone.guru/route/{dungeon-slug}/{routeId}/{route-name}
-// ══════════════════════════════════════════════════════════
-const DUNGEONS = [
-  {
-    id: 'algethar-academy',
-    nombre: "Algeth'ar Academy",
-    tipo: 'nueva',
-    sigla: 'AA',
-    jefes: 4,
-    timer: '35 min',
-    zona: 'Thaldraszus',
-    img: 'https://assets.keystone.guru/images/dungeons/midnight/algeth_ar_academy_midnight.jpg',
-    desc: 'Academia dracónica ahora infestada de energía arcana corrupta. Flexible en orden de jefes — Doragosa se desbloquea al matar a los otros tres.',
-    guia_method: 'https://www.method.gg/guides/dungeons/algethar-academy',
-    guia_icy: 'https://www.icy-veins.com/wow/algethar-academy-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'Skandar Tank – AA PUG (+10/+15)',
-        desc: 'Ruta fácil para PUGs. BL en 1ª pull, 2º jefe fase 2, último jefe. Sin skips obligatorios.',
-        kg_url: 'https://keystone.guru/route/algethar-academy/hfTNdOk/skandar-tank-algethar-academy-10-15',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Yoda Easy',
-        desc: 'Ruta popular de la comunidad. 100% trash sin complicaciones. Para claves intermedias.',
-        kg_url: 'https://keystone.guru/route/algethar-academy/chOOM8t/yoda-easy',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: "Quick N' Easy",
-        desc: 'Ruta directa y eficiente. 101% con camino optimizado. Buena para timing en claves altas.',
-        kg_url: 'https://keystone.guru/route/algethar-academy/5gYIKGp/algethar-academy-quick-n-easy',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – AA',
-        desc: 'Ruta de KiraTank para claves intermedias y altas. Pulls optimizados y buen ritmo de BL.',
-        kg_url: 'https://keystone.guru/route/algethar-academy/koYRI0k/mtv-algethar-academy',
-        thumb: null,
-      },
-    ],
-  },
-  {
-    id: 'maisara-caverns',
-    nombre: 'Maisara Caverns',
-    tipo: 'nueva',
-    sigla: 'MC',
-    jefes: 4,
-    timer: '33 min',
-    zona: 'Harandar',
-    img: 'https://assets.keystone.guru/images/dungeons/midnight/maisara_caverns.jpg',
-    desc: 'Cavernas misteriosas bajo los pantanos de Harandar. Coordina los pulls en el agua — los mobs acuáticos son los más mortales para PUGs.',
-    guia_method: 'https://www.method.gg/guides/dungeons/midnight/maisara-caverns',
-    guia_icy: 'https://www.icy-veins.com/wow/maisara-caverns-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'PUG-Friendly: Raider.IO Weekly Route',
-        desc: 'Ruta oficial de Raider.IO para PUGs. Sin skips complejos. BL en 1ª pull, tras 1er jefe y en el último jefe (intermission).',
-        kg_url: 'https://keystone.guru/route/maisara-caverns/R8zRnBU/pug-friendly-raiderios-weekly-route',
-        thumb: 'https://uploads.keystone.guru/thumbnails/R8zRnBU/R8zRnBU_2_746cc3a3.jpg',
-      },
-      {
-        tipo: 'high',
-        titulo: 'Skandar Tank – MC (+10/+15)',
-        desc: 'Ruta fácil para PUGs y claves hasta +15. BL 1ª pull, después del 1er jefe y en el último durante la intermission.',
-        kg_url: 'https://keystone.guru/route/maisara-caverns/qxBj04s/skandar-tank-maisara-caverns-10-15',
-        thumb: 'https://uploads.keystone.guru/thumbnails/qxBj04s/qxBj04s_2_c0b7d9dd.jpg',
-      },
-      {
-        tipo: 'high',
-        titulo: 'Yoda Easy – MC',
-        desc: 'Ruta popular de nagg_boi. Limpia y eficiente para claves intermedias y altas.',
-        kg_url: 'https://keystone.guru/route/maisara-caverns/ScwLdyU/yoda-easy',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – MC',
-        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
-        kg_url: 'https://keystone.guru/route/maisara-caverns/FPStartID/kira-tank-maisara-caverns',
-        thumb: null,
-      },
-    ],
-  },
-  {
-    id: 'nexuspoint-xenas',
-    nombre: 'Nexus-Point Xenas',
-    tipo: 'nueva',
-    sigla: 'NPX',
-    jefes: 4,
-    timer: '35 min',
-    zona: 'Voidstorm',
-    img: 'https://assets.keystone.guru/images/dungeons/midnight/nexus_point_xenas.jpg',
-    desc: 'Instalación del Vacío en el Voidstorm. Los portales de vacío pueden devolver mobs al combate — posicionamiento crítico en cada pull.',
-    guia_method: 'https://www.method.gg/guides/dungeons/midnight/nexus-point-xenas',
-    guia_icy: 'https://www.icy-veins.com/wow/nexus-point-xenas-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'PUG-Friendly: Raider.IO Weekly Route',
-        desc: 'Ruta oficial de Raider.IO para PUGs. Empieza por el lado izquierdo. Sin skips complicados.',
-        kg_url: 'https://keystone.guru/route/nexuspoint-xenas/AaWjJpg/nexus-point-xenas',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'MTV Nexus Point',
-        desc: 'Ruta de mechanizedtv. Pulls grandes con buen control de cooldowns. Para claves intermedias/altas.',
-        kg_url: 'https://aws.keystone.guru/route/nexuspoint-xenas/koYRI0k/mtv-nexus-point',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'First Week Nexus Point',
-        desc: 'Ruta de Perniepower probada en la primera semana de la temporada. Sólida y directa.',
-        kg_url: 'https://keystone.guru/route/nexuspoint-xenas/prYL2lp/first-week-nexus-point',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – NPX',
-        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
-        kg_url: 'https://keystone.guru/route/nexuspoint-xenas/FPStartID/kira-tank-nexus-point-xenas',
-        thumb: null,
-      },
-    ],
-  },
-  {
-    id: 'windrunner-spire',
-    nombre: 'Windrunner Spire',
-    tipo: 'nueva',
-    sigla: 'WRS',
-    jefes: 4,
-    timer: '34 min',
-    zona: 'Eversong Woods',
-    img: 'https://assets.keystone.guru/images/dungeons/midnight/windrunner_spire.jpg',
-    desc: 'La icónica torre de los Windrunner, ahora dominada por el Vacío. Historia de los Blood Elves entretejida en mecánicas únicas por piso.',
-    guia_method: 'https://www.method.gg/guides/dungeons/midnight/windrunner-spire',
-    guia_icy: 'https://www.icy-veins.com/wow/windrunner-spire-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'Skandar Tank – WRS PUG (+10/+15)',
-        desc: 'Ruta fácil para PUGs y claves bajas/medias. Lineal y sin skips de comms.',
-        kg_url: 'https://keystone.guru/route/windrunner-spire/t7VR0ZC/skandar-tank-windrunner-spire-10-15',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Windrunner Spire – Crassix',
-        desc: 'Ruta de Crassix, uno de los creadores más activos en Keystone.guru para Midnight S1.',
-        kg_url: 'https://keystone.guru/route/windrunner-spire/tJU6X4O/windrunner-spire',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'WRS Route #1 – Goebles',
-        desc: 'Ruta comunitaria estable, buenas valoraciones. Válida para claves intermedias y altas.',
-        kg_url: 'https://keystone.guru/route/windrunner-spire/ENtNmAC/windrunner-spire-route-1',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – WRS',
-        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
-        kg_url: 'https://keystone.guru/route/windrunner-spire/FPStartID/kira-tank-windrunner-spire',
-        thumb: null,
-      },
-    ],
-  },
-  {
-    id: 'magisters-terrace',
-    nombre: "Magisters' Terrace",
-    tipo: 'clasica',
-    sigla: 'MT',
-    jefes: 4,
-    timer: '32 min',
-    zona: "Quel'Danas",
-    img: 'https://assets.keystone.guru/images/dungeons/midnight/magisters_terrace_midnight.jpg',
-    desc: "Terraza renovada de Quel'Danas. Kael'thas al final. Gestión de interrupciones en trash es crítica — muchos casters problemáticos.",
-    guia_method: 'https://www.method.gg/guides/dungeons/midnight/magisters-terrace',
-    guia_icy: 'https://www.icy-veins.com/wow/magisters-terrace-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'PUG-Friendly: Raider.IO Weekly Route',
-        desc: 'Ruta oficial de Raider.IO. Sin skips requeridos — ideal para cualquier nivel de clave.',
-        kg_url: 'https://keystone.guru/route/magisters-terrace/ozpSk7R/pug-friendly-raiderios-weekly-route',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Skandar Tank – MT (+10/+15)',
-        desc: 'Ruta fácil para PUGs hasta +15. Flujo natural de la mazmorra, sin sorpresas.',
-        kg_url: 'https://keystone.guru/route/magisters-terrace/FBwOW7Q/skandar-tank-magisters-terrace-10-15',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Expert: Raider.IO Weekly Route',
-        desc: 'Ruta avanzada vista en las leaderboards de Midnight S1 Beta. No recomendada para PUGs sin comms.',
-        kg_url: 'https://keystone.guru/route/magisters-terrace/i9BZnYH/expert-raiderios-weekly-route',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – MT',
-        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
-        kg_url: 'https://keystone.guru/route/magisters-terrace/FPStartID/kira-tank-magisters-terrace',
-        thumb: null,
-      },
-    ],
-  },
-  {
-    id: 'pit-of-saron',
-    nombre: 'Pit of Saron',
-    tipo: 'clasica',
-    sigla: 'POS',
-    jefes: 3,
-    timer: '30 min',
-    zona: 'Icecrown',
-    img: 'https://assets.keystone.guru/images/dungeons/wotlk/pitofsaron.jpg',
-    desc: 'Minas de la Ciudadela de la Corona de Hielo. El gauntlet del corredor es el momento decisivo — libera prisioneros sin sobrepullar.',
-    guia_method: 'https://www.method.gg/guides/dungeons/midnight/pit-of-saron',
-    guia_icy: 'https://www.icy-veins.com/wow/pit-of-saron-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'PUG-Friendly: Raider.IO Weekly Route',
-        desc: 'Ruta oficial de Raider.IO. Libera prisioneros con cuidado, sin pulls caóticos en el gauntlet.',
-        kg_url: 'https://keystone.guru/route/pit-of-saron/uQ1ba0I/pug-friendly-raiderios-weekly-route',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Skandar Tank – POS (+10/+15)',
-        desc: 'Ruta fácil para PUGs hasta +15. BL en el primer pull. Limpia y directa.',
-        kg_url: 'https://keystone.guru/route/pit-of-saron/cL3zwJR/skandar-tank-pit-of-saron-10-15',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Tactyks PUG Friendly – POS',
-        desc: 'Ruta de Tactyks adaptada para PUGs. Buen manejo del gauntlet y los prisioneros.',
-        kg_url: 'https://keystone.guru/route/pit-of-saron/22RypSt/tactyks-pug-friendly',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – POS',
-        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
-        kg_url: 'https://keystone.guru/route/pit-of-saron/FPStartID/kira-tank-pit-of-saron',
-        thumb: null,
-      },
-    ],
-  },
-  {
-    id: 'seat-of-the-triumvirate',
-    nombre: 'Seat of the Triumvirate',
-    tipo: 'clasica',
-    sigla: 'SEAT',
-    jefes: 4,
-    timer: '32 min',
-    zona: 'Argus',
-    img: 'https://assets.keystone.guru/images/dungeons/legion/theseatofthetriumvirate.jpg',
-    desc: "El trono Eredar en Argus. L'ura al final con mecánicas de Void Step — controla los portales o el grupo se desintegra.",
-    guia_method: 'https://www.method.gg/guides/dungeons/midnight/seat-of-the-triumvirate',
-    guia_icy: 'https://www.icy-veins.com/wow/seat-of-the-triumvirate-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'PUG-Friendly: Raider.IO Weekly Route',
-        desc: 'Sin skips requeridos. Válida para varios niveles de clave. Incluye notas en los pulls.',
-        kg_url: 'https://keystone.guru/route/seat-of-the-triumvirate/Tf03QDk/pug-friendly-raiderios-weekly-route',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'SEAT Route #1 – Goebles',
-        desc: 'Ruta comunitaria con buenas valoraciones. Estable para claves intermedias y altas.',
-        kg_url: 'https://keystone.guru/route/seat-of-the-triumvirate/H8c0Cl9/seat-of-the-triumvirate-route-1',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'WG Seat v1 – WinningWarcraft',
-        desc: 'Ruta avanzada de WinningWarcraft para claves altas. Pulls grandes, buen ritmo de BL.',
-        kg_url: 'https://keystone.guru/route/seat-of-the-triumvirate/i4s9c2Y/wg-seat-v1',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – SEAT',
-        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
-        kg_url: 'https://keystone.guru/route/seat-of-the-triumvirate/FPStartID/kira-tank-seat-of-the-triumvirate',
-        thumb: null,
-      },
-    ],
-  },
-  {
-    id: 'skyreach',
-    nombre: 'Skyreach',
-    tipo: 'clasica',
-    sigla: 'SKY',
-    jefes: 4,
-    timer: '28 min',
-    zona: 'Spires of Arak',
-    img: 'https://assets.keystone.guru/images/dungeons/wod/skyreach.jpg',
-    desc: 'Timer más ajustado de la rotación (28 min). Rook the Wind Reaver al final. Cada segundo cuenta — los frontales de viento pueden wipe-ar.',
-    guia_method: 'https://www.method.gg/guides/dungeons/midnight/skyreach',
-    guia_icy: 'https://www.icy-veins.com/wow/skyreach-dungeon-guide',
-    rutas: [
-      {
-        tipo: 'pug',
-        titulo: 'PUG-Friendly: Raider.IO Weekly Route',
-        desc: 'Ruta oficial de Raider.IO. Straightforward — divide los pulls como necesites según el grupo.',
-        kg_url: 'https://keystone.guru/route/skyreach/kqeL79Y/pug-friendly-raiderios-weekly-route',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Skandar Tank – SKY (+10/+15)',
-        desc: 'Ruta fácil para PUGs. BL en 1ª pull y 2º jefe. Limpia y sin skips difíciles.',
-        kg_url: 'https://keystone.guru/route/skyreach/UHZwjor/skandar-tank-skyreach-10-15',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'Skyreach – Crassix',
-        desc: 'Ruta de Crassix con pulls optimizados para el timer de 28 min. Para claves intermedias/altas.',
-        kg_url: 'https://keystone.guru/routes/retail/skyreach/popular',
-        thumb: null,
-      },
-      {
-        tipo: 'high',
-        titulo: 'KiraTank – SKY',
-        desc: 'Ruta de KiraTank para claves M+ competitivas. Posicionamiento y BL optimizado.',
-        kg_url: 'https://keystone.guru/route/skyreach/FPStartID/kira-tank-skyreach',
-        thumb: null,
-      },
-    ],
-  },
-];
+// Las rutas se cargan desde datos.json (generado por actualizar_datos.py)
+// Esto elimina la duplicación — la fuente única es actualizar_datos.py
 
 // ══════════════════════════════════════════════════════════
 //  RENDER
@@ -786,17 +442,17 @@ function buildPage(dungeons) {
     const routesHTML = (d.rutas || []).map(r => `
       <div class="route-card ${r.tipo}">
         ${r.thumb
-          ? `<img class="route-thumb" src="${r.thumb}" alt="${r.titulo}" loading="lazy" onerror="this.style.display='none'">`
+          ? `<img class="route-thumb" src="${r.thumb}" alt="${r.nombre}" loading="lazy" onerror="this.style.display='none'">`
           : `<div class="route-thumb-placeholder">🗺️</div>`
         }
         <div class="route-body">
           <div class="route-type ${r.tipo === 'pug' ? 'type-pug' : 'type-high'}">
             ${r.tipo === 'pug' ? '✦ PUG Friendly' : '◆ Alta Clave'}
           </div>
-          <div class="route-title">${r.titulo}</div>
+          <div class="route-title">${r.nombre}</div>
           <div class="route-desc">${r.desc}</div>
           <div class="route-actions">
-            <a class="btn-route btn-kg" href="${r.kg_url}" target="_blank">
+            <a class="btn-route btn-kg" href="${r.url}" target="_blank">
               🗝 Keystone.guru ↗
             </a>
           </div>
@@ -859,32 +515,36 @@ document.getElementById('buscador').addEventListener('input', function(e) {
 });
 
 async function cargarDatos() {
+  const content = document.getElementById('content');
   try {
     const res = await fetch('datos.json?t=' + Date.now());
-    if (!res.ok) return;
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const datos = await res.json();
+    if (!datos.mazmorras) throw new Error('datos.json no contiene mazmorras');
 
-    // 1. Construir paneles dinámicamente desde mazmorras en datos.json
-    if (datos.mazmorras) {
-        buildPage(Object.entries(datos.mazmorras).map(([id, meta]) => ({
-            ...meta,
-            id: id,
-            rutas: datos.rutas[id] || []
-        })));
-    }
+    // Construir array de mazmorras desde datos.json (fuente única)
+    const dungeons = Object.entries(datos.mazmorras).map(([id, meta]) => ({
+      ...meta,
+      id: id,
+      rutas: datos.rutas[id] || []
+    }));
 
-    // 2. Mostrar fecha de actualización en el header
+    // Renderizar página
+    buildPage(dungeons);
+
+    // Mostrar fecha de actualización
     if (datos.actualizado) {
       const sub = document.querySelector('.header .sub');
       if (sub) sub.textContent += ' · Actualizado: ' + datos.actualizado;
     }
 
-    // 3. Cargar rutas populares (se añaden al final del grid de cada panel)
+    // Agregar sección de rutas populares desde datos.json
     if (datos.rutas) {
-      DUNGEONS.forEach((d, idx) => {
-        const rutasData = datos.rutas[d.id];
+      Object.entries(datos.rutas).forEach(([dungeonId, rutasData]) => {
         if (!rutasData || rutasData.length === 0) return;
-
+        // Encontrar el panel que corresponde a este dungeon
+        const idx = dungeons.findIndex(d => d.id === dungeonId);
+        if (idx === -1) return;
         const panel = document.getElementById('panel-' + idx);
         if (!panel) return;
         const grid = panel.querySelector('.routes-grid');
@@ -912,11 +572,17 @@ async function cargarDatos() {
       });
     }
   } catch(e) {
-    console.error("Error cargando datos:", e);
+    console.error('Error cargando datos:', e);
+    content.innerHTML = `
+      <div style="text-align:center;padding:80px 20px;color:var(--text-muted)">
+        <div style="font-size:3em;margin-bottom:16px;">⚠️</div>
+        <p style="font-size:1.1em;margin-bottom:8px;color:var(--text)">No se pudieron cargar las mazmorras.</p>
+        <p style="font-size:.85em;">Verifica que datos.json exista o ejecuta actualizar_datos.py</p>
+        <button onclick="location.reload()" style="margin-top:16px;padding:8px 20px;background:var(--gold);color:#000;border:none;border-radius:4px;cursor:pointer;font-weight:600;">Reintentar</button>
+      </div>`;
   }
 }
 
-buildPage(DUNGEONS); // Inicialización con datos estáticos por si falla el fetch
 cargarDatos();
 
 </script>
