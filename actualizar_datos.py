@@ -17,6 +17,23 @@ PERSONAJES = [
 ]
 
 # ── Obtener scores M+ reales desde Raider.io ────────────
+def obtener_perfiles_raiderio():
+    """Obtiene perfiles completos de Raider.io para todos los personajes"""
+    perfiles = {}
+    for p in PERSONAJES:
+        try:
+            fields = 'mythic_plus_scores_by_season:current,gear,raid_progression,class,mythic_plus_recent_runs,mythic_plus_best_runs:current,thumbnail_url'
+            url = f"https://raider.io/api/v1/characters/profile?region=us&realm=quelthalas&name={p['urlNombre']}&fields={fields}"
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=10) as r:
+                perfil = json.loads(r.read().decode())
+                perfiles[p['nombre']] = {"rio": perfil}
+            print(f"  OK: {p['nombre']}")
+        except Exception as e:
+            print(f"  Error {p['nombre']}: {e}")
+            perfiles[p['nombre']] = {"rio": None}
+    return perfiles
+
 def obtener_scores_mas_reales():
     """Obtiene scores M+ reales desde Raider.io API para los personajes trackeados"""
     rankings = {"tank": [], "dps": [], "healer": []}
@@ -392,18 +409,20 @@ def obtener_datos_wow():
     else:
         print("Faltan las llaves secretas en GitHub.")
 
-    # 5.5 Stats y monedas de personajes via Blizzard API
-    personajes_data = {}
+    # 5.5 Perfiles completos de personajes desde Raider.io
+    perfiles = obtener_perfiles_raiderio()
+
+    # 5.6 Stats y monedas via Blizzard API
     if client_id and client_secret and pase_blizzard:
         for p in PERSONAJES:
             nombre_url = p['urlNombre']
-            print(f"  Obteniendo datos de {p['nombre']}...")
+            print(f"  Obteniendo datos Blizzard de {p['nombre']}...")
             stats = obtener_stats_blizzard(pase_blizzard, nombre_url)
             monedas = obtener_monedas_blizzard(pase_blizzard, nombre_url)
-            personajes_data[p['nombre']] = {
-                "stats": stats,
-                "monedas": monedas
-            }
+            if perfiles.get(p['nombre']):
+                perfiles[p['nombre']]['blizzard'] = {}
+                if stats: perfiles[p['nombre']]['blizzard']['stats'] = stats
+                if monedas: perfiles[p['nombre']]['blizzard']['monedas'] = monedas
 
     # 3. Jefe de Mundo (calculado por rotación)
     jefe_activo = obtener_jefe_de_mundo()
@@ -427,7 +446,7 @@ def obtener_datos_wow():
         "noticias": NOTICIAS_DEFAULT,
         "invasiones": INVASIONES_DEFAULT,
         "ranking_mas": obtener_scores_mas_reales(),
-        "personajes_data": personajes_data,
+        "personajes_data": perfiles,
         "actualizado": f"{ahora_cl.day}/{ahora_cl.month}/{ahora_cl.year}"
     }
 

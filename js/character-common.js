@@ -12,18 +12,8 @@ const PX = window.CHAR_PX || 'kr';
 const N  = window.CHAR_URL || window.CHAR_NAME || 'Kreathor';
 const R  = 'us';
 const RL = 'quelthalas';
-const F  = 'mythic_plus_scores_by_season:current,gear,raid_progression,class,mythic_plus_recent_runs,mythic_plus_best_runs:current,thumbnail_url';
 
 let CHAR_DATA = null;
-async function loadCharData() {
-  try {
-    const r = await fetch('datos.json?t=' + Date.now());
-    if (r.ok) {
-      const d = await r.json();
-      CHAR_DATA = d.personajes_data && d.personajes_data[window.CHAR_NAME || 'Kreathor'];
-    }
-  } catch(e) {}
-}
 
 // ── Tab switching ──
 function ST(id) {
@@ -502,9 +492,10 @@ function renderStats(d) {
   if (!el) return;
   let stats = d.gear?.stats;
   let ilvl = d.gear?.item_level_equipped;
-  if ((!stats || !Object.keys(stats).length) && CHAR_DATA && CHAR_DATA.stats) {
-    stats = CHAR_DATA.stats.stats || {};
-    ilvl = CHAR_DATA.stats.ilvl || 0;
+  if ((!stats || !Object.keys(stats).length) && CHAR_DATA && CHAR_DATA.blizzard && CHAR_DATA.blizzard.stats) {
+    const bs = CHAR_DATA.blizzard.stats;
+    stats = bs.stats || {};
+    ilvl = bs.ilvl || 0;
   }
   if (!stats || !Object.keys(stats).length) {
     el.innerHTML = '<p style="color:var(--muted);font-size:.83em;padding:14px 0">Stats no disponibles.</p>';
@@ -548,8 +539,8 @@ function renderMonedas() {
   const mKey = PX + '_monedas';
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(mKey) || '{}'); } catch(e) {}
-  if (CHAR_DATA && CHAR_DATA.monedas && Object.keys(saved).length === 0) {
-    saved = CHAR_DATA.monedas;
+  if (Object.keys(saved).length === 0 && CHAR_DATA && CHAR_DATA.blizzard && CHAR_DATA.blizzard.monedas) {
+    saved = CHAR_DATA.blizzard.monedas;
     localStorage.setItem(mKey, JSON.stringify(saved));
   }
   var currs = [
@@ -595,21 +586,23 @@ function resetMonedas() {
   renderMonedas();
 }
 
-// ── Raider.io API loader ──
-async function loadData() {
-  await loadCharData();
-  const url = `https://raider.io/api/v1/characters/profile?region=${R}&realm=${RL}&name=${N}&fields=${F}`;
+// ── Cargar datos desde datos.json ──
+async function loadFromJson() {
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const d = await res.json();
-    if (d.statusCode === 400 || d.error) throw new Error('No encontrado');
-    renderHero(d);
-    renderStats(d);
-    renderMonedas();
-    renderMP(d);
-    renderRaid(d);
-    renderDG(d.mythic_plus_best_runs);
+    const r = await fetch('datos.json?t=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    const name = window.CHAR_NAME || 'Kreathor';
+    CHAR_DATA = d.personajes_data && d.personajes_data[name];
+    const rio = CHAR_DATA && CHAR_DATA.rio;
+    if (rio) {
+      renderHero(rio);
+      renderStats(rio);
+      renderMonedas();
+      renderMP(rio);
+      renderRaid(rio);
+      renderDG(rio.mythic_plus_best_runs);
+    }
   } catch (e) {
     ['heroStats', 'statsContent', 'monedasContent', 'mpContent', 'raidContent', 'dgContent'].forEach(id => {
       const el = document.getElementById(id);
@@ -640,4 +633,4 @@ function calcU() {
     ${isW ? '<p style="font-size:.7em;color:var(--muted);margin-top:6px">Armas cuestan 2x crests.</p>' : ''}`;
 }
 
-loadData();
+loadFromJson();
