@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WoW Explorador
 
-## Getting Started
+Sitio personal de World of Warcraft para seguimiento semanal de Mythic+, personajes de Quel'Thalas US y rutas de mazmorras. La app genera HTML estático con Next.js y lee una base SQLite producida por el pipeline Python.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 App Router con `output: "export"`
+- TypeScript estricto
+- Tailwind CSS v4 con tema Horda
+- Prisma v7 + `@prisma/adapter-better-sqlite3`
+- SQLite en `prisma/wow.db`
+- Python 3 stdlib para ingesta de Raider.io, Blizzard API y Armory
+- GitHub Actions para build y despliegue a GitHub Pages
+
+## Comandos
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run validate
+npm run build
+npm run seed
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm run seed` ejecuta `scripts/actualizar_datos.py` y luego `prisma generate`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pipeline de datos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+python scripts/actualizar_datos.py
+```
 
-## Learn More
+El script:
 
-To learn more about Next.js, take a look at the following resources:
+- obtiene afijos y perfiles desde Raider.io;
+- usa Blizzard OAuth para el precio del token cuando hay secrets;
+- consulta Armory como fallback de estadísticas;
+- escribe primero en `prisma/wow.tmp.db`;
+- reemplaza `prisma/wow.db` solo cuando toda la ingesta terminó correctamente.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Variables opcionales:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+BLIZZARD_CLIENT_ID
+BLIZZARD_CLIENT_SECRET
+```
 
-## Deploy on Vercel
+## Despliegue
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+El workflow `.github/workflows/deploy.yml` corre en:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- push a `main`;
+- cron semanal martes 15:00 UTC;
+- ejecución manual desde GitHub.
+
+La publicación usa GitHub Pages Actions con artifact `out/`. El sitio vive bajo `/wowexplorador`, por eso `next.config.ts` define `basePath`, `assetPrefix` y `NEXT_PUBLIC_BASE_PATH`.
+
+## Verificación actual
+
+Última verificación local:
+
+```bash
+npm run lint
+npm run validate
+npm audit --audit-level=moderate
+```
+
+Build verificado en una copia limpia del repo porque el directorio generado `.next` del workspace original quedó bloqueado por permisos de Windows:
+
+```bash
+npm ci
+npm run build
+```
+
+Resultado: build correcto, 13 páginas estáticas generadas.

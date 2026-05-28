@@ -4,9 +4,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   output: "export",
   basePath: "/wowexplorador",
   assetPrefix: "/wowexplorador/",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: "/wowexplorador",
+  },
   images: {
     unoptimized: true, // GitHub Pages no soporta optimización de imágenes de Next.js
   },

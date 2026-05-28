@@ -3,6 +3,7 @@
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { safeJsonParse } from "@/lib/utils";
+import type { RaiderIoProfile } from "@/lib/wow-types";
 
 interface RaidPanelProps {
   rioData: string | null; // Perfil de Raider.io con raid_progression
@@ -11,17 +12,9 @@ interface RaidPanelProps {
 // Total de jefes en Midnight S1 (tier-mn-1)
 const TOTAL_BOSSES = 9;
 
-interface RaidProgression {
-  summary: string;
-  total_bosses: number;
-  normal_bosses_killed: number;
-  heroic_bosses_killed: number;
-  mythic_bosses_killed: number;
-}
-
 export default function RaidPanel({ rioData }: RaidPanelProps) {
-  const rio = safeJsonParse<Record<string, any>>(rioData);
-  const raidProg = rio?.raid_progression?.["tier-mn-1"] as RaidProgression | undefined;
+  const rio = safeJsonParse<RaiderIoProfile>(rioData);
+  const raidProg = rio?.raid_progression?.["tier-mn-1"];
 
   // Si no hay datos de raid
   if (!raidProg || !raidProg.total_bosses) {

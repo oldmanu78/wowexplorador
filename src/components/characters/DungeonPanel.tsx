@@ -1,7 +1,6 @@
 // Tab 4: Scores por mazmorra
 // Muestra el score de cada dungeon M+ con colores por rango
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
-import { getDungeonName } from "@/lib/utils";
 import { DUNGEONS } from "@/lib/constants";
 
 interface DungeonScore {

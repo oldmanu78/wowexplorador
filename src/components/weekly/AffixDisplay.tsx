@@ -1,6 +1,5 @@
 // Muestra los afijos de la semana con dots de colores
 // Los afijos vienen como string separado por " - " desde SQLite
-import { cn } from "@/lib/utils";
 
 interface AffixDisplayProps {
   affixes: string; // Ej: "Fortificado - Reforzado - Tiránico - Xal'atath"

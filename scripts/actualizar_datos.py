@@ -15,7 +15,8 @@ import urllib.parse
 import urllib.request
 import urllib.error
 import base64
-from datetime import datetime, timedelta, timezone
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 # ─── Configuración ───────────────────────────────────────────────────
@@ -94,21 +95,28 @@ INVASIONES = [
 ]
 
 
-def fetch_json(url, headers=None):
+def fetch_json(url, headers=None, retries=3):
     """
     Fetch JSON de una URL con manejo de errores.
     Retorna el JSON parseado o None si falla.
     """
-    req = urllib.request.Request(
-        url,
-        headers=headers or {"User-Agent": "Mozilla/5.0 (compatible; WoWExplorador/1.0)"},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError, TimeoutError) as e:
-        print(f"  [!] Error fetching {url}: {e}")
-        return None
+    request_headers = headers or {"User-Agent": "Mozilla/5.0 (compatible; WoWExplorador/1.0)"}
+    for attempt in range(retries):
+        req = urllib.request.Request(url, headers=request_headers)
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            retryable = e.code in (429, 500, 502, 503, 504)
+            if not retryable or attempt == retries - 1:
+                print(f"  [!] Error fetching {url}: {e}")
+                return None
+        except (urllib.error.URLError, json.JSONDecodeError, TimeoutError) as e:
+            if attempt == retries - 1:
+                print(f"  [!] Error fetching {url}: {e}")
+                return None
+        time.sleep(2 ** attempt)
+    return None
 
 
 def get_blizzard_token(client_id, client_secret):
@@ -189,7 +197,7 @@ def obtener_stats_armory(name, realm="quelthalas", region="us"):
     Retorna stats parseados o None si falla (fallback graceful).
     """
     encoded_name = urllib.parse.quote(name, safe="")
-    url = f"https://worldofwarcraft.blizzard.com/en-us/character/us/{realm}/{encoded_name}"
+    url = f"https://worldofwarcraft.blizzard.com/en-us/character/{region}/{realm}/{encoded_name}"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -743,68 +751,84 @@ def main():
     print(f"Inicio: {datetime.now(timezone.utc).isoformat()}")
     print("=" * 50)
 
-    # Conecta a SQLite
-    conn = sqlite3.connect(str(DB_PATH))
-    init_db(conn)
+    # Se escribe en una base temporal y se reemplaza al final para evitar
+    # dejar prisma/wow.db en estado parcial si el proceso se interrumpe.
+    tmp_db_path = DB_PATH.with_suffix(".tmp.db")
+    if tmp_db_path.exists():
+        tmp_db_path.unlink()
 
-    # Obtiene credenciales de Blizzard desde variables de entorno
-    client_id = os.environ.get("BLIZZARD_CLIENT_ID")
-    client_secret = os.environ.get("BLIZZARD_CLIENT_SECRET")
+    conn = sqlite3.connect(str(tmp_db_path))
+    conn_closed = False
 
-    # 1. Obtiene afijos semanales
-    print("\n[AFIJOS] Afijos semanales...")
-    affixes = obtener_afijos_raiderio()
-    print(f"  -> {affixes}")
+    try:
+        init_db(conn)
 
-    # 2. Obtiene token de Blizzard
-    print("\n[TOKEN] Token Blizzard...")
-    token = get_blizzard_token(client_id, client_secret)
+        # Obtiene credenciales de Blizzard desde variables de entorno
+        client_id = os.environ.get("BLIZZARD_CLIENT_ID")
+        client_secret = os.environ.get("BLIZZARD_CLIENT_SECRET")
 
-    # 3. Obtiene precio del token
-    print("\n[TOKEN] Precio del Token...")
-    token_price = obtener_token_price(token) if token else "Buscando..."
-    print(f"  -> {token_price}")
+        # 1. Obtiene afijos semanales
+        print("\n[AFIJOS] Afijos semanales...")
+        affixes = obtener_afijos_raiderio()
+        print(f"  -> {affixes}")
 
-    # 4. Calcula evento y jefe del mundo
-    event = obtener_evento_semana()
-    world_boss = obtener_jefe_mundo()
-    print(f"\n[EVENTO] Evento: {event}")
-    print(f"[BOSS] Jefe del mundo: {world_boss}")
+        # 2. Obtiene token de Blizzard
+        print("\n[TOKEN] Token Blizzard...")
+        token = get_blizzard_token(client_id, client_secret)
 
-    # 5. Guarda snapshot semanal
-    save_weekly_snapshot(conn, affixes, event, token_price, world_boss)
+        # 3. Obtiene precio del token
+        print("\n[TOKEN] Precio del Token...")
+        token_price = obtener_token_price(token) if token else "Buscando..."
+        print(f"  -> {token_price}")
 
-    # 6. Guarda usuario por defecto
-    cursor = conn.cursor()
-    cursor.execute("INSERT OR IGNORE INTO User (id, username, slug) VALUES (?, ?, ?)",
-                   ("default", "oldmanu78", "oldmanu78"))
-    conn.commit()
+        # 4. Calcula evento y jefe del mundo
+        event = obtener_evento_semana()
+        world_boss = obtener_jefe_mundo()
+        print(f"\n[EVENTO] Evento: {event}")
+        print(f"[BOSS] Jefe del mundo: {world_boss}")
 
-    # 7. Obtiene perfiles de Raider.io y stats de Armory para cada personaje
-    print("\n[CHARS] Personajes...")
-    for char in CHARACTERS:
-        print(f"\n  {char['name']}:")
-        rio = obtener_perfil_raiderio(char["name"], char["realm"], char["region"])
-        armory = obtener_stats_armory(char["name"], char["realm"], char["region"])
-        save_character(conn, char, rio, armory, "default")
+        # 5. Guarda snapshot semanal
+        save_weekly_snapshot(conn, affixes, event, token_price, world_boss)
 
-        # Guarda carreras M+
-        if rio:
-            save_mythic_runs(conn, char["slug"], rio)
+        # 6. Guarda usuario por defecto
+        cursor = conn.cursor()
+        cursor.execute("INSERT OR IGNORE INTO User (id, username, slug) VALUES (?, ?, ?)",
+                       ("default", "oldmanu78", "oldmanu78"))
 
-    # 8. Guarda mazmorras y rutas
-    print("\n[DUNGEONS] Mazmorras y rutas...")
-    rutas = obtener_rutas_midnight()
-    save_dungeons_and_routes(conn, rutas)
+        # 7. Obtiene perfiles de Raider.io y stats de Armory para cada personaje
+        print("\n[CHARS] Personajes...")
+        for char in CHARACTERS:
+            print(f"\n  {char['name']}:")
+            rio = obtener_perfil_raiderio(char["name"], char["realm"], char["region"])
+            armory = obtener_stats_armory(char["name"], char["realm"], char["region"])
+            save_character(conn, char, rio, armory, "default")
 
-    # 9. Guarda noticias e invasiones
-    print("\n[NEWS] Noticias e invasiones...")
-    save_news(conn)
-    save_invasions(conn)
+            # Guarda carreras M+
+            if rio:
+                save_mythic_runs(conn, char["slug"], rio)
 
-    # Commit final y cierre
-    conn.commit()
-    conn.close()
+        # 8. Guarda mazmorras y rutas
+        print("\n[DUNGEONS] Mazmorras y rutas...")
+        rutas = obtener_rutas_midnight()
+        save_dungeons_and_routes(conn, rutas)
+
+        # 9. Guarda noticias e invasiones
+        print("\n[NEWS] Noticias e invasiones...")
+        save_news(conn)
+        save_invasions(conn)
+
+        # Commit final, cierre y reemplazo atómico de la base publicada
+        conn.commit()
+        conn.close()
+        conn_closed = True
+        tmp_db_path.replace(DB_PATH)
+    except Exception:
+        if not conn_closed:
+            conn.rollback()
+            conn.close()
+        if tmp_db_path.exists():
+            tmp_db_path.unlink()
+        raise
 
     print("\n" + "=" * 50)
     print(f"[OK] Pipeline completado — {datetime.now(timezone.utc).isoformat()}")

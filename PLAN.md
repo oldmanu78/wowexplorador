@@ -181,13 +181,14 @@ Deploy:
 ### Fase 1 — MVP Estático (actual)
 - [x] Schema Prisma + SQLite
 - [x] Proyecto Next.js configurado
-- [ ] Tailwind tema Horda
-- [ ] Dashboard semanal
-- [ ] Galería de personajes
-- [ ] Página individual con 7 tabs
-- [ ] Página de rutas
-- [ ] Pipeline Python → SQLite
-- [ ] CI/CD GitHub Pages
+- [x] Tailwind tema Horda
+- [x] Dashboard semanal
+- [x] Galería de personajes
+- [x] Página individual con 7 tabs
+- [x] Página de rutas
+- [x] Pipeline Python → SQLite
+- [x] CI/CD GitHub Pages
+- [x] Auditoría técnica aplicada: lint limpio, audit limpio, stats/gear visibles, pipeline atómico
 
 ### Fase 2 — Multiusuario
 - [ ] tracked_users.json configurable

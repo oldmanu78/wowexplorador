@@ -2,7 +2,8 @@
 // Muestra afijos, evento, token, world boss, ranking, noticias e invasiones
 // Todos los datos se cargan desde SQLite en build time (SSG)
 import { prisma } from "@/lib/db";
-import { formatNumber, formatGold } from "@/lib/utils";
+import { safeJsonParse } from "@/lib/utils";
+import type { RaiderIoProfile } from "@/lib/wow-types";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import AffixDisplay from "@/components/weekly/AffixDisplay";
 import EventCard from "@/components/weekly/EventCard";
@@ -150,11 +151,6 @@ export default async function HomePage() {
 
 // Extrae el score M+ total del JSON de Raider.io
 function extractScore(rioData: string | null): number {
-  if (!rioData) return 0;
-  try {
-    const rio = JSON.parse(rioData);
-    return rio?.mythic_plus_scores_by_season?.[0]?.scores?.all || 0;
-  } catch {
-    return 0;
-  }
+  const rio = safeJsonParse<RaiderIoProfile>(rioData);
+  return rio?.mythic_plus_scores_by_season?.[0]?.scores?.all || 0;
 }

@@ -1,7 +1,7 @@
 // Tab 7: Notas por mazmorra — editor de texto con localStorage
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import { DUNGEONS } from "@/lib/constants";
 
@@ -10,36 +10,26 @@ interface NotesPanelProps {
 }
 
 export default function NotesPanel({ slug }: NotesPanelProps) {
+  const storageKey = `${slug}_notes`;
   // Dungeon seleccionado actualmente
   const [selectedDungeon, setSelectedDungeon] = useState(DUNGEONS[0]?.slug || "");
-  // Nota actual
-  const [note, setNote] = useState("");
   // Notas cargadas desde localStorage
-  const [savedNotes, setSavedNotes] = useState<Record<string, string>>({});
-
-  // Cargar notas desde localStorage al montar el componente
-  useEffect(() => {
+  const [savedNotes, setSavedNotes] = useState<Record<string, string>>(() => {
+    if (typeof window === "undefined") return {};
     try {
-      const raw = localStorage.getItem(`${slug}_notes`);
-      if (raw) {
-        setSavedNotes(JSON.parse(raw));
-      }
+      return JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, string>;
     } catch {
-      // Ignorar errores de parseo
+      return {};
     }
-  }, [slug]);
+  });
+  const note = savedNotes[selectedDungeon] || "";
 
-  // Cuando cambia el dungeon seleccionado, cargar su nota
-  useEffect(() => {
-    setNote(savedNotes[selectedDungeon] || "");
-  }, [selectedDungeon, savedNotes]);
-
-  // Guardar la nota actual
-  const saveNote = useCallback(() => {
-    const updated = { ...savedNotes, [selectedDungeon]: note };
+  // Guardar la nota actual en memoria y localStorage
+  const saveNote = useCallback((value: string) => {
+    const updated = { ...savedNotes, [selectedDungeon]: value };
     setSavedNotes(updated);
-    localStorage.setItem(`${slug}_notes`, JSON.stringify(updated));
-  }, [savedNotes, selectedDungeon, note, slug]);
+    localStorage.setItem(storageKey, JSON.stringify(updated));
+  }, [savedNotes, selectedDungeon, storageKey]);
 
   return (
     <Card>
@@ -71,7 +61,7 @@ export default function NotesPanel({ slug }: NotesPanelProps) {
         {/* Editor de nota */}
         <textarea
           value={note}
-          onChange={(e) => setNote(e.target.value)}
+          onChange={(e) => saveNote(e.target.value)}
           placeholder="Escribe tus notas para esta mazmorra..."
           rows={6}
           className="w-full bg-horda-bg border border-horda-border rounded px-3 py-2 text-horda-text text-sm font-exo focus:outline-none focus:border-horda-gold resize-vertical placeholder:text-horda-muted"
@@ -80,10 +70,10 @@ export default function NotesPanel({ slug }: NotesPanelProps) {
         {/* Botón guardar */}
         <div className="flex justify-end mt-3">
           <button
-            onClick={saveNote}
+            onClick={() => saveNote(note)}
             className="px-4 py-2 text-xs font-exo rounded bg-horda-gold text-black font-medium hover:bg-horda-gold-dark transition-colors"
           >
-            Guardar Nota
+            Guardado
           </button>
         </div>
 

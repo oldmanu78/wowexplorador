@@ -4,6 +4,8 @@
 import { prisma } from "@/lib/db";
 import { CHARACTER_TABS } from "@/lib/constants";
 import { safeJsonParse } from "@/lib/utils";
+import type { RaiderIoProfile, RioRun } from "@/lib/wow-types";
+import Link from "next/link";
 import Tabs from "@/components/ui/Tabs";
 import HeroSection from "@/components/characters/HeroSection";
 import StatsPanel from "@/components/characters/StatsPanel";
@@ -41,41 +43,46 @@ export default async function CharacterPage({
       <div className="max-w-7xl mx-auto px-4 py-20 text-center">
         <h1 className="font-cinzel text-2xl text-horda-gold mb-4">Personaje no encontrado</h1>
         <p className="text-horda-muted font-exo">El personaje &quot;{slug}&quot; no existe.</p>
-        <a href="/personajes" className="text-horda-gold hover:underline font-exo mt-4 inline-block">
-          ← Volver a personajes
-        </a>
+        <Link href="/personajes" className="text-horda-gold hover:underline font-exo mt-4 inline-block">
+          Volver a personajes
+        </Link>
       </div>
     );
   }
 
   // Parse datos de Raider.io
-  const rio = safeJsonParse<Record<string, any>>(character.rioData);
+  const rio = safeJsonParse<RaiderIoProfile>(character.rioData);
 
   // Scores por dungeon desde las best runs
   const bestRunsRaw = rio?.mythic_plus_best_runs || [];
-  const dungeonScores = bestRunsRaw.map((run: any) => ({
-    slug: run.dungeon?.slug || "",
+  const dungeonScores = bestRunsRaw.map((run) => ({
+    slug: typeof run.dungeon === "string" ? run.dungeon : run.dungeon?.slug || "",
     score: run.mythic_rating || 0,
     level: run.mythic_level || 0,
   }));
 
   // Carreras recientes
   const recentRunsRaw = rio?.mythic_plus_recent_runs || [];
-  const recentRuns = recentRunsRaw.map((run: any) => ({
+  const toRunPanelData = (run: RioRun, isBest: boolean) => ({
     dungeonSlug: typeof run.dungeon === "string" ? run.dungeon : run.dungeon?.slug || "",
     score: run.mythic_rating || 0,
     level: run.mythic_level || 0,
     completedAt: run.completed_at || new Date().toISOString(),
-    isBest: false,
-  }));
+    isBest,
+  });
+  const recentRuns = recentRunsRaw.map((run) => toRunPanelData(run, false));
 
   // Mejores carreras
-  const bestRuns = bestRunsRaw.map((run: any) => ({
-    dungeonSlug: typeof run.dungeon === "string" ? run.dungeon : run.dungeon?.slug || "",
-    score: run.mythic_rating || 0,
-    level: run.mythic_level || 0,
-    completedAt: run.completed_at || new Date().toISOString(),
-    isBest: true,
+  const bestRuns = bestRunsRaw.map((run) => toRunPanelData(run, true));
+
+  const gearItems = Object.entries(rio?.gear?.items || {}).map(([slot, item]) => ({
+    slot,
+    item: item.name || "Objeto desconocido",
+    icon: item.icon || "?",
+    wowheadId: item.item_id,
+    source: item.item_level ? `ilvl ${item.item_level}` : "Raider.io",
+    prio: "B",
+    isTier: Boolean(item.tier),
   }));
 
   return (
@@ -106,7 +113,7 @@ export default async function CharacterPage({
         </div>
 
         <div data-tab="gear" key="gear">
-          <GearPanel gear={[]} />
+          <GearPanel gear={gearItems} />
         </div>
 
         <div data-tab="dungeons" key="dungeons">

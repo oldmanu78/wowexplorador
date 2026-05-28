@@ -2,6 +2,7 @@
 // Colores de score, formateo, clases CSS condicionales
 
 import { SCORE_TIERS } from "./constants";
+import type { RaiderIoProfile } from "./wow-types";
 
 // Retorna el color HTML correspondiente al score M+
 // Basado en los thresholds: 3000+, 2000+, 1500+, 1000+, 0+
@@ -90,7 +91,7 @@ export function safeJsonParse<T>(str: string | null | undefined): T | null {
 
 // Obtiene el score M+ total desde el perfil de Raider.io
 export function getRioScore(rioData: string | null): number {
-  const rio = safeJsonParse<Record<string, any>>(rioData);
+  const rio = safeJsonParse<RaiderIoProfile>(rioData);
   if (!rio) return 0;
   const scores = rio?.mythic_plus_scores_by_season;
   if (!scores || !scores[0]?.scores?.all) return 0;
@@ -99,6 +100,12 @@ export function getRioScore(rioData: string | null): number {
 
 // Obtiene el item level equipado desde Raider.io
 export function getRioIlvl(rioData: string | null): number {
-  const rio = safeJsonParse<Record<string, any>>(rioData);
+  const rio = safeJsonParse<RaiderIoProfile>(rioData);
   return rio?.gear?.item_level_equipped || 0;
+}
+
+export function withBasePath(path: string | null | undefined): string {
+  if (!path) return "";
+  if (!path.startsWith("/")) return path;
+  return `${process.env.NEXT_PUBLIC_BASE_PATH || ""}${path}`;
 }

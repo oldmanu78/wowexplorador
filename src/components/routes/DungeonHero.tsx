@@ -1,6 +1,8 @@
 // Hero de mazmorra — imagen, info y guías
-import Card, { CardBody } from "@/components/ui/Card";
+import { CardBody } from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
+import { withBasePath } from "@/lib/utils";
+import Image from "next/image";
 
 interface DungeonHeroProps {
   name: string;
@@ -25,19 +27,21 @@ export default function DungeonHero({
 }: DungeonHeroProps) {
   const typeColor = type === "nueva" ? "#00c8ff" : "#a78bfa";
   const typeLabel = type === "nueva" ? "Nueva" : "Clásica";
+  const imageSrc = withBasePath(img);
 
   return (
     <div className="relative rounded-lg overflow-hidden border border-horda-border mb-6">
       {/* Imagen de fondo con overlay oscuro */}
       <div className="h-48 md:h-64 bg-horda-surface relative">
-        <img
-          src={img}
-          alt={name}
-          className="w-full h-full object-cover opacity-40"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
-          }}
-        />
+        {imageSrc && (
+          <Image
+            src={imageSrc}
+            alt={name}
+            fill
+            sizes="100vw"
+            className="object-cover opacity-40"
+          />
+        )}
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-horda-bg via-horda-bg/60 to-transparent" />
       </div>

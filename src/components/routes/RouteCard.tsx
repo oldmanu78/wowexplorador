@@ -2,7 +2,8 @@
 // Muestra thumbnail, nombre, tipo (pug/high) y descripción
 import Card, { CardBody } from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import { cn } from "@/lib/utils";
+import { withBasePath } from "@/lib/utils";
+import Image from "next/image";
 
 interface RouteCardProps {
   name: string;
@@ -16,6 +17,7 @@ export default function RouteCard({ name, url, type, desc, thumb }: RouteCardPro
   // Color según tipo de ruta
   const typeColor = type === "high" ? "#f97316" : "#4ade80";
   const typeLabel = type === "high" ? "High Key" : "PUG";
+  const thumbSrc = withBasePath(thumb);
 
   return (
     <a
@@ -27,20 +29,14 @@ export default function RouteCard({ name, url, type, desc, thumb }: RouteCardPro
       <Card className="h-full">
         <CardBody>
           {/* Thumbnail o placeholder */}
-          <div className="w-full h-28 bg-horda-bg rounded border border-horda-border mb-3 overflow-hidden flex items-center justify-center">
-            {thumb ? (
-              <img
-                src={thumb}
+          <div className="w-full h-28 bg-horda-bg rounded border border-horda-border mb-3 overflow-hidden flex items-center justify-center relative">
+            {thumbSrc ? (
+              <Image
+                src={thumbSrc}
                 alt={name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                  // Muestra icono fallback
-                  const parent = (e.target as HTMLElement).parentElement;
-                  if (parent) {
-                    parent.innerHTML = '<span class="text-3xl">🗺️</span>';
-                  }
-                }}
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="object-cover"
               />
             ) : (
               <span className="text-3xl">🗺️</span>

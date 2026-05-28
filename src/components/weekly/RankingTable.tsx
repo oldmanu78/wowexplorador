@@ -90,7 +90,7 @@ export default function RankingTable({ tank, dps, healer }: RankingTableProps) {
               </div>
               {/* Score + clase */}
               <div className="flex items-center gap-2">
-                <Badge color={entry.class ? undefined : undefined} variant="outline" size="sm">
+                <Badge variant="outline" size="sm">
                   {entry.class}
                 </Badge>
                 <span className="font-bold text-sm font-exo" style={{

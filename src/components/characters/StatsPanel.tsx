@@ -2,16 +2,11 @@
 // Muestra score M+, item level, stats secundarias desde Blizzard API o Armory
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import { getRioScore, getRioIlvl, safeJsonParse } from "@/lib/utils";
+import type { ArmoryStats, ArmoryStatValue } from "@/lib/wow-types";
 
 interface StatsPanelProps {
   rioData: string | null;
   armory: string | null;
-}
-
-interface ArmoryStats {
-  ilvl: number;
-  items?: Record<string, any>;
-  stats?: Record<string, number>;
 }
 
 export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
@@ -21,26 +16,23 @@ export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
   // Intenta parsear datos de Armory Blizzard (stats detallados)
   const armoryStats = safeJsonParse<ArmoryStats>(armory);
 
-  // Stats secundarias desde Armory (más completas que Raider.io)
-  const stats = armoryStats?.stats;
   const ilvl = armoryStats?.ilvl || rioIlvl;
+  const statValue = (stat?: ArmoryStatValue) => stat?.value;
 
   // Lista de stats a mostrar con sus labels en español
-  const statList = stats
-    ? [
-        { label: "Fuerza", value: stats.strength },
-        { label: "Agilidad", value: stats.agility },
-        { label: "Intelecto", value: stats.intellect },
-        { label: "Aguante", value: stats.stamina },
-        { label: "Crítico", value: stats.crit },
-        { label: "Celeridad", value: stats.haste },
-        { label: "Maestría", value: stats.mastery },
-        { label: "Versatilidad", value: stats.versatility },
-        { label: "Leach", value: stats.leech },
-        { label: "Velocidad", value: stats.speed },
-        { label: "Evasión", value: stats.avoidance },
-      ].filter((s) => s.value != null)
-    : [];
+  const statList = [
+    { label: "Fuerza", value: statValue(armoryStats?.strength) },
+    { label: "Agilidad", value: statValue(armoryStats?.agility) },
+    { label: "Intelecto", value: statValue(armoryStats?.intellect) },
+    { label: "Aguante", value: statValue(armoryStats?.stamina) },
+    { label: "Crítico", value: statValue(armoryStats?.crit) },
+    { label: "Celeridad", value: statValue(armoryStats?.haste) },
+    { label: "Maestría", value: statValue(armoryStats?.mastery) },
+    { label: "Versatilidad", value: statValue(armoryStats?.versatility) },
+    { label: "Leech", value: statValue(armoryStats?.leech) },
+    { label: "Velocidad", value: statValue(armoryStats?.speed) },
+    { label: "Evasión", value: statValue(armoryStats?.avoidance) },
+  ].filter((s) => s.value != null);
 
   return (
     <div className="space-y-6">
@@ -93,7 +85,7 @@ export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
       )}
 
       {/* Mensaje si no hay stats */}
-      {statList.length === 0 && !stats && (
+      {statList.length === 0 && (
         <Card>
           <CardBody>
             <p className="text-horda-muted text-sm font-exo text-center">

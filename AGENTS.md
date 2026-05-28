@@ -179,3 +179,5 @@ python scripts/validate.py           # Validar datos
 - **World boss rotación**: 4 semanas: Lu'ashal → Cragpine → Thorm'belan → Predaxas
 - **Reset semanal**: NA, martes 15:00 UTC
 - **Para migrar a PostgreSQL**: Cambiar `provider: "sqlite"` → `"postgresql"` en schema.prisma + DATABASE_URL en .env
+- **Auditoría 2026-05-28 aplicada**: ESLint queda limpio, `npm audit` queda sin vulnerabilidades moderadas, Stats lee el JSON real de Armory, Gear se alimenta desde Raider.io, las imágenes pasan por `NEXT_PUBLIC_BASE_PATH` y el pipeline escribe primero `prisma/wow.tmp.db` antes de reemplazar `prisma/wow.db`.
+- **Build local**: si `.next` queda bloqueado por permisos de Windows, verificar en una copia limpia o usando un workspace sin `.next`; `.next/` está ignorado y no afecta GitHub Actions.

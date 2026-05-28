@@ -5,6 +5,7 @@ import Card, { CardBody } from "@/components/ui/Card";
 import Badge, { RoleBadge, ScoreBadge } from "@/components/ui/Badge";
 import { CLASS_COLORS } from "@/lib/constants";
 import { getRioScore, getRioIlvl, safeJsonParse } from "@/lib/utils";
+import type { RaiderIoProfile } from "@/lib/wow-types";
 
 interface CharacterCardProps {
   slug: string;        // URL slug
@@ -28,7 +29,7 @@ export default function CharacterCard({
   const classColor = CLASS_COLORS[className] || "#F8B700";
 
   // Progreso de raid desde Raider.io
-  const rio = safeJsonParse<Record<string, any>>(rioData);
+  const rio = safeJsonParse<RaiderIoProfile>(rioData);
   const raidProg = rio?.raid_progression?.["tier-mn-1"];
   const mythicBosses = raidProg?.mythic_bosses_killed || 0;
   const totalBosses = raidProg?.total_bosses || 9;
