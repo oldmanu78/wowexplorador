@@ -1,0 +1,109 @@
+// Esquema de base de datos para WoW Explorer
+// SQLite en desarrollo/fase 1, PostgreSQL cuando migre a servidor
+// La URL de conexión se configura en prisma.config.ts y .env
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Usuario del sistema (multiusuario desde el inicio)
+model User {
+  id         String      @id @default(cuid())
+  username   String      @unique
+  slug       String      @unique
+  characters Character[]
+  createdAt  DateTime    @default(now())
+}
+
+// Personaje de WoW trackeado, pertenece a un usuario
+model Character {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  realm     String   @default("Quel'Thalas")
+  region    String   @default("us")
+  class     String
+  spec      String
+  role      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  rioData   String?
+  armory    String?
+  mythicRuns MythicRun[]
+  isActive   Boolean     @default(true)
+  createdAt  DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+// Snapshot semanal de datos globales
+model WeeklySnapshot {
+  id         String   @id @default(cuid())
+  weekStart  DateTime
+  affixes    String
+  event      String
+  tokenPrice String?
+  worldBoss  String
+  createdAt  DateTime @default(now())
+}
+
+// Metadatos de mazmorras Midnight S1
+model Dungeon {
+  id    String  @id
+  slug  String  @unique
+  name  String
+  type  String
+  sigla String
+  jefes Int
+  zona  String
+  timer String
+  desc  String
+  img   String
+  routes Route[]
+}
+
+// Rutas de Keystone.guru por mazmorra
+model Route {
+  id         String @id @default(cuid())
+  dungeonId  String
+  dungeon    Dungeon @relation(fields: [dungeonId], references: [id])
+  name       String
+  url        String
+  type       String
+  desc       String
+  thumb      String?
+}
+
+// Noticias de WoW
+model News {
+  id     String @id @default(cuid())
+  title  String
+  link   String
+  date   String
+  source String
+}
+
+// Invasiones de la semana
+model Invasion {
+  id     String @id @default(cuid())
+  zone   String
+  npcs   Int
+  reward String
+}
+
+// Carreras M+ individuales
+model MythicRun {
+  id          String   @id @default(cuid())
+  characterId String
+  character   Character @relation(fields: [characterId], references: [id])
+  dungeonSlug String
+  score       Float
+  level       Int
+  completedAt DateTime
+  isBest      Boolean  @default(false)
+  weekStart   DateTime?
+}

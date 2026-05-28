@@ -1,0 +1,83 @@
+# CI/CD Pipeline para WoW Explorer
+# 1. Ejecuta el pipeline Python para obtener datos de APIs → genera SQLite
+# 2. Genera el cliente Prisma y construye Next.js (static export)
+# 3. Despliega a GitHub Pages
+# Nota: La BD SQLite se regenera en cada build, no se commitea
+name: Build & Deploy
+
+# Triggers: push a main, programado semanal (martes 15:00 UTC), o manual
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 15 * * 2" # Tuesday 15:00 UTC (reset semanal de WoW)
+  workflow_dispatch: # Permite ejecución manual desde GitHub UI
+
+# Permisos para deploy a GitHub Pages
+permissions:
+  pages: write
+  id-token: write
+
+# Solo un deploy a la vez
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # 1. Checkout del repositorio
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2. Setup de Python 3.x
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      # 3. Ejecuta el pipeline de datos → genera prisma/wow.db
+      - name: Run data pipeline
+        run: python scripts/actualizar_datos.py
+        env:
+          BLIZZARD_CLIENT_ID: ${{ secrets.BLIZZARD_CLIENT_ID }}
+          BLIZZARD_CLIENT_SECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
+
+      # 4. Setup de Node.js 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # 5. Instala dependencias npm
+      - name: Install dependencies
+        run: npm ci
+
+      # 6. Genera el cliente Prisma desde el schema
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      # 7. Construye Next.js (static export → out/)
+      - name: Build Next.js
+        run: npm run build
+
+      # 8. Configura GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # 9. Sube el artifact (carpeta out/)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./out"
+
+      # 10. Despliega a GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

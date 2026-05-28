@@ -1,65 +1,160 @@
-import Image from "next/image";
+// Dashboard semanal — página principal de WoW Explorer
+// Muestra afijos, evento, token, world boss, ranking, noticias e invasiones
+// Todos los datos se cargan desde SQLite en build time (SSG)
+import { prisma } from "@/lib/db";
+import { formatNumber, formatGold } from "@/lib/utils";
+import Card, { CardBody, CardHeader } from "@/components/ui/Card";
+import AffixDisplay from "@/components/weekly/AffixDisplay";
+import EventCard from "@/components/weekly/EventCard";
+import WorldBossCard from "@/components/weekly/WorldBossCard";
+import TokenPrice from "@/components/weekly/TokenPrice";
+import NewsFeed from "@/components/weekly/NewsFeed";
+import InvasionList from "@/components/weekly/InvasionList";
+import RankingTable from "@/components/weekly/RankingTable";
 
-export default function Home() {
+export default async function HomePage() {
+  // Consultas a SQLite en build time
+  // weekly: último snapshot semanal
+  const weekly = await prisma.weeklySnapshot.findFirst({
+    orderBy: { weekStart: "desc" },
+  });
+
+  // noticias: todas ordenadas por fecha descendente
+  const news = await prisma.news.findMany({
+    orderBy: { date: "desc" },
+  });
+
+  // invasiones: todas
+  const invasions = await prisma.invasion.findMany();
+
+  // characters activos para ranking
+  const characters = await prisma.character.findMany({
+    where: { isActive: true },
+  });
+
+  // Construyo el ranking a partir de los personajes activos
+  const rankingData = {
+    tank: characters
+      .filter((c) => c.role === "TANK")
+      .map((c) => ({
+        name: c.name,
+        class: c.class,
+        spec: c.spec,
+        score: extractScore(c.rioData),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5),
+    dps: characters
+      .filter((c) => c.role === "DPS")
+      .map((c) => ({
+        name: c.name,
+        class: c.class,
+        spec: c.spec,
+        score: extractScore(c.rioData),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5),
+    healer: characters
+      .filter((c) => c.role === "HEALER")
+      .map((c) => ({
+        name: c.name,
+        class: c.class,
+        spec: c.spec,
+        score: extractScore(c.rioData),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5),
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      {/* Fondo decorativo: Horde crest watermark */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.03] bg-repeat"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='50,5 65,35 95,35 70,55 80,90 50,70 20,90 30,55 5,35 35,35' fill='%23F8B700'/%3E%3C/svg%3E")`,
+          backgroundSize: "200px 200px",
+        }}
+      />
+
+      {/* Layout de 2 columnas (70/30) que colapsa a 1 en mobile */}
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 relative z-10">
+        {/* Columna principal */}
+        <div className="space-y-6">
+          {/* Título de la semana */}
+          <h2 className="font-cinzel text-2xl text-horda-gold tracking-wider">
+            PANEL SEMANAL
+          </h2>
+
+          {/* Sección de afijos con Card */}
+          <Card>
+            <CardHeader>
+              <h3 className="font-cinzel text-horda-gold text-sm tracking-wide">AFIJOS M+</h3>
+            </CardHeader>
+            <CardBody>
+              <AffixDisplay affixes={weekly?.affixes || ""} />
+            </CardBody>
+          </Card>
+
+          {/* Grid de cards pequeñas: Evento + Token + World Boss */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <EventCard event={weekly?.event || ""} />
+            <TokenPrice price={weekly?.tokenPrice || "Buscando..."} />
+            <WorldBossCard boss={weekly?.worldBoss || ""} />
+          </div>
+
+          {/* Ranking M+ */}
+          <RankingTable
+            tank={rankingData.tank}
+            dps={rankingData.dps}
+            healer={rankingData.healer}
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Sidebar — Noticias + Invasiones */}
+        <div className="space-y-6">
+          <h2 className="font-cinzel text-2xl text-horda-gold tracking-wider">
+            ACTUALIDAD
+          </h2>
+
+          <NewsFeed
+            news={news.map((n) => ({
+              id: n.id,
+              title: n.title,
+              link: n.link,
+              date: n.date,
+              source: n.source,
+            }))}
+          />
+
+          <InvasionList
+            invasions={invasions.map((i) => ({
+              id: i.id,
+              zone: i.zone,
+              npcs: i.npcs,
+              reward: i.reward,
+            }))}
+          />
+
+          {/* Última actualización */}
+          {weekly && (
+            <p className="text-xs text-horda-muted text-center">
+              Última actualización: {weekly.weekStart.toLocaleDateString("es-CL")}
+            </p>
+          )}
         </div>
-      </main>
+      </div>
     </div>
   );
+}
+
+// Extrae el score M+ total del JSON de Raider.io
+function extractScore(rioData: string | null): number {
+  if (!rioData) return 0;
+  try {
+    const rio = JSON.parse(rioData);
+    return rio?.mythic_plus_scores_by_season?.[0]?.scores?.all || 0;
+  } catch {
+    return 0;
+  }
 }

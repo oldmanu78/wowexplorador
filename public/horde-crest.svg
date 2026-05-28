@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Emblema de la Horda - World of Warcraft -->
+  <!-- Versión estilizada con los colores de la Horda: rojo oscuro y oro -->
+  
+  <!-- Sombra exterior -->
+  <polygon
+    points="50,3 67,33 97,33 73,53 83,93 50,73 17,93 27,53 3,33 33,33"
+    fill="#1a0000"
+    stroke="none"
+    transform="translate(1,2)"
+    opacity="0.5"
+  />
+  
+  <!-- Forma principal del emblema (cráneo con cuernos) -->
+  <polygon
+    points="50,5 65,35 95,35 70,55 80,90 50,70 20,90 30,55 5,35 35,35"
+    fill="#8B0000"
+    stroke="#F8B700"
+    stroke-width="2.5"
+    stroke-linejoin="round"
+  />
+  
+  <!-- Detalle del ojo/círculo central -->
+  <circle
+    cx="50" cy="48" r="13"
+    fill="#0a0a0a"
+    stroke="#F8B700"
+    stroke-width="2"
+  />
+  
+  <!-- Pupila -->
+  <circle
+    cx="50" cy="48" r="5"
+    fill="#F8B700"
+    opacity="0.9"
+  />
+  
+  <!-- Pupila interna -->
+  <circle
+    cx="50" cy="48" r="2.5"
+    fill="#8B0000"
+  />
+  
+  <!-- Destaque en las puntas de los cuernos -->
+  <circle cx="20" cy="25" r="2" fill="#F8B700" opacity="0.6" />
+  <circle cx="80" cy="25" r="2" fill="#F8B700" opacity="0.6" />
+  
+  <!-- Destaque inferior -->
+  <circle cx="50" cy="88" r="2" fill="#F8B700" opacity="0.4" />
+</svg>
