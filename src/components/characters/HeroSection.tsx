@@ -1,7 +1,7 @@
 // Hero section de la página de personaje
 // Muestra nombre, clase, spec, rol, score M+, ilvl y links externos
 import Badge, { RoleBadge, ScoreBadge } from "@/components/ui/Badge";
-import { CLASS_COLORS, ROLE_EMOJI } from "@/lib/constants";
+import { CLASS_COLORS, ROLE_TEXT } from "@/lib/constants";
 import { getRioScore, getRioIlvl } from "@/lib/utils";
 
 interface HeroSectionProps {
@@ -54,7 +54,7 @@ export default function HeroSection({
 
           {/* Spec + Clase */}
           <p className="text-horda-text text-sm md:text-base font-exo mt-1">
-            {spec} {ROLE_EMOJI[role] || ""}
+            {spec} · {ROLE_TEXT[role] || role}
           </p>
 
           {/* Badges */}

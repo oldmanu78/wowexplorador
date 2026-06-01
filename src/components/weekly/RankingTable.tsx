@@ -5,7 +5,8 @@
 import { useState } from "react";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import { cn } from "@/lib/utils";
+import { ROLE_COLORS } from "@/lib/constants";
+import { cn, getScoreColor } from "@/lib/utils";
 
 // Datos de un personaje en el ranking
 interface RankingEntry {
@@ -23,9 +24,9 @@ interface RankingTableProps {
 
 // Roles disponibles para el filtro
 const ROLES = [
-  { key: "tank", label: "Tanque", color: "#4488ff" },
-  { key: "dps", label: "DPS", color: "#ff4444" },
-  { key: "healer", label: "Sanador", color: "#44cc88" },
+  { key: "tank", label: "Tanque", color: ROLE_COLORS.TANK },
+  { key: "dps", label: "DPS", color: ROLE_COLORS.DPS },
+  { key: "healer", label: "Sanador", color: ROLE_COLORS.HEALER },
 ];
 
 export default function RankingTable({ tank, dps, healer }: RankingTableProps) {
@@ -79,9 +80,15 @@ export default function RankingTable({ tank, dps, healer }: RankingTableProps) {
             >
               {/* Posición + nombre */}
               <div className="flex items-center gap-3">
-                {/* Medalla para top 3, número para el resto */}
-                <span className="text-lg w-6 text-center">
-                  {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`}
+                {/* Posición del ranking */}
+                <span
+                  className={cn(
+                    "w-7 h-7 rounded-full border flex items-center justify-center text-xs font-bold font-exo",
+                    i < 3 ? "border-horda-gold text-horda-gold bg-horda-gold/10" : "border-horda-border text-horda-muted"
+                  )}
+                  aria-label={`Posición ${i + 1}`}
+                >
+                  {i + 1}
                 </span>
                 <div>
                   <p className="text-horda-text text-sm font-exo">{entry.name}</p>
@@ -93,9 +100,7 @@ export default function RankingTable({ tank, dps, healer }: RankingTableProps) {
                 <Badge variant="outline" size="sm">
                   {entry.class}
                 </Badge>
-                <span className="font-bold text-sm font-exo" style={{
-                  color: entry.score >= 2000 ? "#a335ee" : entry.score >= 1500 ? "#0070dd" : "#ffffff"
-                }}>
+                <span className="font-bold text-sm font-exo" style={{ color: getScoreColor(entry.score) }}>
                   {entry.score.toLocaleString("es-CL")}
                 </span>
               </div>

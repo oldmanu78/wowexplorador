@@ -1,6 +1,7 @@
 // Componente Badge para etiquetas de clase, rol, score y tipo
 // Usado en tarjetas de personaje, rutas, y elementos de lista
-import { cn } from "@/lib/utils";
+import { cn, getScoreColor } from "@/lib/utils";
+import { ROLE_COLORS, ROLE_TEXT } from "@/lib/constants";
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -63,15 +64,8 @@ export default function Badge({
 
 // Badge específico para score M+ (color automático según el rango)
 export function ScoreBadge({ score, size }: { score: number; size?: "sm" | "md" }) {
-  const color =
-    score >= 3000 ? "#ff8000" :
-    score >= 2000 ? "#a335ee" :
-    score >= 1500 ? "#0070dd" :
-    score >= 1000 ? "#1eff00" :
-    "#ffffff";
-
   return (
-    <Badge color={color} variant="filled" size={size}>
+    <Badge color={getScoreColor(score)} variant="filled" size={size}>
       {score.toLocaleString("es-CL")}
     </Badge>
   );
@@ -79,19 +73,9 @@ export function ScoreBadge({ score, size }: { score: number; size?: "sm" | "md" 
 
 // Badge de rol (TANK/HEALER/DPS)
 export function RoleBadge({ role, size }: { role: string; size?: "sm" | "md" }) {
-  const color =
-    role === "TANK" ? "#4488ff" :
-    role === "HEALER" ? "#44cc88" :
-    "#ff4444";
-
-  const label =
-    role === "TANK" ? "🛡️ Tanque" :
-    role === "HEALER" ? "💚 Sanador" :
-    "⚔️ DPS";
-
   return (
-    <Badge color={color} variant="filled" size={size}>
-      {label}
+    <Badge color={ROLE_COLORS[role] || ROLE_COLORS.DPS} variant="filled" size={size}>
+      {ROLE_TEXT[role] || role}
     </Badge>
   );
 }

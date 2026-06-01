@@ -63,21 +63,31 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      # 7. Construye Next.js (static export → out/)
+      # 7. Controles de calidad antes de publicar
+      - name: Lint
+        run: npm run lint
+
+      - name: Validate data and project structure
+        run: npm run validate
+
+      - name: Security audit
+        run: npm audit --audit-level=moderate
+
+      # 8. Construye Next.js (static export → out/)
       - name: Build Next.js
         run: npm run build
 
-      # 8. Configura GitHub Pages
+      # 9. Configura GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      # 9. Sube el artifact (carpeta out/)
+      # 10. Sube el artifact (carpeta out/)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./out"
 
-      # 10. Despliega a GitHub Pages
+      # 11. Despliega a GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

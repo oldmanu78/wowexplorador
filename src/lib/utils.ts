@@ -13,6 +13,10 @@ export function getScoreColor(score: number): string {
   return "#ffffff";
 }
 
+export function getScoreDisplayColor(score: number, emptyColor = "#6b7280"): string {
+  return score > 0 ? getScoreColor(score) : emptyColor;
+}
+
 // Retorna la clase CSS para el color de score (usado con Tailwind)
 export function getScoreColorClass(score: number): string {
   if (score >= 3000) return "text-score-elite";

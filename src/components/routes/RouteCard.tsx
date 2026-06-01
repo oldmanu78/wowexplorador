@@ -39,7 +39,12 @@ export default function RouteCard({ name, url, type, desc, thumb }: RouteCardPro
                 className="object-cover"
               />
             ) : (
-              <span className="text-3xl">🗺️</span>
+              <span
+                className="inline-flex h-12 w-12 items-center justify-center rounded border border-horda-border text-xs font-bold text-horda-gold"
+                aria-label="Ruta sin imagen"
+              >
+                MAP
+              </span>
             )}
           </div>
 

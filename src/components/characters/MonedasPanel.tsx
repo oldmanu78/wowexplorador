@@ -9,14 +9,14 @@ interface MonedasPanelProps {
   slug: string; // para key de localStorage (ej: "kr" antes, ahora usamos slug)
 }
 
-// Monedas disponibles con su label, icono y key de localStorage
+// Monedas disponibles con su label, color y key de localStorage
 const MONEDAS_CONFIG = [
-  { key: "valorstones", label: "Valorstones", icon: "💎" },
-  { key: "whelp", label: "Whelp's Crest", icon: "🟢" },
-  { key: "drake", label: "Drake's Crest", icon: "🔵" },
-  { key: "wyrm", label: "Wyrm's Crest", icon: "🟣" },
-  { key: "aspect", label: "Aspect's Crest", icon: "🟠" },
-  { key: "gold", label: "Oro", icon: "🪙" },
+  { key: "valorstones", label: "Valorstones", color: "#7dd3fc" },
+  { key: "whelp", label: "Whelp's Crest", color: "#1eff00" },
+  { key: "drake", label: "Drake's Crest", color: "#0070dd" },
+  { key: "wyrm", label: "Wyrm's Crest", color: "#a335ee" },
+  { key: "aspect", label: "Aspect's Crest", color: "#ff8000" },
+  { key: "gold", label: "Oro", color: "#f8b700" },
 ];
 
 // Estado inicial por defecto
@@ -71,8 +71,9 @@ export default function MonedasPanel({ slug }: MonedasPanelProps) {
         <h3 className="font-cinzel text-horda-gold text-sm tracking-wide">MONEDAS</h3>
         {/* Botón de reset */}
         <button
+          type="button"
           onClick={resetMonedas}
-          className="text-xs text-horda-muted hover:text-horda-red-bright transition-colors font-exo"
+          className="min-h-10 px-2 text-xs text-horda-muted hover:text-horda-red-bright transition-colors font-exo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-horda-gold focus-visible:ring-offset-2 focus-visible:ring-offset-horda-surface"
         >
           Resetear
         </button>
@@ -84,9 +85,13 @@ export default function MonedasPanel({ slug }: MonedasPanelProps) {
               key={moneda.key}
               className="flex items-center justify-between bg-horda-bg rounded border border-horda-border px-4 py-3"
             >
-              {/* Label con icono */}
+              {/* Label con swatch de color */}
               <label htmlFor={`moneda-${moneda.key}`} className="flex items-center gap-2">
-                <span>{moneda.icon}</span>
+                <span
+                  aria-hidden="true"
+                  className="h-3 w-3 rounded-full border border-white/20 shadow-sm"
+                  style={{ backgroundColor: moneda.color }}
+                />
                 <span className="text-horda-text text-sm font-exo">{moneda.label}</span>
               </label>
 
@@ -97,7 +102,7 @@ export default function MonedasPanel({ slug }: MonedasPanelProps) {
                 min="0"
                 value={monedas[moneda.key] || 0}
                 onChange={(e) => updateMoneda(moneda.key, e.target.value)}
-                className="w-24 text-right bg-horda-surface border border-horda-border rounded px-3 py-1.5 text-horda-text font-exo text-sm focus:outline-none focus:border-horda-gold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="min-h-11 w-24 text-right bg-horda-surface border border-horda-border rounded px-3 py-1.5 text-horda-text font-exo text-sm focus:outline-none focus:border-horda-gold focus:ring-2 focus:ring-horda-gold/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           ))}

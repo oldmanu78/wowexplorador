@@ -180,4 +180,5 @@ python scripts/validate.py           # Validar datos
 - **Reset semanal**: NA, martes 15:00 UTC
 - **Para migrar a PostgreSQL**: Cambiar `provider: "sqlite"` → `"postgresql"` en schema.prisma + DATABASE_URL en .env
 - **Auditoría 2026-05-28 aplicada**: ESLint queda limpio, `npm audit` queda sin vulnerabilidades moderadas, Stats lee el JSON real de Armory, Gear se alimenta desde Raider.io, las imágenes pasan por `NEXT_PUBLIC_BASE_PATH` y el pipeline escribe primero `prisma/wow.tmp.db` antes de reemplazar `prisma/wow.db`.
+- **Modernización 2026-06-01 aplicada**: CI/CD ahora ejecuta `npm run lint`, `npm run validate` y `npm audit --audit-level=moderate` antes del build; `Tabs` incluye roles ARIA, navegación por teclado y focus visible; se quitaron emojis estructurales de roles/ranking/monedas/rutas en favor de texto y swatches; colores de score/rol se centralizan en `constants.ts`/`utils.ts`; se eliminó código muerto duplicado en `obtener_stats_armory`.
 - **Build local**: si `.next` queda bloqueado por permisos de Windows, verificar en una copia limpia o usando un workspace sin `.next`; `.next/` está ignorado y no afecta GitHub Actions.

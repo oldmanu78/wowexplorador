@@ -32,13 +32,6 @@ export const ROLE_TEXT: Record<string, string> = {
   DPS: "DPS",
 };
 
-// Emojis por rol
-export const ROLE_EMOJI: Record<string, string> = {
-  TANK: "🛡️",
-  HEALER: "💚",
-  DPS: "⚔️",
-};
-
 // Mazmorras de Midnight S1 con metadatos
 export interface DungeonMeta {
   slug: string;

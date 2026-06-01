@@ -1,7 +1,7 @@
 // Tab 1: Stats del personaje
 // Muestra score M+, item level, stats secundarias desde Blizzard API o Armory
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
-import { getRioScore, getRioIlvl, safeJsonParse } from "@/lib/utils";
+import { getRioScore, getRioIlvl, getScoreColor, safeJsonParse } from "@/lib/utils";
 import type { ArmoryStats, ArmoryStatValue } from "@/lib/wow-types";
 
 interface StatsPanelProps {
@@ -41,9 +41,7 @@ export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
         <Card>
           <CardBody className="text-center">
             <p className="text-horda-muted text-xs font-exo mb-1">SCORE M+</p>
-            <p className="text-3xl font-bold font-exo" style={{
-              color: score >= 3000 ? "#ff8000" : score >= 2000 ? "#a335ee" : score >= 1500 ? "#0070dd" : "#ffffff"
-            }}>
+            <p className="text-3xl font-bold font-exo" style={{ color: getScoreColor(score) }}>
               {score.toLocaleString("es-CL")}
             </p>
           </CardBody>

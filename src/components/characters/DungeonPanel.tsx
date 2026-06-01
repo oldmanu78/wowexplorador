@@ -2,6 +2,7 @@
 // Muestra el score de cada dungeon M+ con colores por rango
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import { DUNGEONS } from "@/lib/constants";
+import { getScoreDisplayColor } from "@/lib/utils";
 
 interface DungeonScore {
   slug: string;       // Slug de la mazmorra
@@ -29,13 +30,6 @@ export default function DungeonPanel({ scores }: DungeonPanelProps) {
           {DUNGEONS.map((dungeon) => {
             const data = scoreMap.get(dungeon.slug);
             const score = data?.score || 0;
-
-            // Color según el rango del score
-            const color = score >= 3000 ? "#ff8000" :
-              score >= 2000 ? "#a335ee" :
-              score >= 1500 ? "#0070dd" :
-              score >= 1000 ? "#1eff00" :
-              score > 0 ? "#ffffff" : "#6b7280";
 
             return (
               <div
@@ -68,7 +62,7 @@ export default function DungeonPanel({ scores }: DungeonPanelProps) {
                   )}
                   <span
                     className="font-bold text-sm font-exo"
-                    style={{ color }}
+                    style={{ color: getScoreDisplayColor(score) }}
                   >
                     {score > 0 ? score.toLocaleString("es-CL") : "—"}
                   </span>

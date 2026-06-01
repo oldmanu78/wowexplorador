@@ -1,7 +1,7 @@
 // Tab 5: Últimas carreras M+
 // Muestra las carreras recientes y mejores del personaje
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
-import { getDungeonName, formatDate } from "@/lib/utils";
+import { getDungeonName, formatDate, getScoreColor } from "@/lib/utils";
 
 interface Run {
   dungeonSlug: string;
@@ -62,13 +62,6 @@ export default function RunsPanel({ bestRuns, recentRuns }: RunsPanelProps) {
 
 // Fila individual de carrera
 function RunRow({ run }: { run: Run }) {
-  const scoreColor =
-    run.score >= 3000 ? "#ff8000" :
-    run.score >= 2000 ? "#a335ee" :
-    run.score >= 1500 ? "#0070dd" :
-    run.score >= 1000 ? "#1eff00" :
-    "#ffffff";
-
   return (
     <div className="flex items-center justify-between py-2 px-3 bg-horda-bg rounded border border-horda-border">
       <div className="flex items-center gap-3">
@@ -87,7 +80,7 @@ function RunRow({ run }: { run: Run }) {
           {formatDate(run.completedAt)}
         </span>
         {/* Score */}
-        <span className="font-bold text-sm font-exo" style={{ color: scoreColor }}>
+        <span className="font-bold text-sm font-exo" style={{ color: getScoreColor(run.score) }}>
           {run.score.toFixed(1)}
         </span>
       </div>
