@@ -12,16 +12,20 @@ export default async function PersonajesPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
-      <h1 className="font-cinzel text-2xl text-horda-gold tracking-wider mb-6">
-        PERSONAJES
-      </h1>
-
-      <p className="text-horda-muted text-sm font-exo mb-6">
-        Quel&apos;Thalas (US) — {characters.length} personajes trackeados
-      </p>
+      <div className="mb-6 border-b border-horda-border/80 pb-5">
+        <p className="text-xs uppercase tracking-[0.22em] text-horda-muted font-exo mb-2">
+          Roster de guerra
+        </p>
+        <h1 className="font-cinzel text-2xl md:text-3xl text-horda-gold tracking-[0.14em]">
+          PERSONAJES
+        </h1>
+        <p className="text-horda-muted text-sm font-exo mt-2">
+          Quel&apos;Thalas (US) — {characters.length} personajes trackeados
+        </p>
+      </div>
 
       {/* Grid de personajes: responsive, 1 col en mobile, 3-4 en desktop */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {characters.map((char) => (
           <CharacterCard
             key={char.id}

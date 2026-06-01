@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a0906"/>
+      <stop offset="0.42" stop-color="#5a1d10"/>
+      <stop offset="1" stop-color="#100706"/>
+    </linearGradient>
+    <linearGradient id="dust" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2a24d" stop-opacity="0.25"/>
+      <stop offset="0.52" stop-color="#8b2d14" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#070303" stop-opacity="0.75"/>
+    </linearGradient>
+    <radialGradient id="forge" cx="50%" cy="55%" r="58%">
+      <stop offset="0" stop-color="#f8b700" stop-opacity="0.22"/>
+      <stop offset="0.38" stop-color="#c94519" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#050202" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soften">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#forge)"/>
+
+  <g opacity="0.62" filter="url(#soften)">
+    <path d="M-120 820 C120 660 210 700 360 560 C520 410 640 450 820 330 C1000 210 1240 270 1410 390 C1580 510 1720 500 2040 360 L2040 1120 L-120 1120 Z" fill="#2a120c"/>
+    <path d="M-80 930 C260 810 470 860 710 730 C940 605 1140 655 1380 760 C1600 856 1780 790 2020 690 L2020 1120 L-80 1120 Z" fill="#120807"/>
+  </g>
+
+  <g opacity="0.55">
+    <path d="M210 790 L310 460 L390 790 Z" fill="#2b120c"/>
+    <path d="M290 610 L348 455 L406 610 Z" fill="#3a190f"/>
+    <path d="M1450 800 L1570 390 L1660 800 Z" fill="#2b120c"/>
+    <path d="M1524 590 L1600 360 L1678 590 Z" fill="#3a190f"/>
+    <path d="M850 820 L960 440 L1070 820 Z" fill="#2a110b"/>
+  </g>
+
+  <g opacity="0.38" filter="url(#soften)">
+    <ellipse cx="430" cy="740" rx="520" ry="180" fill="#d06a21"/>
+    <ellipse cx="1240" cy="700" rx="620" ry="210" fill="#8f1628"/>
+    <ellipse cx="960" cy="920" rx="860" ry="170" fill="#050202"/>
+  </g>
+
+  <rect width="1920" height="1080" fill="url(#dust)"/>
+  <rect width="1920" height="1080" fill="#050202" opacity="0.28"/>
+</svg>
