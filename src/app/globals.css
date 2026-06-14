@@ -1,35 +1,30 @@
-/* Tailwind v4 — Tema Horda de World of Warcraft */
-/* Configuración de colores, fuentes y estilos globales */
 @import "tailwindcss";
 
-/* Defino el tema personalizado con la paleta de la Horda */
 @theme {
-  /* Colores Horda — oscuros, rojos, gold */
-  --color-horda-bg: #0a0a0a;
-  --color-horda-surface: #1a1a1a;
-  --color-horda-surface-2: #222222;
-  --color-horda-border: #2a1a1a;
-  --color-horda-gold: #f8b700;
-  --color-horda-gold-dark: #c99400;
-  --color-horda-red: #8b0000;
-  --color-horda-red-bright: #c41e3a;
-  --color-horda-text: #ccd0e0;
-  --color-horda-muted: #6b7280;
-  --color-horda-accent: #3a1a1a;
+  --color-bg: #070504;
+  --color-bg-2: #120807;
+  --color-surface: rgba(21, 14, 12, 0.84);
+  --color-surface-strong: #19100d;
+  --color-iron: #2c2420;
+  --color-blood: #8f1513;
+  --color-blood-2: #c32620;
+  --color-ember: #f05a28;
+  --color-brass: #c49445;
+  --color-gold: #f0c35a;
+  --color-bone: #f3e7d0;
+  --color-muted: #bcae96;
+  --color-line: rgba(240, 195, 90, 0.28);
 
-  /* Colores de rol M+ */
   --color-role-tank: #4488ff;
   --color-role-healer: #44cc88;
   --color-role-dps: #ff4444;
 
-  /* Colores de score M+ por rango */
   --color-score-elite: #ff8000;
   --color-score-epic: #a335ee;
   --color-score-rare: #0070dd;
   --color-score-uncommon: #1eff00;
   --color-score-common: #ffffff;
 
-  /* Colores de clase WoW */
   --color-dk: #c41e3a;
   --color-dh: #a330c9;
   --color-druid: #ff7c0a;
@@ -44,18 +39,27 @@
   --color-warlock: #8788ee;
   --color-warrior: #c69b3a;
 
-  /* Tipografía */
   --font-cinzel: "Cinzel", serif;
-  --font-exo: "Exo 2", sans-serif;
+  --font-inter: "Inter", sans-serif;
 }
 
-/* Estilos base globales */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: var(--color-horda-bg);
-  color: var(--color-horda-text);
-  font-family: var(--font-exo);
-  position: relative;
-  isolation: isolate;
+  margin: 0;
+  color: var(--color-bone);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(195, 38, 32, 0.32), transparent 34rem),
+    radial-gradient(circle at 15% 18%, rgba(240, 90, 40, 0.15), transparent 26rem),
+    linear-gradient(180deg, #070504 0%, #100705 42%, #070504 100%);
+  font-family: var(--font-inter);
+  overflow-x: hidden;
   min-height: 100dvh;
 }
 
@@ -64,12 +68,12 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -2;
+  pointer-events: none;
   background-image:
-    linear-gradient(90deg, rgba(10, 10, 10, 0.92) 0%, rgba(10, 10, 10, 0.68) 44%, rgba(10, 10, 10, 0.9) 100%),
-    url("/wowexplorador/images/orgrimmar-valley-bg.svg");
-  background-position: center;
-  background-size: cover;
-  filter: saturate(0.95) contrast(1.08);
+    linear-gradient(rgba(240, 195, 90, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 195, 90, 0.035) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: linear-gradient(to bottom, black, transparent 70%);
 }
 
 body::after {
@@ -79,23 +83,41 @@ body::after {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% 8%, rgba(248, 183, 0, 0.12), transparent 34%),
-    linear-gradient(180deg, rgba(10, 10, 10, 0.22), rgba(10, 10, 10, 0.82));
-  backdrop-filter: blur(1.5px);
+    radial-gradient(circle at 20% 80%, rgba(240, 90, 40, 0.12), transparent 22rem),
+    linear-gradient(110deg, transparent 0 45%, rgba(240, 195, 90, 0.05) 45% 46%, transparent 46% 100%);
+  opacity: 0.9;
 }
 
-/* Scrollbar oscuro para Chrome/Edge */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #111;
+  background: #0a0706;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #2c2420;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #3d3028;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

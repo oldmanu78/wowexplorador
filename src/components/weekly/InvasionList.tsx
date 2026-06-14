@@ -1,4 +1,3 @@
-// Lista de invasiones de la semana
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 
 interface InvasionItem {
@@ -16,27 +15,24 @@ export default function InvasionList({ invasions }: InvasionListProps) {
   return (
     <Card>
       <CardHeader>
-        <h3 className="font-cinzel text-horda-gold text-sm tracking-wide">
-          INVASIONES
-        </h3>
+        <p className="text-gold text-[0.74rem] font-black tracking-[0.18em] uppercase">
+          Invasiones
+        </p>
       </CardHeader>
       <CardBody className="space-y-2">
         {invasions.length === 0 && (
-          <p className="text-horda-muted text-sm">Sin invasiones</p>
+          <p className="text-muted text-sm">Sin invasiones</p>
         )}
         {invasions.map((inv) => (
           <div
             key={inv.id}
-            className="flex items-center justify-between py-2 px-3 bg-horda-bg rounded border border-horda-border"
+            className="flex items-center justify-between py-3 px-4 bg-[rgba(7,5,4,0.52)] rounded border border-[rgba(240,195,90,0.2)]"
           >
             <div>
-              {/* Zona invadida */}
-              <p className="text-horda-text text-sm font-exo">{inv.zone}</p>
-              {/* Cantidad de NPCs */}
-              <p className="text-xs text-horda-muted">{inv.npcs} NPCs</p>
+              <p className="text-bone text-sm font-inter">{inv.zone}</p>
+              <p className="text-xs text-muted">{inv.npcs} NPCs</p>
             </div>
-            {/* Recompensa */}
-            <span className="text-horda-gold text-xs font-medium">{inv.reward}</span>
+            <span className="text-gold text-xs font-bold">{inv.reward}</span>
           </div>
         ))}
       </CardBody>

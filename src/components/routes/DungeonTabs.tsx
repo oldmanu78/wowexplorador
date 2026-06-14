@@ -1,5 +1,3 @@
-// Tabs de mazmorras para la página de rutas
-// Genera tabs dinámicamente desde los datos de SQLite
 'use client';
 
 import { useState } from "react";
@@ -8,7 +6,6 @@ import DungeonHero from "./DungeonHero";
 import RouteCard from "./RouteCard";
 import type { Dungeon, Route } from "@/generated/prisma/client";
 
-// Datos completos de una mazmorra con sus rutas
 interface DungeonWithRoutes extends Dungeon {
   routes: Route[];
 }
@@ -18,11 +15,9 @@ interface DungeonTabsProps {
 }
 
 export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
-  // Estado del dungeon activo
   const [activeIndex, setActiveIndex] = useState(0);
   const [search, setSearch] = useState("");
 
-  // Filtra dungeons por búsqueda
   const filtered = dungeons.filter((d) =>
     d.name.toLowerCase().includes(search.toLowerCase()) ||
     d.sigla.toLowerCase().includes(search.toLowerCase())
@@ -32,9 +27,8 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
 
   return (
     <div className="space-y-6">
-      {/* Buscador */}
-      <div className="rounded-lg border border-horda-border bg-horda-surface/90 p-4 shadow-[inset_0_1px_0_rgba(248,183,0,0.05)]">
-        <label htmlFor="dungeon-search" className="mb-2 block text-xs uppercase tracking-[0.18em] text-horda-muted">
+      <div className="rounded-lg border border-[rgba(240,195,90,0.28)] bg-[rgba(25,16,13,0.96)] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.55)]">
+        <label htmlFor="dungeon-search" className="mb-2 block text-xs text-muted font-inter font-bold uppercase tracking-[0.18em]">
           Buscar mazmorra
         </label>
         <input
@@ -46,11 +40,10 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
             setSearch(e.target.value);
             setActiveIndex(0);
           }}
-          className="min-h-11 w-full rounded border border-horda-border bg-horda-bg px-4 py-2 text-sm text-horda-text placeholder:text-horda-muted focus:outline-none focus:border-horda-gold focus:ring-2 focus:ring-horda-gold/25"
+          className="min-h-11 w-full rounded border border-[rgba(240,195,90,0.2)] bg-[rgba(7,5,4,0.52)] px-4 py-2 text-sm text-bone placeholder:text-muted focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/25 font-inter"
         />
       </div>
 
-      {/* Barra de tabs con scroll horizontal */}
       <div className="overflow-x-auto hide-scrollbar">
         <div className="flex min-w-max gap-2 pb-1" role="tablist" aria-label="Mazmorras disponibles">
           {filtered.map((dungeon, i) => (
@@ -61,33 +54,28 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
               aria-selected={activeIndex === i}
               onClick={() => setActiveIndex(i)}
               className={cn(
-                "flex min-h-11 items-center gap-2 rounded-lg border px-4 py-2 text-sm font-exo transition-all whitespace-nowrap",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-horda-gold focus-visible:ring-offset-2 focus-visible:ring-offset-horda-bg",
+                "flex min-h-11 items-center gap-2 rounded-lg border px-4 py-2 text-sm font-inter font-bold transition-all whitespace-nowrap",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
                 activeIndex === i
-                  ? "bg-horda-gold text-black border-horda-gold font-medium"
-                  : "bg-horda-surface text-horda-text border-horda-border hover:border-horda-gold"
+                  ? "bg-gold text-[#180c07] border-gold"
+                  : "bg-surface-strong text-bone border-[rgba(240,195,90,0.2)] hover:border-gold"
               )}
             >
-              {/* Dot de tipo */}
               <span
                 className="w-2 h-2 rounded-full inline-block shrink-0"
                 style={{
                   backgroundColor: dungeon.type === "nueva" ? "#00c8ff" : "#a78bfa",
                 }}
               />
-              {/* Sigla */}
-              <span className="font-bold">{dungeon.sigla}</span>
-              {/* Nombre (oculto en mobile) */}
+              <span>{dungeon.sigla}</span>
               <span className="hidden md:inline text-xs opacity-80">{dungeon.name}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Contenido del dungeon activo */}
       {activeDungeon && (
         <div className="min-w-0">
-          {/* Hero de la mazmorra */}
           <DungeonHero
             name={activeDungeon.name}
             sigla={activeDungeon.sigla}
@@ -99,30 +87,28 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
             img={activeDungeon.img}
           />
 
-          {/* Guías externas */}
           <div className="mb-6 flex flex-wrap gap-3">
             <a
               href={`https://method.gg/dungeons/${activeDungeon.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="min-h-10 px-4 py-2 text-xs font-exo rounded border border-horda-border bg-horda-surface/85 text-horda-text hover:text-horda-gold hover:border-horda-gold transition-colors"
+              className="min-h-10 px-4 py-2 text-xs font-inter font-bold rounded border border-[rgba(240,195,90,0.2)] bg-surface-strong text-bone hover:text-gold hover:border-gold transition-colors uppercase tracking-wide"
             >
-              Guía Method
+              Guia Method
             </a>
             <a
               href={`https://www.icy-veins.com/wow/dungeons/${activeDungeon.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="min-h-10 px-4 py-2 text-xs font-exo rounded border border-horda-border bg-horda-surface/85 text-horda-text hover:text-horda-gold hover:border-horda-gold transition-colors"
+              className="min-h-10 px-4 py-2 text-xs font-inter font-bold rounded border border-[rgba(240,195,90,0.2)] bg-surface-strong text-bone hover:text-gold hover:border-gold transition-colors uppercase tracking-wide"
             >
-              Guía Icy-Veins
+              Guia Icy-Veins
             </a>
           </div>
 
-          {/* Rutas */}
-          <h3 className="font-cinzel text-horda-gold text-sm tracking-wide mb-4">
-            RUTAS — {activeDungeon.name}
-          </h3>
+          <p className="text-gold text-[0.74rem] font-black tracking-[0.18em] uppercase mb-4">
+            Rutas — {activeDungeon.name}
+          </p>
 
           <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {activeDungeon.routes?.map((route) => (
@@ -137,19 +123,17 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
             ))}
           </div>
 
-          {/* Sin rutas */}
           {(!activeDungeon.routes || activeDungeon.routes.length === 0) && (
-            <p className="text-horda-muted text-sm font-exo text-center py-8">
+            <p className="text-muted text-sm font-inter text-center py-8">
               No hay rutas disponibles para esta mazmorra.
             </p>
           )}
         </div>
       )}
 
-      {/* Sin resultados de búsqueda */}
       {filtered.length === 0 && (
-        <div className="rounded-lg border border-horda-border bg-horda-surface/85 p-8 text-center">
-          <p className="text-horda-muted text-sm font-exo">
+        <div className="rounded-lg border border-[rgba(240,195,90,0.2)] bg-surface-strong p-8 text-center">
+          <p className="text-muted text-sm font-inter">
             No se encontraron mazmorras con &quot;{search}&quot;
           </p>
         </div>

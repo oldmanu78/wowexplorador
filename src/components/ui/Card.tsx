@@ -1,20 +1,19 @@
-// Componente Card base con estilo Horda
-// Borde superior rojo, hover gold, sombras sutiles
 import { cn } from "@/lib/utils";
 
 interface CardProps {
   children: React.ReactNode;
   className?: string;
-  hover?: boolean; // Si true, muestra efecto hover con borde gold
+  hover?: boolean;
 }
 
 export default function Card({ children, className, hover = true }: CardProps) {
   return (
     <div
       className={cn(
-        "bg-horda-surface border border-horda-border rounded-lg",
-        "border-t-2 border-t-horda-red",
-        hover && "hover:border-t-horda-gold hover:shadow-lg hover:shadow-horda-red/5 transition-all duration-300",
+        "relative overflow-hidden border border-[rgba(240,195,90,0.28)] rounded-lg",
+        "bg-[linear-gradient(180deg,rgba(25,16,13,0.96),rgba(7,5,4,0.96))]",
+        "shadow-[0_18px_60px_rgba(0,0,0,0.34)]",
+        hover && "transition-all duration-180 hover:-translate-y-0.5 hover:border-gold hover:shadow-[0_22px_46px_rgba(143,21,19,0.35)]",
         className
       )}
     >
@@ -23,19 +22,17 @@ export default function Card({ children, className, hover = true }: CardProps) {
   );
 }
 
-// Card header con título opcional
 export function CardHeader({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("px-4 py-3 border-b border-horda-border", className)}>
+    <div className={cn("px-5 py-4 border-b border-[rgba(240,195,90,0.2)]", className)}>
       {children}
     </div>
   );
 }
 
-// Card body con padding
 export function CardBody({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("p-4", className)}>
+    <div className={cn("p-5", className)}>
       {children}
     </div>
   );

@@ -1,4 +1,3 @@
-// Header principal con el emblema de la Horda, navegación y título
 'use client';
 
 import Link from "next/link";
@@ -9,7 +8,6 @@ import { cn, withBasePath } from "@/lib/utils";
 export default function Header() {
   const pathname = usePathname();
 
-  // Links de navegación principales
   const navLinks = [
     { href: "/", label: "Semanal" },
     { href: "/personajes", label: "Personajes" },
@@ -17,49 +15,44 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-horda-border/90 bg-horda-bg/86 shadow-[0_10px_30px_rgba(0,0,0,0.38)] backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo + título */}
-        <Link href="/" className="flex items-center gap-3 group min-w-0">
-          <span className="relative grid h-12 w-12 shrink-0 place-items-center">
-            <span className="absolute inset-0 rounded-full bg-horda-red/25 blur-md transition-opacity group-hover:opacity-90" />
-            <Image
-              src={withBasePath("/horde-crest.svg")}
-              alt="Emblema de la Horda"
-              width={44}
-              height={44}
-              className="relative h-11 w-11 drop-shadow-[0_0_10px_rgba(248,183,0,0.22)]"
-            />
-          </span>
+    <header className="fixed top-0 left-0 right-0 z-20 border-b border-[rgba(240,195,90,0.18)] bg-[rgba(7,5,4,0.82)] backdrop-blur-[16px]">
+      <nav className="min-h-[72px] flex items-center justify-between gap-5 max-w-[1180px] mx-auto px-4" aria-label="Navegacion principal">
+        <Link href="/" className="inline-flex items-center gap-3 no-underline min-h-[44px] group" aria-label="WoW Explorador inicio">
+          <Image
+            src={withBasePath("/horde-crest.svg")}
+            alt="Emblema de la Horda"
+            width={42}
+            height={42}
+            className="object-contain drop-shadow-[0_0_16px_rgba(195,38,32,0.75)]"
+          />
           <div>
-            <h1 className="font-cinzel text-horda-gold text-lg md:text-xl tracking-[0.18em] [text-shadow:0_1px_0_#3a120d,0_0_18px_rgba(248,183,0,0.18)] group-hover:text-white transition-colors">
-              WOW EXPLORADOR
-            </h1>
-            <p className="text-horda-muted text-[10px] md:text-xs leading-tight -mt-0.5 tracking-[0.2em] uppercase">
+            <span className="block font-cinzel font-black tracking-[0.08em] leading-none text-gold text-lg group-hover:text-bone transition-colors">
+              WoW EXPLORADOR
+            </span>
+            <small className="block mt-1 text-muted text-[0.68rem] font-extrabold tracking-[0.18em] uppercase">
               Quel&apos;Thalas · US
-            </p>
+            </small>
           </div>
         </Link>
 
-        {/* Navegación */}
-        <nav className="flex items-center gap-1 md:gap-2">
+        <ul className="flex items-center gap-1.5 list-none m-0 p-0">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "px-3 py-2 text-sm rounded transition-colors font-exo tracking-wide",
-                "hover:bg-horda-surface-2 hover:text-horda-gold",
-                pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
-                  ? "text-horda-gold border-b-2 border-horda-gold"
-                  : "text-horda-text border-b-2 border-transparent"
-              )}
-            >
-              {link.label}
-            </Link>
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className={cn(
+                  "inline-flex min-h-[44px] items-center px-3.5 rounded-md text-[0.82rem] font-extrabold tracking-[0.08em] uppercase no-underline transition-all duration-180",
+                  pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
+                    ? "text-gold bg-[rgba(240,195,90,0.08)]"
+                    : "text-muted hover:text-gold hover:bg-[rgba(240,195,90,0.08)]"
+                )}
+              >
+                {link.label}
+              </Link>
+            </li>
           ))}
-        </nav>
-      </div>
+        </ul>
+      </nav>
     </header>
   );
 }

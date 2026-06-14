@@ -1,13 +1,11 @@
-// Tab 4: Scores por mazmorra
-// Muestra el score de cada dungeon M+ con colores por rango
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import { DUNGEONS } from "@/lib/constants";
 import { getScoreDisplayColor } from "@/lib/utils";
 
 interface DungeonScore {
-  slug: string;       // Slug de la mazmorra
-  score: number;      // Score M+ en esa mazmorra
-  level?: number;     // Nivel de la clave
+  slug: string;
+  score: number;
+  level?: number;
 }
 
 interface DungeonPanelProps {
@@ -15,15 +13,14 @@ interface DungeonPanelProps {
 }
 
 export default function DungeonPanel({ scores }: DungeonPanelProps) {
-  // Mapa de scores por slug para acceso rápido
   const scoreMap = new Map(scores.map((s) => [s.slug, s]));
 
   return (
     <Card>
       <CardHeader>
-        <h3 className="font-cinzel text-horda-gold text-sm tracking-wide">
-          SCORES POR MAZMORRA
-        </h3>
+        <p className="text-gold text-[0.74rem] font-black tracking-[0.18em] uppercase">
+          Scores por Mazmorra
+        </p>
       </CardHeader>
       <CardBody>
         <div className="space-y-2">
@@ -34,34 +31,29 @@ export default function DungeonPanel({ scores }: DungeonPanelProps) {
             return (
               <div
                 key={dungeon.slug}
-                className="flex items-center justify-between py-2 px-3 bg-horda-bg rounded border border-horda-border"
+                className="flex items-center justify-between py-3 px-4 bg-[rgba(7,5,4,0.52)] rounded border border-[rgba(240,195,90,0.2)]"
               >
-                {/* Nombre + sigla */}
                 <div className="flex items-center gap-2">
-                  {/* Dot de tipo (nueva = cyan, clásica = purple) */}
                   <span
                     className="w-2 h-2 rounded-full inline-block shrink-0"
                     style={{
                       backgroundColor: dungeon.type === "nueva" ? "#00c8ff" : "#a78bfa",
                     }}
                   />
-                  <span className="text-horda-text text-sm font-exo">
+                  <span className="text-bone text-sm font-inter">
                     {dungeon.name}
                   </span>
-                  <span className="text-horda-muted text-xs font-exo">
-                    {dungeon.sigla}
-                  </span>
+                  <span className="text-muted text-xs font-inter">{dungeon.sigla}</span>
                 </div>
 
-                {/* Score + level */}
                 <div className="flex items-center gap-3">
                   {data?.level && (
-                    <span className="text-xs text-horda-muted font-exo">
+                    <span className="text-xs text-muted font-inter">
                       +{data.level}
                     </span>
                   )}
                   <span
-                    className="font-bold text-sm font-exo"
+                    className="font-bold text-sm font-inter"
                     style={{ color: getScoreDisplayColor(score) }}
                   >
                     {score > 0 ? score.toLocaleString("es-CL") : "—"}
@@ -72,9 +64,8 @@ export default function DungeonPanel({ scores }: DungeonPanelProps) {
           })}
         </div>
 
-        {/* Sin datos */}
         {scores.length === 0 && (
-          <p className="text-horda-muted text-sm font-exo text-center mt-4">
+          <p className="text-muted text-sm font-inter text-center mt-4">
             Sin datos de carreras M+ esta semana.
           </p>
         )}

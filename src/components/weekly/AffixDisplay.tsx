@@ -1,46 +1,39 @@
-// Muestra los afijos de la semana con dots de colores
-// Los afijos vienen como string separado por " - " desde SQLite
-
 interface AffixDisplayProps {
-  affixes: string; // Ej: "Fortificado - Reforzado - Tiránico - Xal'atath"
+  affixes: string;
 }
 
-// Paleta de colores para cada afijo conocido
 const affixColors: Record<string, string> = {
-  Fortificado: "#ff4444",
-  Reforzado: "#ff8844",
-  Tiránico: "#ffaa00",
-  "Sangre Sangrante": "#cc0000",
-  Explosivo: "#ff6600",
-  "Volátil Cargado": "#ffaa00",
-  Espinas: "#88cc00",
-  "Atormentador": "#aa44ff",
-  "Orgulloso": "#ff88ff",
-  "Inquietante": "#88ff88",
-  "Opresivo": "#8888ff",
-  Huracanado: "#00ccff",
-  "Xal'atath": "#aa00ff",
+  Fortificado: "#c32620",
+  Reforzado: "#f05a28",
+  Tiránico: "#f0c35a",
+  "Sangre Sangrante": "#8f1513",
+  Explosivo: "#f05a28",
+  "Volátil Cargado": "#f0c35a",
+  Espinas: "#aad372",
+  "Atormentador": "#a330c9",
+  "Orgulloso": "#f48cba",
+  "Inquietante": "#44cc88",
+  "Opresivo": "#4488ff",
+  Huracanado: "#3fc7eb",
+  "Xal'atath": "#8788ee",
 };
 
 export default function AffixDisplay({ affixes }: AffixDisplayProps) {
-  // Separa el string de afijos en un array
   const affixList = affixes.split(" - ").filter(Boolean);
 
   if (affixList.length === 0) {
-    return <p className="text-horda-muted">Sin datos de afijos</p>;
+    return <p className="text-muted">Sin datos de afijos</p>;
   }
 
   return (
     <div className="flex flex-wrap gap-3">
       {affixList.map((affix, i) => (
-        <div key={i} className="flex items-center gap-2">
-          {/* Dot de color según el afijo */}
+        <div key={i} className="flex items-center gap-2 px-3 py-2 rounded border border-[rgba(240,195,90,0.2)] bg-[rgba(7,5,4,0.52)]">
           <span
-            className="w-3 h-3 rounded-full inline-block"
-            style={{ backgroundColor: affixColors[affix] || "#F8B700" }}
+            className="w-3 h-3 rounded-full inline-block shadow-[0_0_8px_currentColor]"
+            style={{ backgroundColor: affixColors[affix] || "#f0c35a", color: affixColors[affix] || "#f0c35a" }}
           />
-          {/* Nombre del afijo */}
-          <span className="text-horda-text text-sm font-exo">{affix}</span>
+          <span className="text-bone text-sm font-inter font-medium">{affix}</span>
         </div>
       ))}
     </div>

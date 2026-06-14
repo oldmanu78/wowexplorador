@@ -1,6 +1,3 @@
-// Componente Tabs con scroll horizontal
-// Recibe los paneles como children directos (no render props)
-// Cada panel debe tener data-tab="tabId" para identificar su tab
 'use client';
 
 import { useState, Children, isValidElement } from "react";
@@ -42,10 +39,14 @@ export default function Tabs({ tabs, defaultTab, className, children }: TabsProp
   };
 
   return (
-    <div className={className}>
-      {/* Barra de tabs con scroll horizontal */}
-      <div className="overflow-x-auto hide-scrollbar border-b border-horda-border">
-        <div className="flex gap-1 min-w-max px-1" role="tablist" aria-label="Secciones del personaje">
+    <div className={cn(
+      "border border-[rgba(240,195,90,0.34)] rounded-lg",
+      "bg-[linear-gradient(180deg,rgba(25,16,13,0.96),rgba(7,5,4,0.96))]",
+      "shadow-[0_24px_80px_rgba(0,0,0,0.55)]",
+      className
+    )}>
+      <div className="overflow-x-auto hide-scrollbar border-b border-[rgba(240,195,90,0.2)]">
+        <div className="flex gap-1 min-w-max px-2" role="tablist" aria-label="Secciones del personaje">
           {tabs.map((tab, index) => (
             <button
               key={tab.id}
@@ -58,12 +59,12 @@ export default function Tabs({ tabs, defaultTab, className, children }: TabsProp
               onClick={() => setActiveTab(tab.id)}
               onKeyDown={(event) => handleKeyDown(event, index)}
               className={cn(
-                "px-4 py-2.5 text-sm font-exo whitespace-nowrap transition-all duration-200",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-horda-gold focus-visible:ring-offset-2 focus-visible:ring-offset-horda-surface",
-                "border-b-2 -mb-[1px]",
+                "px-4 py-3 text-[0.78rem] font-inter font-bold whitespace-nowrap transition-all duration-180",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-surface-strong",
+                "border-b-2 -mb-[1px] tracking-[0.08em] uppercase",
                 activeTab === tab.id
-                  ? "text-horda-gold border-horda-gold"
-                  : "text-horda-muted border-transparent hover:text-horda-text hover:border-horda-muted"
+                  ? "text-gold border-gold"
+                  : "text-muted border-transparent hover:text-bone hover:border-[rgba(240,195,90,0.4)]"
               )}
             >
               {tab.label}
@@ -72,8 +73,7 @@ export default function Tabs({ tabs, defaultTab, className, children }: TabsProp
         </div>
       </div>
 
-      {/* Contenido del tab activo */}
-      <div className="py-4">
+      <div className="p-5">
         {tabs.map((tab) => (
           <div
             key={tab.id}
@@ -91,7 +91,6 @@ export default function Tabs({ tabs, defaultTab, className, children }: TabsProp
   );
 }
 
-// Encuentra el panel con data-tab coincidente entre los children
 function findPanel(children: ReactNode, tabId: string): ReactNode {
   const childrenArray = Children.toArray(children);
   return childrenArray.find(

@@ -1,18 +1,17 @@
-// Muestra el jefe del mundo activo esta semana
 import Card, { CardBody } from "@/components/ui/Card";
 
 interface WorldBossCardProps {
-  boss: string; // Ej: "Lu'ashal (Eversong Woods)"
+  boss: string;
 }
 
 export default function WorldBossCard({ boss }: WorldBossCardProps) {
   return (
     <Card>
       <CardBody>
-        <h3 className="font-cinzel text-horda-gold text-sm mb-2 tracking-wide">
-          JEFE DEL MUNDO
-        </h3>
-        <p className="text-horda-text font-exo">{boss || "Sin datos"}</p>
+        <p className="text-gold text-[0.74rem] font-black tracking-[0.18em] uppercase mb-2">
+          Jefe del Mundo
+        </p>
+        <p className="text-bone font-inter text-base leading-relaxed">{boss || "Sin datos"}</p>
       </CardBody>
     </Card>
   );

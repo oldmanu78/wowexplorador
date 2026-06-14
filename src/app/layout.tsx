@@ -1,23 +1,21 @@
-// Layout raíz de WoW Explorer
-// Configura las fuentes Cinzel (títulos) y Exo 2 (cuerpo), el tema Horda y el layout global
 import type { Metadata } from "next";
-import { Cinzel, Exo_2 } from "next/font/google";
+import { Cinzel, Inter } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
-// Fuente Cinzel para títulos (serif, estilo épico Warcraft)
 const cinzel = Cinzel({
   subsets: ["latin"],
   variable: "--font-cinzel",
   display: "swap",
+  weight: ["700", "800", "900"],
 });
 
-// Fuente Exo 2 para cuerpo de texto (sans-serif, legible)
-const exo2 = Exo_2({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-exo",
+  variable: "--font-inter",
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -32,12 +30,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // Aplico las variables de fuentes al HTML para que estén disponibles globalmente
-    <html lang="es" className={`${cinzel.variable} ${exo2.variable}`}>
-      <body className="min-h-dvh flex flex-col bg-horda-bg text-horda-text font-exo antialiased">
+    <html lang="es" className={`${cinzel.variable} ${inter.variable}`}>
+      <body className="min-h-dvh flex flex-col bg-bg text-bone font-inter antialiased">
         <Header />
-        {/* Padding-top para compensar el header fijo (h-16 = 4rem) */}
-        <main className="flex-1 pt-16">
+        <main className="flex-1 pt-[72px]">
           {children}
         </main>
         <Footer />

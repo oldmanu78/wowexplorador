@@ -1,11 +1,10 @@
-// Barra de progreso reutilizable para raid progress, crests, etc.
 import { cn } from "@/lib/utils";
 
 interface ProgressBarProps {
-  value: number;       // Valor actual
-  max: number;         // Valor máximo
-  label?: string;      // Texto descriptivo
-  color?: string;      // Color de la barra (clase Tailwind o hex)
+  value: number;
+  max: number;
+  label?: string;
+  color?: string;
   height?: "sm" | "md";
   showPercentage?: boolean;
   className?: string;
@@ -15,19 +14,17 @@ export default function ProgressBar({
   value,
   max,
   label,
-  color = "bg-horda-gold",
+  color = "bg-gold",
   height = "sm",
   showPercentage = true,
   className,
 }: ProgressBarProps) {
-  // Calcula el porcentaje de progreso, limitado a 100%
   const percentage = max > 0 ? Math.min((value / max) * 100, 100) : 0;
 
   return (
-    <div className={cn("space-y-1", className)}>
-      {/* Label con valores */}
+    <div className={cn("space-y-1.5", className)}>
       {(label || showPercentage) && (
-        <div className="flex justify-between text-xs text-horda-muted">
+        <div className="flex justify-between text-xs text-muted font-extrabold tracking-[0.08em] uppercase">
           {label && <span>{label}</span>}
           {showPercentage && (
             <span>
@@ -37,16 +34,14 @@ export default function ProgressBar({
         </div>
       )}
 
-      {/* Contenedor de la barra */}
       <div
         className={cn(
-          "w-full bg-horda-bg rounded-full overflow-hidden border border-horda-border",
-          height === "sm" ? "h-2" : "h-3"
+          "w-full rounded-full overflow-hidden bg-[rgba(240,195,90,0.12)]",
+          height === "sm" ? "h-2.5" : "h-3"
         )}
       >
-        {/* Relleno de la barra */}
         <div
-          className={cn("h-full rounded-full transition-all duration-500", color)}
+          className={cn("h-full rounded-full transition-all duration-500 shadow-[0_0_18px_rgba(240,90,40,0.65)]", color)}
           style={{ width: `${percentage}%` }}
         />
       </div>

@@ -1,4 +1,3 @@
-// Lista de noticias de WoW con fecha, título y fuente
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
 
@@ -18,13 +17,13 @@ export default function NewsFeed({ news }: NewsFeedProps) {
   return (
     <Card>
       <CardHeader>
-        <h3 className="font-cinzel text-horda-gold text-sm tracking-wide">
-          NOTICIAS
-        </h3>
+        <p className="text-gold text-[0.74rem] font-black tracking-[0.18em] uppercase">
+          Noticias
+        </p>
       </CardHeader>
       <CardBody className="space-y-3">
         {news.length === 0 && (
-          <p className="text-horda-muted text-sm">Sin noticias disponibles</p>
+          <p className="text-muted text-sm">Sin noticias disponibles</p>
         )}
         {news.map((item) => (
           <a
@@ -33,18 +32,16 @@ export default function NewsFeed({ news }: NewsFeedProps) {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "block pb-3 border-b border-horda-border last:border-0 last:pb-0",
-              "hover:bg-horda-surface-2 -mx-4 px-4 py-2 rounded transition-colors"
+              "block pb-3 border-b border-[rgba(240,195,90,0.16)] last:border-0 last:pb-0",
+              "hover:bg-[rgba(240,195,90,0.05)] -mx-5 px-5 py-3 rounded transition-colors"
             )}
           >
-            {/* Título de la noticia */}
-            <p className="text-horda-text text-sm font-exo leading-snug">
+            <p className="text-bone text-sm font-inter leading-snug">
               {item.title}
             </p>
-            {/* Fecha y fuente */}
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-xs text-horda-muted">{item.date}</span>
-              <span className="text-xs text-horda-gold">{item.source}</span>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-xs text-muted">{item.date}</span>
+              <span className="text-xs text-gold font-bold">{item.source}</span>
             </div>
           </a>
         ))}
