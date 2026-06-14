@@ -2,11 +2,15 @@
 
 Sitio personal de World of Warcraft para seguimiento semanal de Mythic+, personajes de Quel'Thalas US y rutas de mazmorras. La app genera HTML estático con Next.js y lee una base SQLite producida por el pipeline Python.
 
+## Diseño
+
+Tema **Horda-UNO**: paleta cálida atmosférica con fondos negro cálido (#070504), acentos en rojo sangre, brasa y dorado. Tipografía Cinzel (títulos épicos) + Inter (cuerpo). Background con gradientes radiales atmosféricos y grid sutil dorado.
+
 ## Stack
 
 - Next.js 16 App Router con `output: "export"`
 - TypeScript estricto
-- Tailwind CSS v4 con tema Horda
+- Tailwind CSS v4 con tema Horda-UNO
 - Prisma v7 + `@prisma/adapter-better-sqlite3`
 - SQLite en `prisma/wow.db`
 - Python 3 stdlib para ingesta de Raider.io, Blizzard API y Armory

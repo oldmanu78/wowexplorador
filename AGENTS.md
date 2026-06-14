@@ -79,9 +79,11 @@ GitHub Pages (rama gh-pages)
 ### Frontend Data Loading
 - **Server Components**: La mayoría de los componentes leen datos de SQLite via Prisma en build time
 - **Client Components**: Solo para interactividad del usuario:
+  - `Header`: usa `usePathname()` para resaltar link activo
   - `MonedasPanel`: edición de monedas con localStorage
   - `NotesPanel`: notas por dungeon con localStorage
-  - `CountdownTimer`: cuenta regresiva al reset semanal
+  - `RankingTable`: filtro por rol (Tank/DPS/Healer)
+  - `DungeonTabs`: selector de mazmorra + búsqueda
 
 ### Estados de UI
 Cada componente maneja 3 estados:
@@ -89,29 +91,43 @@ Cada componente maneja 3 estados:
 2. **Success**: datos renderizados normalmente
 3. **Error/Empty**: mensaje descriptivo si no hay datos
 
-## 🎨 Tema Horda
+## 🎨 Tema Horda-UNO
 
 ### Colores (Tailwind v4 @theme)
 ```css
---color-horda-bg: #0a0a0a;
---color-horda-surface: #1a1a1a;
---color-horda-border: #2a1a1a;
---color-horda-gold: #F8B700;
---color-horda-red: #8B0000;
---color-horda-red-bright: #C41E3A;
---color-horda-text: #ccd0e0;
---color-horda-muted: #6b7280;
+/* Paleta atmosférica cálida */
+--color-bg: #070504;              /* Negro cálido base */
+--color-bg-2: #120807;            /* Negro ligeramente más claro */
+--color-surface: rgba(21, 14, 12, 0.84);  /* Superficie semi-transparente */
+--color-surface-strong: #19100d;  /* Superficie opaca */
+--color-iron: #2c2420;            /* Hierro oscuro */
+--color-blood: #8f1513;           /* Rojo sangre profundo */
+--color-blood-2: #c32620;         /* Rojo sangre brillante */
+--color-ember: #f05a28;           /* Naranja brasa */
+--color-brass: #c49445;           /* Bronce/latón */
+--color-gold: #f0c35a;            /* Dorado principal */
+--color-bone: #f3e7d0;            /* Texto principal (blanco cálido) */
+--color-muted: #bcae96;           /* Texto secundario */
+--color-line: rgba(240, 195, 90, 0.28);  /* Borde dorado */
 ```
 
 ### Fuentes
-- `Cinzel` (Google Font): títulos, serif con estilo épico
-- `Exo 2` (Google Font): cuerpo de texto, sans-serif
+- `Cinzel` (Google Font): títulos, serif con estilo épico (weights 700/800/900)
+- `Inter` (Google Font): cuerpo de texto, sans-serif moderno (weights 400/500/600/700/800)
 - Cargadas via `next/font` en layout.tsx
 
 ### Layout
-- Header fijo con Horde crest SVG + navegación
-- Footer con créditos y links
-- Background oscuro con watermark sutil de la Horda
+- Header sticky con backdrop blur (16px), borde dorado sutil
+- Footer 4 columnas con links organizados
+- Background: gradientes radiales atmosféricos (rojo/naranja) + grid sutil dorado
+- Cards: bordes dorados, hover con lift (-translate-y-0.5), sombras profundas
+- Tabs: accesibles con navegación por teclado, focus visible dorado
+
+### Efectos visuales
+- Grid overlay sutil en body (46px, dorado 3.5% opacidad)
+- Radial gradients atmosféricos para profundidad
+- Hover effects con transiciones suaves (180ms)
+- Box shadows con glow rojo/naranja
 
 ## 👤 Personajes Trackeados
 
@@ -182,3 +198,4 @@ python scripts/validate.py           # Validar datos
 - **Auditoría 2026-05-28 aplicada**: ESLint queda limpio, `npm audit` queda sin vulnerabilidades moderadas, Stats lee el JSON real de Armory, Gear se alimenta desde Raider.io, las imágenes pasan por `NEXT_PUBLIC_BASE_PATH` y el pipeline escribe primero `prisma/wow.tmp.db` antes de reemplazar `prisma/wow.db`.
 - **Modernización 2026-06-01 aplicada**: CI/CD ahora ejecuta `npm run lint`, `npm run validate` y `npm audit --audit-level=moderate` antes del build; `Tabs` incluye roles ARIA, navegación por teclado y focus visible; se quitaron emojis estructurales de roles/ranking/monedas/rutas en favor de texto y swatches; colores de score/rol se centralizan en `constants.ts`/`utils.ts`; se eliminó código muerto duplicado en `obtener_stats_armory`.
 - **Build local**: si `.next` queda bloqueado por permisos de Windows, verificar en una copia limpia o usando un workspace sin `.next`; `.next/` está ignorado y no afecta GitHub Actions.
+- **Rediseño 2026-06-14 aplicado**: Frontend completamente rediseñado con tema Horda-UNO. Paleta cálida atmosférica (bg #070504, blood, ember, gold, bone). Fuentes: Cinzel (títulos) + Inter (cuerpo) reemplaza Exo 2. Background con gradientes radiales rojo/naranja + grid sutil dorado. Header sticky con backdrop blur. Footer 4 columnas. Dashboard con Hero section + MetricsBar con datos reales. Cards con bordes dorados, hover lift, sombras profundas. 32 archivos adaptados al nuevo sistema visual. Lint y TypeScript limpios.

@@ -139,30 +139,40 @@ Deploy:
   3. Push a gh-pages
 ```
 
-## Diseño Visual: Tema Horda
+## Diseño Visual: Tema Horda-UNO
 
 ### Paleta de colores
 
 | Token | Color | Uso |
 |---|---|---|
-| `horda-bg` | `#0a0a0a` | Fondo principal |
-| `horda-surface` | `#1a1a1a` | Cards, paneles |
-| `horda-border` | `#2a1a1a` | Bordes de cards |
-| `horda-gold` | `#F8B700` | Acentos, hover, títulos |
-| `horda-red` | `#8B0000` | Rojo Horda oscuro |
-| `horda-red-bright` | `#C41E3A` | Rojo sangre (Death Knight) |
-| `horda-text` | `#ccd0e0` | Texto principal |
-| `horda-muted` | `#6b7280` | Texto secundario |
+| `bg` | `#070504` | Fondo principal (negro cálido) |
+| `bg-2` | `#120807` | Fondo secundario |
+| `surface` | `rgba(21,14,12,0.84)` | Cards, paneles (semi-transparente) |
+| `surface-strong` | `#19100d` | Superficie opaca |
+| `iron` | `#2c2420` | Hierro oscuro |
+| `blood` | `#8f1513` | Rojo sangre profundo |
+| `blood-2` | `#c32620` | Rojo sangre brillante |
+| `ember` | `#f05a28` | Naranja brasa |
+| `brass` | `#c49445` | Bronce/latón |
+| `gold` | `#f0c35a` | Acentos, hover, títulos |
+| `bone` | `#f3e7d0` | Texto principal (blanco cálido) |
+| `muted` | `#bcae96` | Texto secundario |
+| `line` | `rgba(240,195,90,0.28)` | Borde dorado |
 
 ### Elementos visuales
 
-- **Header**: Fondo negro, Horde crest SVG (rojo/gold) a la izquierda, navegación, título en Cinzel gold
-- **Background**: Patrón sutil del Horde crest como watermark (opacidad ~3%)
-- **Cards**: Borde superior rojo sangre con glow, hover con borde gold
-- **Tabs**: Scroll horizontal, active con subrayado gold
+- **Header**: Sticky con backdrop blur (16px), emblema Horda + navegación uppercase
+- **Background**: Gradientes radiales atmosféricos rojo/naranja + grid sutil dorado (46px, 3.5% opacidad)
+- **Cards**: Bordes dorados, hover con lift (-translate-y-0.5), sombras profundas con glow
+- **Tabs**: Scroll horizontal, active con subrayado gold, focus visible dorado
 - **Score M+**: Naranja ≥3k, morado ≥2k, azul ≥1.5k, verde ≥1k, blanco >0
 - **Roles**: Tank `#4488ff`, Healer `#44cc88`, DPS `#ff4444`
 - **Badges de clase**: Color específico de cada clase de WoW
+
+### Tipografía
+- **Cinzel** (serif): Títulos, estilo épico/fantasía (weights 700/800/900)
+- **Inter** (sans-serif): Cuerpo de texto, moderno y legible (weights 400-800)
+- Fluid sizing con `clamp()` para responsive perfecto
 
 ## Tabs de Personaje (7 unificadas para todos)
 
@@ -181,8 +191,8 @@ Deploy:
 ### Fase 1 — MVP Estático (actual)
 - [x] Schema Prisma + SQLite
 - [x] Proyecto Next.js configurado
-- [x] Tailwind tema Horda
-- [x] Dashboard semanal
+- [x] Tailwind tema Horda-UNO (rediseño 2026-06-14)
+- [x] Dashboard semanal con Hero + MetricsBar
 - [x] Galería de personajes
 - [x] Página individual con 7 tabs
 - [x] Página de rutas
@@ -256,9 +266,12 @@ Deploy:
 - Server Components por defecto, Client Components solo cuando hay interactividad
 
 ### CSS/Tailwind
-- Tema Horda via `@theme` en globals.css
+- Tema Horda-UNO via `@theme` en globals.css (paleta cálida atmosférica)
 - Componentes usan clases Tailwind, no CSS modules
 - Clases utilitarias con `cn()` para merge condicional
+- Gradientes radiales para profundidad atmosférica
+- Hover effects con transiciones suaves (180ms)
+- Focus visible dorado para accesibilidad
 
 ### Python (pipeline)
 - Solo stdlib (sin imports externos)
