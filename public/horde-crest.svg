@@ -1,50 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Emblema de la Horda - World of Warcraft -->
-  <!-- Versión estilizada con los colores de la Horda: rojo oscuro y oro -->
-  
-  <!-- Sombra exterior -->
-  <polygon
-    points="50,3 67,33 97,33 73,53 83,93 50,73 17,93 27,53 3,33 33,33"
-    fill="#1a0000"
-    stroke="none"
-    transform="translate(1,2)"
-    opacity="0.5"
-  />
-  
-  <!-- Forma principal del emblema (cráneo con cuernos) -->
-  <polygon
-    points="50,5 65,35 95,35 70,55 80,90 50,70 20,90 30,55 5,35 35,35"
-    fill="#8B0000"
-    stroke="#F8B700"
-    stroke-width="2.5"
-    stroke-linejoin="round"
-  />
-  
-  <!-- Detalle del ojo/círculo central -->
-  <circle
-    cx="50" cy="48" r="13"
-    fill="#0a0a0a"
-    stroke="#F8B700"
-    stroke-width="2"
-  />
-  
-  <!-- Pupila -->
-  <circle
-    cx="50" cy="48" r="5"
-    fill="#F8B700"
-    opacity="0.9"
-  />
-  
-  <!-- Pupila interna -->
-  <circle
-    cx="50" cy="48" r="2.5"
-    fill="#8B0000"
-  />
-  
-  <!-- Destaque en las puntas de los cuernos -->
-  <circle cx="20" cy="25" r="2" fill="#F8B700" opacity="0.6" />
-  <circle cx="80" cy="25" r="2" fill="#F8B700" opacity="0.6" />
-  
-  <!-- Destaque inferior -->
-  <circle cx="50" cy="88" r="2" fill="#F8B700" opacity="0.4" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Emblema de la Horda</title>
+  <desc id="desc">Marca estilizada inspirada en la Horda, adaptada a la paleta Horda-UNO.</desc>
+  <defs>
+    <radialGradient id="ember-glow" cx="50%" cy="45%" r="58%">
+      <stop offset="0%" stop-color="#c32620" />
+      <stop offset="56%" stop-color="#8f1513" />
+      <stop offset="100%" stop-color="#350706" />
+    </radialGradient>
+    <linearGradient id="gold-edge" x1="28" x2="228" y1="25" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f0c35a" />
+      <stop offset="42%" stop-color="#c49445" />
+      <stop offset="100%" stop-color="#7f4b22" />
+    </linearGradient>
+    <filter id="shadow" x="-24%" y="-24%" width="148%" height="148%">
+      <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#070504" flood-opacity=".78" />
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#c32620" flood-opacity=".32" />
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <path
+      d="M128 16c15 19 27 39 35 60 20-20 43-34 69-42-4 34-20 63-48 88 17 22 25 50 24 84-25-6-47-19-66-39l-14 70-14-70c-19 20-41 33-66 39-1-34 7-62 24-84-28-25-44-54-48-88 26 8 49 22 69 42 8-21 20-41 35-60Z"
+      fill="#070504"
+      stroke="url(#gold-edge)"
+      stroke-width="7"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M128 31c11 17 20 35 27 55l6 18 13-15c13-15 28-26 46-34-7 23-21 44-42 62l-11 9 9 12c12 16 18 34 20 56-17-7-32-18-45-33l-19-22-4 29-4-29-19 22c-13 15-28 26-45 33 2-22 8-40 20-56l9-12-11-9c-21-18-35-39-42-62 18 8 33 19 46 34l13 15 6-18c7-20 16-38 27-55Z"
+      fill="url(#ember-glow)"
+    />
+
+    <path
+      d="M89 93c13 13 23 32 28 58l11 55 11-55c5-26 15-45 28-58-14 6-28 16-39 30-11-14-25-24-39-30Z"
+      fill="#070504"
+      opacity=".82"
+    />
+    <path
+      d="M128 48c-8 17-14 35-18 54 6-7 12-13 18-17 6 4 12 10 18 17-4-19-10-37-18-54Z"
+      fill="#f0c35a"
+      opacity=".92"
+    />
+    <path
+      d="M70 72c9 24 26 45 50 61-12-23-28-43-50-61Zm116 0c-22 18-38 38-50 61 24-16 41-37 50-61Z"
+      fill="#f0c35a"
+      opacity=".22"
+    />
+    <path
+      d="M128 214l-8-41h16l-8 41Z"
+      fill="#f0c35a"
+      opacity=".72"
+    />
+  </g>
 </svg>
