@@ -12,7 +12,10 @@ export interface RioGearItem {
   item_level?: number;
   icon?: string;
   name?: string;
+  item_quality?: number;
   tier?: string;
+  gems_detail?: { id?: number; name?: string; icon?: string }[];
+  enchants_detail?: { id?: number; name?: string; icon?: string }[];
 }
 
 export interface RaiderIoProfile {
@@ -44,6 +47,7 @@ export interface ArmoryStatValue {
 
 export interface ArmoryStats {
   ilvl?: number;
+  currencies?: ArmoryCurrency[];
   items?: Record<string, unknown>;
   strength?: ArmoryStatValue;
   agility?: ArmoryStatValue;
@@ -56,4 +60,12 @@ export interface ArmoryStats {
   leech?: ArmoryStatValue;
   speed?: ArmoryStatValue;
   avoidance?: ArmoryStatValue;
+}
+
+export interface ArmoryCurrency {
+  id?: number;
+  name: string;
+  quantity?: number;
+  maxQuantity?: number;
+  icon?: string;
 }

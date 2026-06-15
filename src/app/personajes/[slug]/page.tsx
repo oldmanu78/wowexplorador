@@ -69,8 +69,11 @@ export default async function CharacterPage({
     item: item.name || "Objeto desconocido",
     icon: item.icon || "?",
     wowheadId: item.item_id,
-    source: item.item_level ? `ilvl ${item.item_level}` : "Raider.io",
-    prio: "B",
+    itemLevel: item.item_level || 0,
+    quality: item.item_quality,
+    gems: item.gems_detail || [],
+    enchants: item.enchants_detail || [],
+    source: "Raider.io",
     isTier: Boolean(item.tier),
   }));
 
@@ -94,7 +97,7 @@ export default async function CharacterPage({
         </div>
 
         <div data-tab="monedas" key="monedas">
-          <MonedasPanel slug={character.slug} />
+          <MonedasPanel slug={character.slug} armory={character.armory} />
         </div>
 
         <div data-tab="gear" key="gear">

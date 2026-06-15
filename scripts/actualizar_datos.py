@@ -190,6 +190,40 @@ def obtener_token_price(token):
     return "Buscando..."
 
 
+def obtener_monedas_blizzard(token, name, realm="quelthalas", region="us"):
+    """
+    Obtiene currencies del personaje desde la API de perfil de Blizzard.
+    Falla de forma silenciosa si el endpoint no esta disponible para el personaje.
+    """
+    if not token:
+        return []
+
+    encoded_name = urllib.parse.quote(name.lower(), safe="")
+    realm_slug = realm.lower().replace("'", "").replace(" ", "-")
+    url = (
+        f"https://{region}.api.blizzard.com/profile/wow/character/"
+        f"{realm_slug}/{encoded_name}/currency?namespace=profile-{region}&locale=es_MX"
+    )
+    data = fetch_json(url, headers={"Authorization": f"Bearer {token}"})
+    currencies = []
+    for entry in (data or {}).get("currencies", []):
+        currency = entry.get("currency", {}) if isinstance(entry, dict) else {}
+        name_value = currency.get("name") or entry.get("name")
+        quantity = entry.get("quantity")
+        if not name_value or quantity is None:
+            continue
+        currencies.append({
+            "id": currency.get("id") or entry.get("id"),
+            "name": name_value,
+            "quantity": quantity,
+            "maxQuantity": entry.get("max_quantity") or entry.get("maxQuantity"),
+        })
+
+    if currencies:
+        print(f"  [+] {name}: {len(currencies)} monedas obtenidas")
+    return currencies
+
+
 def obtener_stats_armory(name, realm="quelthalas", region="us"):
     """
     Scrapea stats detallados desde Armory Blizzard.
@@ -287,12 +321,58 @@ def obtener_stats_armory(name, realm="quelthalas", region="us"):
                 if count > 0:
                     result["ilvl"] = total_ilvl // count
 
+        currencies = extract_currencies_from_armory(char)
+        if currencies:
+            result["currencies"] = currencies
+
         print(f"  [+] {name}: stats obtenidas (ilvl={result.get('ilvl', '?')})")
         return result
 
     except Exception as e:
         print(f"  [!] Error parsing Armory data for {name}: {e}")
         return None
+
+
+def extract_currencies_from_armory(character_data):
+    """
+    Extrae currencies si el JSON público de Armory las incluye.
+    La estructura cambia por expansión, así que se acepta cualquier nodo con name + quantity.
+    """
+    candidates = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            name = node.get("name") or node.get("displayName")
+            quantity = node.get("quantity") or node.get("amount")
+            if name and isinstance(quantity, (int, float)):
+                candidates.append({
+                    "id": node.get("id"),
+                    "name": str(name),
+                    "quantity": int(quantity),
+                    "maxQuantity": node.get("maxQuantity") or node.get("max_quantity"),
+                    "icon": node.get("icon"),
+                })
+            for key, value in node.items():
+                if key.lower() in ("currencies", "currency", "wallet", "money"):
+                    walk(value)
+                elif isinstance(value, (dict, list)):
+                    walk(value)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item)
+
+    for key in ("currencies", "currency", "wallet"):
+        walk(character_data.get(key))
+
+    seen = set()
+    result = []
+    for currency in candidates:
+        key = (currency.get("id"), currency["name"])
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(currency)
+    return result
 
 
 def obtener_jefe_mundo():
@@ -723,6 +803,10 @@ def main():
             print(f"\n  {char['name']}:")
             rio = obtener_perfil_raiderio(char["name"], char["realm"], char["region"])
             armory = obtener_stats_armory(char["name"], char["realm"], char["region"])
+            currencies = obtener_monedas_blizzard(token, char["name"], char["realm"], char["region"]) if token else []
+            if currencies:
+                armory = armory or {}
+                armory["currencies"] = currencies
             save_character(conn, char, rio, armory, "default")
 
             # Guarda carreras M+

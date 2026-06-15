@@ -17,17 +17,17 @@ export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
   const statValue = (stat?: ArmoryStatValue) => stat?.value;
 
   const statList = [
-    { label: "Fuerza", value: statValue(armoryStats?.strength) },
-    { label: "Agilidad", value: statValue(armoryStats?.agility) },
-    { label: "Intelecto", value: statValue(armoryStats?.intellect) },
-    { label: "Aguante", value: statValue(armoryStats?.stamina) },
-    { label: "Critico", value: statValue(armoryStats?.crit) },
-    { label: "Celeridad", value: statValue(armoryStats?.haste) },
-    { label: "Maestria", value: statValue(armoryStats?.mastery) },
-    { label: "Versatilidad", value: statValue(armoryStats?.versatility) },
-    { label: "Leech", value: statValue(armoryStats?.leech) },
-    { label: "Velocidad", value: statValue(armoryStats?.speed) },
-    { label: "Evasion", value: statValue(armoryStats?.avoidance) },
+    { label: "Fuerza", stat: armoryStats?.strength, value: statValue(armoryStats?.strength) },
+    { label: "Agilidad", stat: armoryStats?.agility, value: statValue(armoryStats?.agility) },
+    { label: "Intelecto", stat: armoryStats?.intellect, value: statValue(armoryStats?.intellect) },
+    { label: "Aguante", stat: armoryStats?.stamina, value: statValue(armoryStats?.stamina) },
+    { label: "Crítico", stat: armoryStats?.crit, value: statValue(armoryStats?.crit) },
+    { label: "Celeridad", stat: armoryStats?.haste, value: statValue(armoryStats?.haste) },
+    { label: "Maestría", stat: armoryStats?.mastery, value: statValue(armoryStats?.mastery) },
+    { label: "Versatilidad", stat: armoryStats?.versatility, value: statValue(armoryStats?.versatility) },
+    { label: "Leech", stat: armoryStats?.leech, value: statValue(armoryStats?.leech) },
+    { label: "Velocidad", stat: armoryStats?.speed, value: statValue(armoryStats?.speed) },
+    { label: "Evasión", stat: armoryStats?.avoidance, value: statValue(armoryStats?.avoidance) },
   ].filter((s) => s.value != null);
 
   return (
@@ -55,7 +55,7 @@ export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
         <Card>
           <CardHeader>
             <p className="text-gold text-[0.74rem] font-black tracking-[0.18em] uppercase">
-              Estadisticas
+              Estadísticas
             </p>
           </CardHeader>
           <CardBody>
@@ -67,7 +67,7 @@ export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
                 >
                   <p className="text-muted text-xs font-inter font-bold uppercase tracking-wide">{stat.label}</p>
                   <p className="text-bone font-bold font-inter text-lg">
-                    {stat.value?.toLocaleString("es-CL") || "—"}
+                    {formatStatValue(stat.value, stat.stat)}
                   </p>
                 </div>
               ))}
@@ -87,4 +87,14 @@ export default function StatsPanel({ rioData, armory }: StatsPanelProps) {
       )}
     </div>
   );
+}
+
+function formatStatValue(value: number | undefined, stat?: ArmoryStatValue): string {
+  if (value == null) return "—";
+
+  if (stat?.type === "PERCENTAGE") {
+    return `(${value.toLocaleString("es-CL", { maximumFractionDigits: 2 })}%)`;
+  }
+
+  return value.toLocaleString("es-CL", { maximumFractionDigits: 2 });
 }
