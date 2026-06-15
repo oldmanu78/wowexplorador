@@ -39,8 +39,8 @@ scripts/
 └── validate.py                   # Validador de estructura de datos
 
 public/
-├── horde-crest.svg               # SVG del emblema de la Horda
-└── images/                       # Imágenes estáticas
+└── images/
+    └── horde-emblem-mask.png     # Máscara del emblema de la Horda
 
 .github/workflows/
 └── deploy.yml                    # CI/CD: fetch data + build + deploy a Pages

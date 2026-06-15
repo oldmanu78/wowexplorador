@@ -1,6 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
-import { withBasePath } from "@/lib/utils";
+import HordeEmblem from "@/components/ui/HordeEmblem";
 
 export default function Footer() {
   return (
@@ -8,13 +7,7 @@ export default function Footer() {
       <div className="max-w-[1180px] mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-[1.4fr_repeat(3,1fr)] gap-6">
         <div>
           <div className="inline-flex items-center gap-3 no-underline">
-            <Image
-              src={withBasePath("/horde-crest.svg")}
-              alt="Emblema de la Horda"
-              width={42}
-              height={42}
-              className="object-contain drop-shadow-[0_0_16px_rgba(195,38,32,0.75)]"
-            />
+            <HordeEmblem className="h-12 w-8" />
             <div>
               <span className="block font-cinzel font-black tracking-[0.08em] leading-none text-gold">
                 WoW EXPLORADOR

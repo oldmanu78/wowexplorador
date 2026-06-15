@@ -77,7 +77,8 @@ wowexplorador/
 │   ├── seed.ts                     → Seed de datos iniciales
 │   └── validate.py                 → Validador de datos
 ├── public/
-│   ├── horde-crest.svg             → Símbolo de la Horda
+│   └── images/
+│       └── horde-emblem-mask.png   → Máscara del símbolo de la Horda
 │   └── images/                     → Imágenes estáticas
 ├── .github/workflows/
 │   └── deploy.yml                  → CI/CD: fetch data → build → deploy
@@ -161,7 +162,7 @@ Deploy:
 
 ### Elementos visuales
 
-- **Header**: Sticky con backdrop blur (16px), emblema Horda + navegación uppercase
+- **Header**: Sticky con backdrop blur (16px), emblema Horda por máscara PNG + navegación uppercase
 - **Background**: Gradientes radiales atmosféricos rojo/naranja + grid sutil dorado (46px, 3.5% opacidad)
 - **Cards**: Bordes dorados, hover con lift (-translate-y-0.5), sombras profundas con glow
 - **Tabs**: Scroll horizontal, active con subrayado gold, focus visible dorado

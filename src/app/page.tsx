@@ -9,8 +9,7 @@ import TokenPrice from "@/components/weekly/TokenPrice";
 import NewsFeed from "@/components/weekly/NewsFeed";
 import InvasionList from "@/components/weekly/InvasionList";
 import RankingTable from "@/components/weekly/RankingTable";
-import Image from "next/image";
-import { withBasePath } from "@/lib/utils";
+import HordeEmblem from "@/components/ui/HordeEmblem";
 
 export default async function HomePage() {
   const weekly = await prisma.weeklySnapshot.findFirst({
@@ -71,14 +70,10 @@ export default async function HomePage() {
       <section className="relative min-h-[420px] grid items-center py-18 overflow-hidden border-b border-[rgba(240,195,90,0.14)]">
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,5,4,0.98)_0%,rgba(7,5,4,0.72)_39%,rgba(7,5,4,0.1)_72%),radial-gradient(circle_at_78%_38%,rgba(240,90,40,0.32),transparent_21rem),radial-gradient(circle_at_78%_54%,rgba(195,38,32,0.28),transparent_28rem)] z-[1]" />
 
-        <div className="absolute right-0 bottom-0 w-[500px] h-[500px] pointer-events-none opacity-20 hidden lg:block" aria-hidden="true">
-          <Image
-            src={withBasePath("/horde-crest.svg")}
-            alt=""
-            fill
-            className="object-contain drop-shadow-[0_0_60px_rgba(195,38,32,0.5)]"
-          />
-        </div>
+        <HordeEmblem
+          label=""
+          className="absolute right-4 bottom-[-120px] z-[1] hidden h-[580px] w-[348px] pointer-events-none opacity-20 lg:block drop-shadow-[0_0_60px_rgba(195,38,32,0.5)]"
+        />
 
         <div className="relative z-[2] max-w-[1180px] mx-auto px-4 w-full">
           <p className="inline-flex items-center gap-2.5 text-gold text-[0.8rem] font-black tracking-[0.18em] uppercase mb-4">
