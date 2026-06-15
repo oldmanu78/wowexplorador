@@ -18,14 +18,15 @@ src/
 │   └── rutas/
 │       └── page.tsx              # Mazmorras + rutas M+ (SSG)
 ├── components/
-│   ├── ui/                       # Sistema de diseño: Card, Badge, Tabs, ProgressBar
-│   ├── layout/                   # Header.tsx (Horde crest), Footer.tsx
+│   ├── ui/                       # Sistema de diseño: Card, Badge, Tabs, ProgressBar, HordeEmblem, WowIcon
+│   ├── layout/                   # Header.tsx (emblema Horda), Footer.tsx
 │   ├── characters/               # Paneles: Stats, Monedas, Gear, Dungeon, Runs, Raid, Notes
 │   ├── weekly/                   # Afijos, Evento, Token, Boss, Noticias, Invasiones, Ranking
-│   └── routes/                   # DungeonTabs, RouteCard, DungeonHero
+│   └── routes/                   # DungeonTabs, RouteCard, DungeonHero, DungeonMapPreview
 ├── lib/
 │   ├── db.ts                     # Cliente Prisma singleton
 │   ├── utils.ts                  # SC(), getClassColor(), formatGold(), etc.
+│   ├── wow-assets.ts             # Iconos de clase/raza desde Wowhead
 │   └── constants.ts              # Clases de WoW, colores, roles, dungeons
 └── generated/prisma/             # Prisma client (auto-generado, no tocar)
 
@@ -40,7 +41,7 @@ scripts/
 
 public/
 └── images/
-    └── horde-emblem-mask.png     # Máscara del emblema de la Horda
+    └── horde-emblem-mask.png     # Máscara del emblema correcto de la Horda
 
 .github/workflows/
 └── deploy.yml                    # CI/CD: fetch data + build + deploy a Pages
@@ -63,14 +64,14 @@ GitHub Actions (cron semanal martes 15:00 UTC)
   ↓
 actualizar_datos.py
   ├── Raider.io API → perfiles, scores, runs, raid gear
-  ├── Blizzard API OAuth → token price + stats personaje
+  ├── Blizzard API OAuth → token price + stats + monedas personaje
   │   └── fallback: Armory Blizzard scrape
   ├── Cálculo por fecha → world boss, evento semanal
   └── Escribe a SQLite (prisma/wow.db)
   ↓
 Next.js build (SSG)
   ├── Prisma lee SQLite en build time
-  ├── getStaticProps / generateStaticParams
+  ├── Server Components + generateStaticParams
   └── out/ → HTML estático
   ↓
 GitHub Pages (rama gh-pages)
@@ -80,7 +81,7 @@ GitHub Pages (rama gh-pages)
 - **Server Components**: La mayoría de los componentes leen datos de SQLite via Prisma en build time
 - **Client Components**: Solo para interactividad del usuario:
   - `Header`: usa `usePathname()` para resaltar link activo
-  - `MonedasPanel`: edición de monedas con localStorage
+  - `MonedasPanel`: monedas/tokens actuales + edición manual con localStorage
   - `NotesPanel`: notas por dungeon con localStorage
   - `RankingTable`: filtro por rol (Tank/DPS/Healer)
   - `DungeonTabs`: selector de mazmorra + búsqueda
@@ -161,9 +162,9 @@ Reino: Quel'Thalas (US)
 
 | # | Nombre | Componente | Tipo | Descripción |
 |---|---|---|---|---|
-| 1 | Stats | `StatsPanel` | Server | Score M+, ilvl, stats secundarias |
-| 2 | Monedas | `MonedasPanel` | Cliente | Valorstones, crests, gold (localStorage) |
-| 3 | Gear & BiS | `GearPanel` | Server | 17 slots BiS con wowhead links |
+| 1 | Stats | `StatsPanel` | Server | Score M+, ilvl, stats secundarias con % entre paréntesis |
+| 2 | Monedas | `MonedasPanel` | Cliente | Monedas/tokens actuales desde Armory + localStorage manual |
+| 3 | Gear & BiS | `GearPanel` | Server | Equipo actual con iconos, ilvl, calidad, tier, gemas y enchants |
 | 4 | Mazmorras | `DungeonPanel` | Server | Scores por dungeon con colores |
 | 5 | M+ Runs | `RunsPanel` | Server | Últimas carreras M+ |
 | 6 | Raid | `RaidPanel` | Server | Progreso de raid Normal/Heroic/Mythic |
@@ -172,7 +173,7 @@ Reino: Quel'Thalas (US)
 ## 🌐 APIs
 
 - **Raider.io** (sin auth, User-Agent requerido): perfiles completos, scores, affixes
-- **Blizzard API OAuth** (`BLIZZARD_CLIENT_ID` + `BLIZZARD_CLIENT_SECRET`): token price + stats
+- **Blizzard API OAuth** (`BLIZZARD_CLIENT_ID` + `BLIZZARD_CLIENT_SECRET`): token price, stats y monedas de personaje
 - **Armory Blizzard scrape** (sin auth): fallback para stats
 
 ## ⚙️ Comandos
@@ -199,3 +200,4 @@ python scripts/validate.py           # Validar datos
 - **Modernización 2026-06-01 aplicada**: CI/CD ahora ejecuta `npm run lint`, `npm run validate` y `npm audit --audit-level=moderate` antes del build; `Tabs` incluye roles ARIA, navegación por teclado y focus visible; se quitaron emojis estructurales de roles/ranking/monedas/rutas en favor de texto y swatches; colores de score/rol se centralizan en `constants.ts`/`utils.ts`; se eliminó código muerto duplicado en `obtener_stats_armory`.
 - **Build local**: si `.next` queda bloqueado por permisos de Windows, verificar en una copia limpia o usando un workspace sin `.next`; `.next/` está ignorado y no afecta GitHub Actions.
 - **Rediseño 2026-06-14 aplicado**: Frontend completamente rediseñado con tema Horda-UNO. Paleta cálida atmosférica (bg #070504, blood, ember, gold, bone). Fuentes: Cinzel (títulos) + Inter (cuerpo) reemplaza Exo 2. Background con gradientes radiales rojo/naranja + grid sutil dorado. Header sticky con backdrop blur. Footer 4 columnas. Dashboard con Hero section + MetricsBar con datos reales. Cards con bordes dorados, hover lift, sombras profundas. 32 archivos adaptados al nuevo sistema visual. Lint y TypeScript limpios.
+- **Correcciones 2026-06-15 aplicadas**: Emblema Horda corregido con máscara PNG real (`public/images/horde-emblem-mask.png`) y `HordeEmblem`; mapas/rutas usan `DungeonMapPreview` en vez de placeholders; iconos de clase/raza se toman desde helpers de `wow-assets.ts`; `GearPanel` muestra equipo actual legible; `StatsPanel` agrega porcentajes; `MonedasPanel` puede mostrar monedas/tokens actuales desde Blizzard Character Currency con fallback Armory/localStorage.

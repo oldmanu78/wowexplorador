@@ -36,7 +36,9 @@ wowexplorador/
 │   │   ├── ui/                     → Sistema de diseño base
 │   │   │   ├── Card.tsx            → Contenedor con bordes Horda
 │   │   │   ├── Badge.tsx           → Etiquetas de clase/rol/score
+│   │   │   ├── HordeEmblem.tsx     → Emblema Horda por máscara PNG
 │   │   │   ├── Tabs.tsx            → Sistema de pestañas horizontal
+│   │   │   ├── WowIcon.tsx         → Iconos de clase/raza desde Wowhead
 │   │   │   ├── ProgressBar.tsx     → Barras de progreso (raid, crests)
 │   │   │   └── ScoreDisplay.tsx    → Score M+ con color por rango
 │   │   ├── layout/                 → Componentes de layout
@@ -61,12 +63,14 @@ wowexplorador/
 │   │   │   ├── InvasionList.tsx    → Invasiones activas
 │   │   │   └── RankingTable.tsx    → Ranking M+ (Tank/DPS/Healer)
 │   │   └── routes/                 → Componentes de rutas
+│   │       ├── DungeonMapPreview.tsx → Mapa generado para mazmorras/rutas
 │   │       ├── DungeonTabs.tsx     → Tabs de mazmorras
 │   │       ├── RouteCard.tsx       → Card de ruta individual
 │   │       └── DungeonHero.tsx     → Hero de mazmorra con info
 │   ├── lib/
 │   │   ├── db.ts                   → Cliente Prisma singleton
 │   │   ├── utils.ts                → Funciones helper (colores, formateo)
+│   │   ├── wow-assets.ts           → Iconos de clase/raza y helpers visuales
 │   │   └── constants.ts            → Constantes de WoW
 │   └── generated/prisma/           → Generado por Prisma (no editar)
 ├── prisma/
@@ -78,8 +82,7 @@ wowexplorador/
 │   └── validate.py                 → Validador de datos
 ├── public/
 │   └── images/
-│       └── horde-emblem-mask.png   → Máscara del símbolo de la Horda
-│   └── images/                     → Imágenes estáticas
+│       └── horde-emblem-mask.png   → Máscara del símbolo correcto de la Horda
 ├── .github/workflows/
 │   └── deploy.yml                  → CI/CD: fetch data → build → deploy
 ├── PLAN.md                         → Este archivo
@@ -131,13 +134,13 @@ Python (GH Actions, semanal):
 
 Next.js (build time):
   1. Prisma lee SQLite
-  2. getStaticProps/generateStaticParams pre-renderiza todas las páginas
+  2. Server Components + generateStaticParams pre-renderizan todas las páginas
   3. next build → out/ (HTML estático)
 
 Deploy:
-  1. GitHub Actions hace commit de SQLite
+  1. GitHub Actions ejecuta validación, lint, audit e ingesta
   2. Build de Next.js
-  3. Push a gh-pages
+  3. Publicación del artifact `out/` en GitHub Pages
 ```
 
 ## Diseño Visual: Tema Horda-UNO
@@ -180,8 +183,8 @@ Deploy:
 | # | Tab | Tipo | Datos |
 |---|---|---|---|
 | 1 | Stats | Server | Score M+, ilvl, stats secundarias (Blizzard API → fallback Armory) |
-| 2 | Monedas | Cliente | Valorstones, crests, gold — localStorage con precarga |
-| 3 | Gear & BiS | Server | 17 slots con BiS, wowhead links, prioridad, tier set |
+| 2 | Monedas | Cliente | Monedas/tokens actuales desde Blizzard/Armory + seguimiento manual localStorage |
+| 3 | Gear & BiS | Server | Equipo actual con iconos, ilvl, calidad, tier, gemas y encantamientos |
 | 4 | Mazmorras | Server | Scores por dungeon, timer, color por rango |
 | 5 | M+ Runs | Server | Últimas carreras con nivel, dungeon, score |
 | 6 | Raid | Server | Progreso Normal/Heroic/Mythic, jefes derrotados |
@@ -197,9 +200,11 @@ Deploy:
 - [x] Galería de personajes
 - [x] Página individual con 7 tabs
 - [x] Página de rutas
+- [x] Mapas generados para mazmorras y rutas, sin placeholders genéricos
 - [x] Pipeline Python → SQLite
 - [x] CI/CD GitHub Pages
 - [x] Auditoría técnica aplicada: lint limpio, audit limpio, stats/gear visibles, pipeline atómico
+- [x] Corrección 2026-06-15: emblema Horda real, iconos clase/raza, paneles Stats/Gear/Monedas corregidos
 
 ### Fase 2 — Multiusuario
 - [ ] tracked_users.json configurable
@@ -255,7 +260,8 @@ Deploy:
 | Raider.io | User-Agent | `/api/v1/mythic-plus/affixes` | Afijos semanales |
 | Blizzard OAuth | Client ID + Secret | `POST /oauth/token` | Token de acceso |
 | Blizzard API | Bearer token | `/data/wow/token/index` | Precio del token |
-| Blizzard API | Bearer token | `/profile/wow/character/.../status` | Stats de personaje |
+| Blizzard API | Bearer token | `/profile/wow/character/.../statistics` | Stats de personaje |
+| Blizzard API | Bearer token | `/profile/wow/character/.../currency` | Monedas y tokens de personaje |
 | Armory (scrape) | User-Agent | HTML scrape | Fallback para stats |
 
 ## Convenciones de Código
@@ -292,12 +298,48 @@ Triggers:
 Jobs:
   1. Setup Python + Node.js
   2. Ejecutar actualizar_datos.py (con secrets de Blizzard)
-  3. npx prisma generate + db push
+  3. npm run lint + npm run validate + npm audit --audit-level=moderate
   4. npm run build (next build → out/)
-  5. Deploy a GitHub Pages (rama gh-pages)
+  5. Deploy a GitHub Pages via artifact
 ```
 
 ### GitHub Pages Config
 - Base path: `/wowexplorador`
 - Rama: `gh-pages`
 - CNAME: (opcional, dominio personalizado)
+
+## Registro de Auditoría 2026-06-15
+
+### Branding
+
+- El símbolo tipo estrella fue reemplazado por el emblema correcto de la Horda.
+- `public/horde-crest.svg` fue eliminado y reemplazado por `public/images/horde-emblem-mask.png`.
+- `HordeEmblem` centraliza el render para mantener colores consistentes con el tema Horda-UNO.
+
+### Mapas e iconos
+
+- Se revisó la sección de mapas/rutas y se reemplazaron placeholders por `DungeonMapPreview`.
+- Las cards de ruta y los heroes de mazmorra ahora muestran previsualizaciones específicas por dungeon.
+- Se corrigieron URLs de Keystone Guru en `scripts/actualizar_datos.py`; para NPX la ruta correcta queda como `nexuspoint-xenas`.
+- Los iconos de clase y raza se incorporan desde los datos presentes en `D:\Projects\FRONTEND\UNO`.
+
+### Personajes
+
+- `StatsPanel` agrega el porcentaje entre paréntesis para stats porcentuales.
+- `GearPanel` muestra equipo actual de Raider.io con icono, ilvl, calidad, tier, gemas y encantamientos.
+- `MonedasPanel` muestra monedas/tokens actuales desde `armory.currencies` cuando el pipeline los obtiene.
+- El pipeline consulta Blizzard Character Currency y mantiene fallback defensivo desde Armory.
+
+### Verificación
+
+Comandos ejecutados correctamente durante la corrección:
+
+```bash
+npm run lint
+npx tsc --noEmit
+python -m py_compile scripts\actualizar_datos.py scripts\validate.py
+npm run validate
+npm audit --audit-level=moderate
+```
+
+Limitación local: el build completo puede fallar en este equipo por bloqueo de `.next` en Windows o por descarga de Google Fonts bajo sandbox. CI/CD construye en workspace limpio.
