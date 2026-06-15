@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
   },
   images: {
     unoptimized: true, // GitHub Pages no soporta optimización de imágenes de Next.js
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "wow.zamimg.com",
+      },
+    ],
   },
   // Deshabilitar verificación de tipos durante el build
   typescript: {

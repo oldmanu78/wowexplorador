@@ -16,6 +16,9 @@ export interface RioGearItem {
 }
 
 export interface RaiderIoProfile {
+  race?: string;
+  faction?: string;
+  active_spec_name?: string;
   mythic_plus_scores_by_season?: { scores?: { all?: number } }[];
   mythic_plus_recent_runs?: RioRun[];
   mythic_plus_best_runs?: RioRun[];

@@ -1,6 +1,9 @@
 import Badge, { RoleBadge, ScoreBadge } from "@/components/ui/Badge";
 import { CLASS_COLORS, ROLE_TEXT } from "@/lib/constants";
-import { getRioScore, getRioIlvl } from "@/lib/utils";
+import { getRioScore, getRioIlvl, safeJsonParse } from "@/lib/utils";
+import type { RaiderIoProfile } from "@/lib/wow-types";
+import { getClassIconUrl, getRaceIconUrl } from "@/lib/wow-assets";
+import WowIcon from "@/components/ui/WowIcon";
 
 interface HeroSectionProps {
   name: string;
@@ -22,6 +25,10 @@ export default function HeroSection({
   const score = getRioScore(rioData);
   const ilvl = getRioIlvl(rioData);
   const classColor = CLASS_COLORS[className] || "#f0c35a";
+  const rio = safeJsonParse<RaiderIoProfile>(rioData);
+  const race = rio?.race || "";
+  const classIcon = getClassIconUrl(className);
+  const raceIcon = getRaceIconUrl(race);
 
   return (
     <div
@@ -31,17 +38,13 @@ export default function HeroSection({
       }}
     >
       <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-        <div
-          className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center text-3xl md:text-4xl font-bold font-cinzel border-2 shrink-0"
-          style={{
-            backgroundColor: `${classColor}33`,
-            borderColor: classColor,
-            color: classColor,
-            boxShadow: `0 0 24px ${classColor}44`,
-          }}
-        >
-          {name.charAt(0)}
-        </div>
+        <WowIcon
+          src={classIcon}
+          alt={`${className} icon`}
+          color={classColor}
+          fallback={name.charAt(0)}
+          className="h-20 w-20 rounded-lg md:h-24 md:w-24"
+        />
 
         <div className="text-center md:text-left flex-1">
           <h1 className="text-2xl md:text-3xl font-cinzel tracking-wide" style={{ color: classColor }}>
@@ -56,6 +59,18 @@ export default function HeroSection({
             <Badge color={classColor} variant="filled">
               {className}
             </Badge>
+            {race && (
+              <Badge color="#c49445" variant="outline" className="pl-1">
+                <WowIcon
+                  src={raceIcon}
+                  alt={`${race} icon`}
+                  color="#c49445"
+                  fallback={race.charAt(0)}
+                  className="mr-0.5 h-5 w-5 rounded-sm border"
+                />
+                {race}
+              </Badge>
+            )}
             <RoleBadge role={role} />
             <ScoreBadge score={score} />
           </div>

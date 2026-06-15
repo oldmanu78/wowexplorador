@@ -33,8 +33,10 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
         </label>
         <input
           id="dungeon-search"
+          name="dungeon-search"
           type="text"
-          placeholder="Nombre o sigla..."
+          autoComplete="off"
+          placeholder="Nombre o sigla…"
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
@@ -54,7 +56,7 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
               aria-selected={activeIndex === i}
               onClick={() => setActiveIndex(i)}
               className={cn(
-                "flex min-h-11 items-center gap-2 rounded-lg border px-4 py-2 text-sm font-inter font-bold transition-all whitespace-nowrap",
+                "flex min-h-11 items-center gap-2 rounded-lg border px-4 py-2 text-sm font-inter font-bold transition-colors whitespace-nowrap",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
                 activeIndex === i
                   ? "bg-gold text-[#180c07] border-gold"
@@ -94,7 +96,7 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
               rel="noopener noreferrer"
               className="min-h-10 px-4 py-2 text-xs font-inter font-bold rounded border border-[rgba(240,195,90,0.2)] bg-surface-strong text-bone hover:text-gold hover:border-gold transition-colors uppercase tracking-wide"
             >
-              Guia Method
+              Guía Method
             </a>
             <a
               href={`https://www.icy-veins.com/wow/dungeons/${activeDungeon.slug}`}
@@ -102,7 +104,7 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
               rel="noopener noreferrer"
               className="min-h-10 px-4 py-2 text-xs font-inter font-bold rounded border border-[rgba(240,195,90,0.2)] bg-surface-strong text-bone hover:text-gold hover:border-gold transition-colors uppercase tracking-wide"
             >
-              Guia Icy-Veins
+              Guía Icy-Veins
             </a>
           </div>
 
@@ -119,6 +121,9 @@ export default function DungeonTabs({ dungeons }: DungeonTabsProps) {
                 type={route.type}
                 desc={route.desc}
                 thumb={route.thumb}
+                dungeonName={activeDungeon.name}
+                dungeonSigla={activeDungeon.sigla}
+                dungeonType={activeDungeon.type}
               />
             ))}
           </div>

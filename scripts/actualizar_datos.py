@@ -333,41 +333,35 @@ def obtener_evento_semana():
 def obtener_rutas_midnight():
     """
     Rutas hardcodeadas de Keystone.guru para Midnight S1.
-    4 rutas por mazmorra (2 pug, 2 high).
+    2 accesos por mazmorra (PUG y high), apuntando a la página real de rutas publicadas.
     """
+    keystone_urls = {
+        "algethar-academy": "https://keystone.guru/routes/retail/algethar-academy",
+        "maisara-caverns": "https://keystone.guru/routes/retail/maisara-caverns",
+        "nexus-point-xenas": "https://keystone.guru/routes/retail/nexuspoint-xenas",
+        "windrunner-spire": "https://keystone.guru/routes/retail/windrunner-spire",
+        "magisters-terrace": "https://keystone.guru/routes/retail/magisters-terrace",
+        "pit-of-saron": "https://keystone.guru/routes/retail/pit-of-saron",
+        "seat-of-the-triumvirate": "https://keystone.guru/routes/retail/seat-of-the-triumvirate",
+        "skyreach": "https://keystone.guru/routes/retail/skyreach",
+    }
+
+    def rutas(slug, sigla):
+        url = keystone_urls[slug]
+        return [
+            {"name": f"Rutas PUG {sigla}", "url": url, "type": "pug", "desc": "Listado real de rutas públicas y semanales en Keystone.guru", "thumb": None},
+            {"name": f"Rutas High Key {sigla}", "url": url, "type": "high", "desc": "Listado real de rutas avanzadas y de push en Keystone.guru", "thumb": None},
+        ]
+
     return {
-        "algethar-academy": [
-            {"name": "Ruta Segura AA", "url": "https://keystone.guru/route/aa-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima AA", "url": "https://keystone.guru/route/aa-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
-        "maisara-caverns": [
-            {"name": "Ruta Segura MC", "url": "https://keystone.guru/route/mc-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima MC", "url": "https://keystone.guru/route/mc-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
-        "nexus-point-xenas": [
-            {"name": "Ruta Segura NPX", "url": "https://keystone.guru/route/npx-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima NPX", "url": "https://keystone.guru/route/npx-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
-        "windrunner-spire": [
-            {"name": "Ruta Segura WRS", "url": "https://keystone.guru/route/wrs-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima WRS", "url": "https://keystone.guru/route/wrs-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
-        "magisters-terrace": [
-            {"name": "Ruta Segura MT", "url": "https://keystone.guru/route/mt-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima MT", "url": "https://keystone.guru/route/mt-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
-        "pit-of-saron": [
-            {"name": "Ruta Segura POS", "url": "https://keystone.guru/route/pos-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima POS", "url": "https://keystone.guru/route/pos-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
-        "seat-of-the-triumvirate": [
-            {"name": "Ruta Segura SEAT", "url": "https://keystone.guru/route/seat-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima SEAT", "url": "https://keystone.guru/route/seat-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
-        "skyreach": [
-            {"name": "Ruta Segura SKY", "url": "https://keystone.guru/route/sky-pug-1", "type": "pug", "desc": "Ruta segura para grupos públicos", "thumb": None},
-            {"name": "Ruta Óptima SKY", "url": "https://keystone.guru/route/sky-high-1", "type": "high", "desc": "Ruta optimizada para high keys", "thumb": None},
-        ],
+        "algethar-academy": rutas("algethar-academy", "AA"),
+        "maisara-caverns": rutas("maisara-caverns", "MC"),
+        "nexus-point-xenas": rutas("nexus-point-xenas", "NPX"),
+        "windrunner-spire": rutas("windrunner-spire", "WRS"),
+        "magisters-terrace": rutas("magisters-terrace", "MT"),
+        "pit-of-saron": rutas("pit-of-saron", "POS"),
+        "seat-of-the-triumvirate": rutas("seat-of-the-triumvirate", "SEAT"),
+        "skyreach": rutas("skyreach", "SKY"),
     }
 
 

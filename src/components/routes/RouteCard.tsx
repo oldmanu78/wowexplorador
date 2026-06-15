@@ -2,6 +2,7 @@ import Card, { CardBody } from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import { withBasePath } from "@/lib/utils";
 import Image from "next/image";
+import DungeonMapPreview from "./DungeonMapPreview";
 
 interface RouteCardProps {
   name: string;
@@ -9,9 +10,12 @@ interface RouteCardProps {
   type: string;
   desc: string;
   thumb: string | null;
+  dungeonName: string;
+  dungeonSigla: string;
+  dungeonType: string;
 }
 
-export default function RouteCard({ name, url, type, desc, thumb }: RouteCardProps) {
+export default function RouteCard({ name, url, type, desc, thumb, dungeonName, dungeonSigla, dungeonType }: RouteCardProps) {
   const typeColor = type === "high" ? "#f05a28" : "#4ade80";
   const typeLabel = type === "high" ? "High Key" : "PUG";
   const thumbSrc = withBasePath(thumb);
@@ -35,12 +39,13 @@ export default function RouteCard({ name, url, type, desc, thumb }: RouteCardPro
                 className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
               />
             ) : (
-              <span
-                className="inline-flex h-12 w-12 items-center justify-center rounded border border-[rgba(240,195,90,0.2)] bg-[rgba(7,5,4,0.52)] text-xs font-bold tracking-[0.18em] text-gold"
-                aria-label="Ruta sin imagen"
-              >
-                MAP
-              </span>
+              <DungeonMapPreview
+                sigla={dungeonSigla}
+                name={dungeonName}
+                type={dungeonType}
+                routeType={type}
+                className="min-h-0"
+              />
             )}
           </div>
 

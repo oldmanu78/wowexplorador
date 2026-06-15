@@ -4,6 +4,8 @@ import Badge, { RoleBadge, ScoreBadge } from "@/components/ui/Badge";
 import { CLASS_COLORS } from "@/lib/constants";
 import { getRioScore, getRioIlvl, safeJsonParse } from "@/lib/utils";
 import type { RaiderIoProfile } from "@/lib/wow-types";
+import { getClassIconUrl, getRaceIconUrl } from "@/lib/wow-assets";
+import WowIcon from "@/components/ui/WowIcon";
 
 interface CharacterCardProps {
   slug: string;
@@ -27,6 +29,9 @@ export default function CharacterCard({
   const classColor = CLASS_COLORS[className] || "#f0c35a";
 
   const rio = safeJsonParse<RaiderIoProfile>(rioData);
+  const race = rio?.race || "";
+  const classIcon = getClassIconUrl(className);
+  const raceIcon = getRaceIconUrl(race);
   const raidProg = rio?.raid_progression?.["tier-mn-1"];
   const mythicBosses = raidProg?.mythic_bosses_killed || 0;
   const totalBosses = raidProg?.total_bosses || 9;
@@ -46,17 +51,13 @@ export default function CharacterCard({
         />
         <CardBody className="relative">
           <div className="flex items-center gap-4 mb-4">
-            <div
-              className="w-16 h-16 rounded flex items-center justify-center text-2xl font-bold font-cinzel border-2 shrink-0 transition-transform group-hover:scale-[1.03]"
-              style={{
-                background: `linear-gradient(135deg, ${classColor}3d, rgba(7,5,4,0.88))`,
-                borderColor: classColor,
-                color: classColor,
-                boxShadow: `inset 0 0 18px rgba(0,0,0,0.55), 0 0 12px ${classColor}33`,
-              }}
-            >
-              {name.charAt(0)}
-            </div>
+            <WowIcon
+              src={classIcon}
+              alt={`${className} icon`}
+              color={classColor}
+              fallback={name.charAt(0)}
+              className="h-16 w-16 transition-transform group-hover:scale-[1.03]"
+            />
             <div className="min-w-0">
               <h3 className="font-cinzel text-base tracking-[0.08em] truncate" style={{ color: classColor }}>
                 {name}
@@ -69,6 +70,18 @@ export default function CharacterCard({
             <Badge color={classColor} variant="filled" size="sm">
               {className}
             </Badge>
+            {race && (
+              <Badge color="#c49445" variant="outline" size="sm" className="pl-1">
+                <WowIcon
+                  src={raceIcon}
+                  alt={`${race} icon`}
+                  color="#c49445"
+                  fallback={race.charAt(0)}
+                  className="mr-0.5 h-5 w-5 rounded-sm border"
+                />
+                {race}
+              </Badge>
+            )}
             <RoleBadge role={role} size="sm" />
             <ScoreBadge score={score} size="sm" />
           </div>

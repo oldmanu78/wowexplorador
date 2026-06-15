@@ -110,6 +110,8 @@ def validate_project_files():
         "components/ui/Card.tsx",
         "components/ui/Badge.tsx",
         "components/ui/Tabs.tsx",
+        "components/ui/HordeEmblem.tsx",
+        "components/ui/WowIcon.tsx",
         "components/ui/ProgressBar.tsx",
         "components/ui/ScoreDisplay.tsx",
         "components/layout/Header.tsx",
@@ -131,6 +133,7 @@ def validate_project_files():
         "components/weekly/InvasionList.tsx",
         "components/weekly/RankingTable.tsx",
         "components/routes/DungeonHero.tsx",
+        "components/routes/DungeonMapPreview.tsx",
         "components/routes/RouteCard.tsx",
         "components/routes/DungeonTabs.tsx",
     ]
