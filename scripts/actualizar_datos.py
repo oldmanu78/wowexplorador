@@ -655,8 +655,22 @@ def extract_dungeon_slug(dungeon_field):
     Puede ser un string (slug directo) o un dict con campo 'slug'.
     """
     if isinstance(dungeon_field, dict):
-        return dungeon_field.get("slug", "")
-    return str(dungeon_field) if dungeon_field else ""
+        slug = dungeon_field.get("slug")
+        if slug:
+            return slug
+        dungeon_field = dungeon_field.get("name", "")
+    if not dungeon_field:
+        return ""
+    name = str(dungeon_field)
+    for dungeon in DUNGEONS:
+        if dungeon["slug"] == name or dungeon["name"].lower() == name.lower():
+            return dungeon["slug"]
+    return name.lower().replace("'", "").replace(" ", "-")
+
+
+def extract_run_score(run):
+    """Raider.io currently returns run score as 'score'; keep fallback for older payloads."""
+    return run.get("score", run.get("mythic_rating", 0))
 
 
 def save_mythic_runs(conn, character_slug, rio_data):
@@ -683,7 +697,7 @@ def save_mythic_runs(conn, character_slug, rio_data):
             f"{character_slug}-best-{i}",
             character_slug,
             dungeon_slug,
-            run.get("mythic_rating", 0),
+            extract_run_score(run),
             run.get("mythic_level", 0),
             run.get("completed_at", datetime.now(timezone.utc).isoformat()),
             1,
@@ -701,7 +715,7 @@ def save_mythic_runs(conn, character_slug, rio_data):
             f"{character_slug}-recent-{i}",
             character_slug,
             dungeon_slug,
-            run.get("mythic_rating", 0),
+            extract_run_score(run),
             run.get("mythic_level", 0),
             run.get("completed_at", datetime.now(timezone.utc).isoformat()),
             0,

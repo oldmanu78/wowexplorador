@@ -1,7 +1,7 @@
 // Funciones utilitarias para WoW Explorer
 // Colores de score, formateo, clases CSS condicionales
 
-import { SCORE_TIERS } from "./constants";
+import { DUNGEONS, SCORE_TIERS } from "./constants";
 import type { RaiderIoProfile } from "./wow-types";
 
 // Retorna el color HTML correspondiente al score M+
@@ -60,6 +60,24 @@ export function getDungeonName(slug: string): string {
     skyreach: "Skyreach",
   };
   return names[slug] || slug;
+}
+
+export function slugifyDungeonName(name: string): string {
+  const normalized = name
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  return DUNGEONS.find(
+    (dungeon) => dungeon.slug === normalized || dungeon.name.toLowerCase() === name.toLowerCase()
+  )?.slug || normalized;
+}
+
+export function getRioDungeonSlug(dungeon: string | { slug?: string; name?: string } | undefined): string {
+  if (!dungeon) return "";
+  if (typeof dungeon === "string") return slugifyDungeonName(dungeon);
+  return dungeon.slug || (dungeon.name ? slugifyDungeonName(dungeon.name) : "");
 }
 
 // Calcula el próximo reset semanal (martes 15:00 UTC)

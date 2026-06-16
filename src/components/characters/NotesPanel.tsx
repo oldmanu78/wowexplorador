@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import { DUNGEONS } from "@/lib/constants";
 
@@ -11,15 +11,18 @@ interface NotesPanelProps {
 export default function NotesPanel({ slug }: NotesPanelProps) {
   const storageKey = `${slug}_notes`;
   const [selectedDungeon, setSelectedDungeon] = useState(DUNGEONS[0]?.slug || "");
-  const [savedNotes, setSavedNotes] = useState<Record<string, string>>(() => {
-    if (typeof window === "undefined") return {};
-    try {
-      return JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, string>;
-    } catch {
-      return {};
-    }
-  });
+  const [savedNotes, setSavedNotes] = useState<Record<string, string>>({});
   const note = savedNotes[selectedDungeon] || "";
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      try {
+        setSavedNotes(JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, string>);
+      } catch {
+        setSavedNotes({});
+      }
+    });
+  }, [storageKey]);
 
   const saveNote = useCallback((value: string) => {
     const updated = { ...savedNotes, [selectedDungeon]: value };
@@ -58,7 +61,7 @@ export default function NotesPanel({ slug }: NotesPanelProps) {
           onChange={(e) => saveNote(e.target.value)}
           placeholder="Escribe tus notas para esta mazmorra..."
           rows={6}
-          className="w-full bg-[rgba(7,5,4,0.52)] border border-[rgba(240,195,90,0.2)] rounded px-3 py-2 text-bone text-sm font-inter focus:outline-none focus:border-gold resize-vertical placeholder:text-muted"
+          className="w-full bg-[rgba(7,5,4,0.52)] border border-[rgba(240,195,90,0.2)] rounded px-3 py-2 text-bone text-sm font-inter focus:outline-none focus:border-gold resize-y placeholder:text-muted"
         />
 
         <div className="flex justify-end mt-3">

@@ -2,7 +2,9 @@ export type RioDungeon = string | { slug?: string; name?: string };
 
 export interface RioRun {
   dungeon?: RioDungeon;
+  short_name?: string;
   mythic_rating?: number;
+  score?: number;
   mythic_level?: number;
   completed_at?: string;
 }

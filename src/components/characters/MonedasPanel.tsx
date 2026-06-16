@@ -33,23 +33,30 @@ export default function MonedasPanel({ slug, armory }: MonedasPanelProps) {
   const armoryStats = safeJsonParse<ArmoryStats>(armory);
   const liveCurrencies = normalizeCurrencies(armoryStats?.currencies);
 
-  const [monedas, setMonedas] = useState<Record<string, number>>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        try {
-          return { ...DEFAULT_MONEDAS, ...JSON.parse(saved) };
-        } catch {
-          return DEFAULT_MONEDAS;
-        }
-      }
-    }
-    return DEFAULT_MONEDAS;
-  });
+  const [monedas, setMonedas] = useState<Record<string, number>>(DEFAULT_MONEDAS);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    queueMicrotask(() => {
+      const saved = localStorage.getItem(storageKey);
+      if (!saved) {
+        setIsLoaded(true);
+        return;
+      }
+
+      try {
+        setMonedas({ ...DEFAULT_MONEDAS, ...JSON.parse(saved) });
+      } catch {
+        setMonedas(DEFAULT_MONEDAS);
+      }
+      setIsLoaded(true);
+    });
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
     localStorage.setItem(storageKey, JSON.stringify(monedas));
-  }, [monedas, storageKey]);
+  }, [isLoaded, monedas, storageKey]);
 
   const updateMoneda = (key: string, value: string) => {
     const num = parseInt(value, 10);

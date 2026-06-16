@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { CHARACTER_TABS } from "@/lib/constants";
-import { safeJsonParse } from "@/lib/utils";
+import { getRioDungeonSlug, safeJsonParse } from "@/lib/utils";
 import type { RaiderIoProfile, RioRun } from "@/lib/wow-types";
 import Link from "next/link";
 import Tabs from "@/components/ui/Tabs";
@@ -48,15 +48,15 @@ export default async function CharacterPage({
 
   const bestRunsRaw = rio?.mythic_plus_best_runs || [];
   const dungeonScores = bestRunsRaw.map((run) => ({
-    slug: typeof run.dungeon === "string" ? run.dungeon : run.dungeon?.slug || "",
-    score: run.mythic_rating || 0,
+    slug: getRioDungeonSlug(run.dungeon),
+    score: run.score ?? run.mythic_rating ?? 0,
     level: run.mythic_level || 0,
   }));
 
   const recentRunsRaw = rio?.mythic_plus_recent_runs || [];
   const toRunPanelData = (run: RioRun, isBest: boolean) => ({
-    dungeonSlug: typeof run.dungeon === "string" ? run.dungeon : run.dungeon?.slug || "",
-    score: run.mythic_rating || 0,
+    dungeonSlug: getRioDungeonSlug(run.dungeon),
+    score: run.score ?? run.mythic_rating ?? 0,
     level: run.mythic_level || 0,
     completedAt: run.completed_at || new Date().toISOString(),
     isBest,
